@@ -210,9 +210,6 @@ p { margin: 0 0 0.8em; }
 .data-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
 .page-head + .table-scroll { max-height: none; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius); }
 
-.coming-soon { margin-top: 32px; padding: 20px; border: 1px dashed var(--axis); border-radius: var(--radius); }
-.coming-soon h3 { font-size: 17px; }
-.coming-soon ul { margin: 0; padding-left: 20px; color: var(--text-secondary); font-size: 15px; }
 
 @media (max-width: 560px) {
   .chart-card { padding: 16px 12px 12px; }

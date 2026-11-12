@@ -1,0 +1,28 @@
+{
+  "topic": {
+    "id": "fixture-topic",
+    "order": 1,
+    "title": { "de": "Testthema", "en": "Test topic" },
+    "intro": { "de": "Ein Thema nur für Tests.", "en": "A topic used only by tests." }
+  },
+  "indicators": [
+    {
+      "id": "fixture-ready",
+      "title": { "de": "Ein Testindikator mit Daten", "en": "A test indicator with data" },
+      "subtitle": { "de": "Werte von 2000 bis 2004.", "en": "Values from 2000 to 2004." },
+      "unit": "",
+      "chart": "line",
+      "series": { "A": { "de": "Reihe A", "en": "Series A" } },
+      "source": { "name": "Fixture Office", "url": "https://example.org/ready", "license": "CC BY 4.0" }
+    },
+    {
+      "id": "fixture-planned",
+      "title": { "de": "Ein geplanter Testindikator", "en": "A planned test indicator" },
+      "subtitle": { "de": "Noch keine Daten.", "en": "No data yet." },
+      "unit": "",
+      "chart": "line",
+      "series": { "A": { "de": "Reihe A", "en": "Series A" } },
+      "source": { "name": { "de": "Planungsamt", "en": "Planning Office" }, "url": "https://example.org/planned", "license": "CC BY 4.0" }
+    }
+  ]
+}

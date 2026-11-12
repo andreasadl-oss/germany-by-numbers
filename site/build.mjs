@@ -1,28 +1,39 @@
 // Static site generator: indicators/*.json + data/*.csv -> dist/
 // No framework on purpose: one file, easy to read, nothing to keep upgrading.
+//
+// Usage: node site/build.mjs [--indicators <dir>] [--data <dir>] [--out <dir>]
+// Each location defaults to the repository's own (indicators/, data/, dist/).
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseArgs } from "node:util";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const DIST = path.join(ROOT, "dist");
-const read = (p) => JSON.parse(fs.readFileSync(path.join(ROOT, p), "utf8"));
+const { values: opts } = parseArgs({
+  options: { indicators: { type: "string" }, data: { type: "string" }, out: { type: "string" } },
+});
+const INDICATORS = path.resolve(opts.indicators ?? path.join(ROOT, "indicators"));
+const DATA = path.resolve(opts.data ?? path.join(ROOT, "data"));
+const DIST = path.resolve(opts.out ?? path.join(ROOT, "dist"));
+const readJson = (file) => JSON.parse(fs.readFileSync(file, "utf8"));
+const read = (p) => readJson(path.join(ROOT, p));
 
 const config = read("site/config.json");
 const i18n = read("site/i18n.json");
-const status = fs.existsSync(path.join(ROOT, "data/_status.json")) ? read("data/_status.json") : {};
+const statusFile = path.join(DATA, "_status.json");
+const status = fs.existsSync(statusFile) ? readJson(statusFile) : {};
 const LANGS = ["de", "en"];
 
 const topics = fs
-  .readdirSync(path.join(ROOT, "indicators"))
+  .readdirSync(INDICATORS)
   .filter((f) => f.endsWith(".json"))
-  .map((f) => read(`indicators/${f}`))
+  .map((f) => readJson(path.join(INDICATORS, f)))
   .sort((a, b) => a.topic.order - b.topic.order);
 
 for (const t of topics) {
   for (const ind of t.indicators) {
     ind.topic = t.topic.id;
-    ind.hasData = fs.existsSync(path.join(ROOT, "data", `${ind.id}.csv`));
+    ind.hasData = fs.existsSync(path.join(DATA, `${ind.id}.csv`));
     ind.updated = status[ind.id]?.updated ?? null;
   }
 }
@@ -120,16 +131,6 @@ function chartCard(ind, lang, rel, { compact = false } = {}) {
 </figure>`;
 }
 
-function comingSoon(inds, lang, rel) {
-  if (!inds.length) return "";
-  const t = i18n[lang];
-  return `<section class="coming-soon">
-  <h3>${t.comingSoon}</h3>
-  <p class="muted">${t.comingSoonText}</p>
-  <ul>${inds.map((i) => `<li>${esc(i.title[lang])} <span class="muted">– ${esc(srcName(i, lang))}</span></li>`).join("")}</ul>
-</section>`;
-}
-
 // ---------------------------------------------------------------- pages
 
 function write(rel, html) {
@@ -170,7 +171,6 @@ ${featured.map((ind) => chartCard(ind, lang, rel, { compact: true })).join("\n")
 function topicPage(tp, lang) {
   const rel = "../../";
   const ready = tp.indicators.filter((i) => i.hasData);
-  const pending = tp.indicators.filter((i) => !i.hasData);
   const body = `
 <section class="page-head">
   <h1>${esc(tp.topic.title[lang])}</h1>
@@ -179,8 +179,7 @@ function topicPage(tp, lang) {
 </section>
 <section class="chart-list">
 ${ready.map((ind) => chartCard(ind, lang, rel)).join("\n")}
-</section>
-${comingSoon(pending, lang, rel)}`;
+</section>`;
   write(
     `${lang}/${tp.topic.id}/index.html`,
     page({ lang, rel, title: tp.topic.title[lang], description: tp.topic.intro[lang], body, altPath: `${tp.topic.id}/`, chartsJson: ready.map((i) => chartSpec(i, lang)) })
@@ -270,7 +269,7 @@ fs.cpSync(path.join(ROOT, "site/assets"), path.join(DIST, "assets"), { recursive
 fs.mkdirSync(path.join(DIST, "assets/vendor"), { recursive: true });
 fs.copyFileSync(path.join(ROOT, "node_modules/d3/dist/d3.min.js"), path.join(DIST, "assets/vendor/d3.min.js"));
 fs.copyFileSync(path.join(ROOT, "node_modules/@observablehq/plot/dist/plot.umd.min.js"), path.join(DIST, "assets/vendor/plot.umd.min.js"));
-fs.cpSync(path.join(ROOT, "data"), path.join(DIST, "data"), { recursive: true });
+fs.cpSync(DATA, path.join(DIST, "data"), { recursive: true });
 
 for (const lang of LANGS) {
   home(lang);
@@ -294,4 +293,4 @@ write(
 fs.writeFileSync(path.join(DIST, ".nojekyll"), "");
 
 const n = topics.flatMap((t) => t.indicators);
-console.log(`Built ${n.filter((i) => i.hasData).length}/${n.length} charts in ${LANGS.length} languages -> dist/`);
+console.log(`Built ${n.filter((i) => i.hasData).length}/${n.length} charts in ${LANGS.length} languages -> ${path.relative(process.cwd(), DIST) || "."}/`);
