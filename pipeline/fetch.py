@@ -162,9 +162,97 @@ def eurostat_error(url: str) -> str:
         return str(e)
 
 
+# ---------------------------------------------------------------- Bundeswahlleiterin
+
+# Column headers of btw_ab49_datenbank_ergebnisse.csv -> NUTS codes.
+LAND_CODES = {
+    "Deutschland": "DE", "Baden-Württemberg": "DE1", "Bayern": "DE2", "Berlin": "DE3",
+    "Brandenburg": "DE4", "Bremen": "DE5", "Hamburg": "DE6", "Hessen": "DE7",
+    "Mecklenburg-Vorpommern": "DE8", "Niedersachsen": "DE9", "Nordrhein-Westfalen": "DEA",
+    "Rheinland-Pfalz": "DEB", "Saarland": "DEC", "Sachsen": "DED", "Sachsen-Anhalt": "DEE",
+    "Schleswig-Holstein": "DEF", "Thüringen": "DEG",
+}
+
+_bwl_cache: dict[str, dict] = {}
+
+
+def german_number(cell: str) -> float | None:
+    """'60.510.631 ' -> 60510631.0; '82,5' -> 82.5; '–' or '' -> None."""
+    cell = cell.strip()
+    if cell in ("", "–", "-", "."):
+        return None
+    return float(cell.replace(".", "").replace(",", "."))
+
+
+def load_bundestag_results(url: str) -> dict:
+    """Parse the Bundeswahlleiterin's results-since-1949 table.
+
+    Returns {(row label, year, geo, vote): count}, where vote is "Erststimmen"
+    or "Zweitstimmen" and count is the absolute number ("Anzahl" columns only).
+    Row labels are parties as named today (PDS is "Die Linke", NPD is "HEIMAT")
+    plus Wahlberechtigte, Wählende and "gültige Stimmen/Sitze insgesamt".
+    """
+    if url in _bwl_cache:
+        return _bwl_cache[url]
+    text = http_get(url).decode("utf-8-sig")
+    rows = list(csv.reader(io.StringIO(text), delimiter=";"))
+    head = next(i for i, r in enumerate(rows) if r and r[0] == "Merkmal/Partei")
+    lands, votes, kinds = rows[head], rows[head + 1], rows[head + 2]
+    cols = []
+    for j in range(3, len(lands)):
+        land = lands[j].replace("\n", "").strip()
+        if land in LAND_CODES and kinds[j].strip() == "Anzahl" and votes[j].strip() in ("Erststimmen", "Zweitstimmen"):
+            cols.append((j, LAND_CODES[land], votes[j].strip()))
+    if len({c[1] for c in cols}) != 17:
+        raise RuntimeError(f"unexpected table layout: found {len(cols)} count columns")
+    out = {}
+    for r in rows[head + 3:]:
+        if len(r) < 4 or not r[1].strip().isdigit():
+            continue
+        label, year = r[0].strip(), int(r[1])
+        for j, geo, vote in cols:
+            v = german_number(r[j]) if j < len(r) else None
+            if v is not None:
+                out[(label, year, geo, vote)] = v
+    _bwl_cache[url] = out
+    return out
+
+
+def fetch_bundeswahlleiterin(ind: dict) -> list[tuple]:
+    spec = ind["fetch"]
+    data = load_bundestag_results(spec["url"])
+    geos = ["DE"] + (LAENDER if ind.get("geo") == "laender" else [])
+    years = sorted({k[1] for k in data if k[1] >= spec.get("from_year", UNIFIED_FROM)})
+    rows = []
+    for year in years:
+        for geo in geos:
+            get = lambda label, vote="Zweitstimmen": data.get((label, year, geo, vote))
+            if spec["measure"] == "turnout":
+                voters, electorate = get("Wählende"), get("Wahlberechtigte")
+                if voters and electorate:
+                    rows.append((year, geo, "turnout", 100 * voters / electorate))
+            elif spec["measure"] == "second_vote_share":
+                valid = get("gültige Stimmen/Sitze insgesamt")
+                if not valid:
+                    continue
+                named = 0.0
+                for key, parties in spec["parties"].items():
+                    votes = [get(p) for p in parties]
+                    if any(v is not None for v in votes):
+                        share = 100 * sum(v or 0 for v in votes) / valid
+                        named += share
+                        rows.append((year, geo, key, share))
+                if "other" in ind["series"]:
+                    rows.append((year, geo, "other", 100 - named))
+            else:
+                raise RuntimeError(f"unknown measure {spec['measure']}")
+    return rows
+
+
 FETCHERS = {
     "owid_github": fetch_owid_github,
     "eurostat": fetch_eurostat,
+    "bundeswahlleiterin": fetch_bundeswahlleiterin,
 }
 
 

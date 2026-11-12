@@ -25,10 +25,9 @@
     const v = (n) => cs.getPropertyValue(n).trim();
     return {
       series: [1, 2, 3, 4, 5, 6, 7, 8].map((i) => v(`--series-${i}`)),
-      // Fixed colours for energy sources, so coal is the same colour on every chart.
-      energy: Object.fromEntries(
-        ["wind", "solar", "hydro", "bio", "nuclear", "other", "gas", "coal"].map((k) => [k, v(`--energy-${k}`)])
-      ),
+      // Fixed colours with a meaning across charts: energy sources ("coal" ->
+      // --energy-coal) and parties ("party-spd" -> --party-spd).
+      fixed: (name) => v(`--energy-${name}`) || v(`--${name}`),
       surface: v("--surface-1"),
       ink: v("--text-primary"),
       ink2: v("--text-secondary"),
@@ -52,7 +51,7 @@
     return (d) => {
       const abs = Math.abs(d);
       if (abs >= 1e6) return new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 1 }).format(d / 1e6) + (LANG === "de" ? " Mio." : "M");
-      return new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 1 }).format(d);
+      return new Intl.NumberFormat(LOCALE, { maximumFractionDigits: abs < 10 ? 2 : 1 }).format(d);
     };
   }
 
@@ -73,9 +72,10 @@
   }
 
   // One colour per series, in series order. An indicator may name a fixed colour
-  // per series ("colors": {"coal_co2": "coal"}); otherwise the categorical order is used.
+  // per series ("colors": {"coal_co2": "coal", "spd": "party-spd"}); otherwise
+  // the categorical order is used.
   function seriesColors(spec, prep, tk) {
-    return prep.keys.map((k, i) => (spec.colors && spec.colors[k] && tk.energy[spec.colors[k]]) || tk.series[i % 8]);
+    return prep.keys.map((k, i) => (spec.colors && spec.colors[k] && tk.fixed(spec.colors[k])) || tk.series[i % 8]);
   }
 
   // ------------------------------------------------------------ chart forms
@@ -115,7 +115,9 @@
         : spec.chart === "bar-time"
         ? Plot.rectY(data, { x1: (d) => d.year - 0.42, x2: (d) => d.year + 0.42, y: "value", fill: "label", rx: 2 })
         : Plot.lineY(data, { x: "year", y: "value", stroke: "label", strokeWidth: 2, curve: "linear" }),
-      Plot.ruleY([0], { stroke: ymin < 0 || isArea || spec.chart === "bar-time" ? tk.axis : "none" }),
+      // Only draw (and so only include) zero when the axis starts there; an
+      // invisible rule at 0 would still stretch a zoomed axis down to 0.
+      zero ? Plot.ruleY([0], { stroke: ymin < 0 || isArea || spec.chart === "bar-time" ? tk.axis : "none" }) : null,
     ];
     if (direct) {
       marks.push(Plot.text(last, { x: "year", y: "ly", text: "label", dx: 6, textAnchor: "start", fill: tk.ink2, fontSize: 12 }));
@@ -128,7 +130,7 @@
       marginTop: 18,
       style: { background: "transparent", color: tk.muted, fontSize: "12px", fontFamily: "inherit" },
       x: { label: null, tickFormat: (d) => String(d), ticks: Math.max(3, Math.floor(width / 90)), domain: d3.extent(data, (d) => d.year) },
-      y: { label: null, tickFormat: axisFormat(spec.unit), nice: !yDomainMax, zero, ...(yDomainMax ? { domain: [0, yDomainMax] } : {}) },
+      y: { label: null, tickFormat: axisFormat(spec.unit), ticks: Math.max(4, Math.floor(height / 50)), nice: !yDomainMax, zero, ...(yDomainMax ? { domain: [0, yDomainMax] } : {}) },
       color: { domain: labels, range },
       marks,
     });

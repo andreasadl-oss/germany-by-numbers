@@ -43,8 +43,8 @@ Source: GitHub Actions**.
   Credit "Germany by Numbers" and the original source.
 - **Code:** [MIT](LICENSE).
 - **Data:** belongs to its publishers and stays under their licences (Eurostat
-  and Our World in Data: CC BY 4.0; Destatis: Datenlizenz Deutschland –
-  Namensnennung 2.0; some OWID energy data comes from third parties such as the
+  and Our World in Data: CC BY 4.0; Destatis and the Bundeswahlleiterin:
+  Datenlizenz Deutschland – Namensnennung 2.0; some OWID energy data comes from third parties such as the
   Energy Institute, with their own terms). Every chart names its source; see
   [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md).
 

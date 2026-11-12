@@ -33,7 +33,7 @@ planned, no fetcher yet.
 | **Our World in Data** (GitHub) | Energy mix and CO₂ series from 1950 (Ember, Energy Institute, Global Carbon Budget) | CSV on GitHub, no key | CC BY 4.0 (OWID); underlying third-party data have their own terms, credited on each chart | ✅ 6 indicators |
 | **Destatis GENESIS-Online** | The primary source for nearly everything German: Bundeshaushalt, tax revenue by tax (Kassenmäßige Steuereinnahmen), causes of death, Mikrozensus, housing, wages (Verdiensterhebung), Länder and Kreis data | REST API `genesis.destatis.de/genesisWS/rest/2020`; needs a free account/API token | Datenlizenz Deutschland – Namensnennung 2.0 (dl-de/by-2-0) | 📋 needs account (see `docs/DESTATIS_SETUP.md`) |
 | **Regionalstatistik.de** (Statistische Ämter des Bundes und der Länder) | Same GENESIS engine, for Kreise and Gemeinden: the source for a "look up your Kreis" feature | Same API as GENESIS; free account | dl-de/by-2-0 | 📋 for v2 |
-| **Bundeswahlleiterin** | Bundestag and European election results by Land and Wahlkreis | CSV downloads per election | Free reuse with attribution | 📋 |
+| **Bundeswahlleiterin** | Bundestag and European election results by Land and Wahlkreis. One table holds every Bundestag result since 1949 by Land (`btw_ab49_datenbank_ergebnisse.csv`) | CSV downloads, no key. The file URL contains an ID that changes when the table is republished (after each election): update `fetch.url` in `indicators/public-life.json` then | dl-de/by-2-0 | ✅ 3 indicators |
 | **Bundeskriminalamt – PKS** | Polizeiliche Kriminalstatistik: all recorded offences by type and Land, back to 1987 | Yearly CSV/Excel tables | Free reuse with attribution | 📋 (Eurostat covers headline categories for now) |
 | **SMARD (Bundesnetzagentur)** / **Energy-Charts (Fraunhofer ISE)** | Hourly/daily electricity generation, prices, imports | Open JSON APIs | CC BY 4.0 | 📋 (for monthly/real-time energy charts) |
 | **Umweltbundesamt** | Official GHG inventory by sector (Klimaschutzgesetz sectors), air quality | Excel/CSV downloads | dl-de/by-2-0 | 📋 (Eurostat env_air_gge used meanwhile) |
@@ -74,6 +74,9 @@ titles (DE/EN), chart type, source and fetch specification.
 | Energy | CO₂ by fuel | OWID co2-data | DE | ✅ |
 | Energy | CO₂ per person, territorial vs. consumption | OWID co2-data | DE | ✅ |
 | Energy | GHG emissions by sector | Eurostat `env_air_gge` | DE | ✅ |
+| Public life | Bundestag second votes by party, 1990–2025 | Bundeswahlleiterin, results since 1949 | DE | ✅ |
+| Public life | Bundestag turnout, 1990–2025 | Bundeswahlleiterin, results since 1949 | DE | ✅ |
+| Public life | Bundestag turnout by Land (latest election) | Bundeswahlleiterin, results since 1949 | Länder | ✅ |
 | Public life | Intentional homicide rate | Eurostat `crim_off_cat` | DE | ✅ |
 | Public life | Recorded burglary, theft, robbery | Eurostat `crim_off_cat` | DE | ✅ |
 | Public life | Tertiary attainment, 25–34 | Eurostat `edat_lfse_03` | DE | ✅ |
@@ -84,7 +87,8 @@ titles (DE/EN), chart type, source and fetch specification.
 1. **Destatis GENESIS** (free account): federal budget by ministry, tax
    revenue by individual tax (Lohnsteuer, Umsatzsteuer, …), causes of death,
    rents. The most "German" charts, and the ones people ask about most.
-2. **Bundeswahlleiterin**: Bundestag results 1949–2025 and by Land.
+2. **Bundeswahlleiterin, more**: second votes by party per Land, seats,
+   European elections.
 3. **PKS (BKA)**: crime by type and Land, the official German series.
 4. **SMARD / Energy-Charts**: monthly electricity data and prices.
 5. **Regionalstatistik**: Kreis-level maps (v2).

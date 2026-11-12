@@ -7,6 +7,30 @@
       2025
     ]
   },
+  "bundestag-second-votes": {
+    "rows": 65,
+    "updated": "2026-11-12",
+    "years": [
+      1990,
+      2025
+    ]
+  },
+  "bundestag-turnout": {
+    "rows": 10,
+    "updated": "2026-11-12",
+    "years": [
+      1990,
+      2025
+    ]
+  },
+  "bundestag-turnout-laender": {
+    "rows": 170,
+    "updated": "2026-11-12",
+    "years": [
+      1990,
+      2025
+    ]
+  },
   "co2-by-fuel": {
     "rows": 304,
     "updated": "2026-11-12",

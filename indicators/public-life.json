@@ -3,15 +3,178 @@
     "id": "public-life",
     "order": 4,
     "title": {
-      "de": "Kriminalität & Bildung",
-      "en": "Crime & education"
+      "de": "Wahlen, Kriminalität & Bildung",
+      "en": "Elections, crime & education"
     },
     "intro": {
-      "de": "Wie sicher Deutschland ist und wie gut ausgebildet die Menschen sind.",
-      "en": "How safe Germany is and how well educated people are."
+      "de": "Wie Deutschland wählt, wie sicher es ist und wie gut ausgebildet die Menschen sind.",
+      "en": "How Germany votes, how safe it is and how well educated people are."
     }
   },
   "indicators": [
+    {
+      "id": "bundestag-second-votes",
+      "title": {
+        "de": "Bundestagswahlen: Zweitstimmen nach Partei",
+        "en": "Bundestag elections: second votes by party"
+      },
+      "subtitle": {
+        "de": "Anteil an den gültigen Zweitstimmen in Prozent, bei jeder Bundestagswahl seit der Wiedervereinigung. Die Zweitstimme entscheidet über die Sitzverteilung.",
+        "en": "Share of valid second votes in percent, at every Bundestag election since reunification. The second vote decides how seats are shared out."
+      },
+      "unit": "%",
+      "chart": "line",
+      "series": {
+        "union": {
+          "de": "CDU/CSU",
+          "en": "CDU/CSU"
+        },
+        "spd": {
+          "de": "SPD",
+          "en": "SPD"
+        },
+        "afd": {
+          "de": "AfD",
+          "en": "AfD"
+        },
+        "greens": {
+          "de": "Grüne",
+          "en": "Greens"
+        },
+        "left": {
+          "de": "Die Linke (bis 2005 PDS)",
+          "en": "The Left (PDS until 2005)"
+        },
+        "fdp": {
+          "de": "FDP",
+          "en": "FDP"
+        },
+        "bsw": {
+          "de": "BSW",
+          "en": "BSW"
+        },
+        "other": {
+          "de": "Andere",
+          "en": "Others"
+        }
+      },
+      "colors": {
+        "union": "party-union",
+        "spd": "party-spd",
+        "afd": "party-afd",
+        "greens": "party-greens",
+        "left": "party-left",
+        "fdp": "party-fdp",
+        "bsw": "party-bsw",
+        "other": "party-other"
+      },
+      "source": {
+        "name": {
+          "de": "Die Bundeswahlleiterin, Ergebnisse der Bundestagswahlen seit 1949",
+          "en": "Die Bundeswahlleiterin (Federal Returning Officer), Bundestag election results since 1949"
+        },
+        "url": "https://www.bundeswahlleiterin.de/bundestagswahlen/2025/ergebnisse.html",
+        "license": "dl-de/by-2-0"
+      },
+      "fetch": {
+        "type": "bundeswahlleiterin",
+        "url": "https://www.bundeswahlleiterin.de/dam/jcr/24d8e745-920d-431a-893a-12805bc7ef40/btw_ab49_datenbank_ergebnisse.csv",
+        "measure": "second_vote_share",
+        "from_year": 1990,
+        "parties": {
+          "union": [
+            "CDU",
+            "CSU"
+          ],
+          "spd": [
+            "SPD"
+          ],
+          "afd": [
+            "AfD"
+          ],
+          "greens": [
+            "GRÜNE",
+            "B90/Gr"
+          ],
+          "left": [
+            "Die Linke"
+          ],
+          "fdp": [
+            "FDP"
+          ],
+          "bsw": [
+            "BSW"
+          ]
+        }
+      }
+    },
+    {
+      "id": "bundestag-turnout",
+      "title": {
+        "de": "Wahlbeteiligung bei Bundestagswahlen",
+        "en": "Turnout at Bundestag elections"
+      },
+      "subtitle": {
+        "de": "Anteil der Wahlberechtigten, die gewählt haben, in Prozent.",
+        "en": "Share of eligible voters who voted, in percent."
+      },
+      "unit": "%",
+      "chart": "line",
+      "series": {
+        "turnout": {
+          "de": "Wahlbeteiligung",
+          "en": "Turnout"
+        }
+      },
+      "source": {
+        "name": {
+          "de": "Die Bundeswahlleiterin, Ergebnisse der Bundestagswahlen seit 1949",
+          "en": "Die Bundeswahlleiterin (Federal Returning Officer), Bundestag election results since 1949"
+        },
+        "url": "https://www.bundeswahlleiterin.de/bundestagswahlen/2025/ergebnisse.html",
+        "license": "dl-de/by-2-0"
+      },
+      "fetch": {
+        "type": "bundeswahlleiterin",
+        "url": "https://www.bundeswahlleiterin.de/dam/jcr/24d8e745-920d-431a-893a-12805bc7ef40/btw_ab49_datenbank_ergebnisse.csv",
+        "measure": "turnout",
+        "from_year": 1990
+      }
+    },
+    {
+      "id": "bundestag-turnout-laender",
+      "title": {
+        "de": "Wahlbeteiligung nach Bundesland",
+        "en": "Turnout by state"
+      },
+      "subtitle": {
+        "de": "Wahlbeteiligung bei der letzten Bundestagswahl in Prozent.",
+        "en": "Turnout at the latest Bundestag election, in percent."
+      },
+      "unit": "%",
+      "chart": "bar-latest",
+      "geo": "laender",
+      "series": {
+        "turnout": {
+          "de": "Wahlbeteiligung",
+          "en": "Turnout"
+        }
+      },
+      "source": {
+        "name": {
+          "de": "Die Bundeswahlleiterin, Ergebnisse der Bundestagswahlen seit 1949",
+          "en": "Die Bundeswahlleiterin (Federal Returning Officer), Bundestag election results since 1949"
+        },
+        "url": "https://www.bundeswahlleiterin.de/bundestagswahlen/2025/ergebnisse.html",
+        "license": "dl-de/by-2-0"
+      },
+      "fetch": {
+        "type": "bundeswahlleiterin",
+        "url": "https://www.bundeswahlleiterin.de/dam/jcr/24d8e745-920d-431a-893a-12805bc7ef40/btw_ab49_datenbank_ergebnisse.csv",
+        "measure": "turnout",
+        "from_year": 1990
+      }
+    },
     {
       "id": "homicide-rate",
       "title": {

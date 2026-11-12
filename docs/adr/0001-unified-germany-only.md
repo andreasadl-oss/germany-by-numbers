@@ -6,3 +6,6 @@ Eurostat data are cut at 1991 (`UNIFIED_FROM` in `pipeline/fetch.py`). Sources
 that reconstruct today's borders for earlier years (Our World in Data's energy
 and CO₂ series) keep their full history. West/East German history could come
 back later as its own clearly labelled indicators, never mixed into "Germany".
+
+Bundestag election results start with the election of 2 December 1990, the
+first held across unified Germany.

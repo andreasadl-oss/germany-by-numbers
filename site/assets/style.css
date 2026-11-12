@@ -27,6 +27,15 @@
   --energy-other: #8c8c8c;
   --energy-gas: #eb6834;
   --energy-coal: #8e4a22;
+  /* Parties: their own conventional colours (CDU/CSU black, SPD red, ...) */
+  --party-union: #1f1f1f;
+  --party-spd: #e3000f;
+  --party-afd: #009ee0;
+  --party-greens: #3f9a2a;
+  --party-left: #be3075;
+  --party-fdp: #d9ad00;
+  --party-bsw: #6b2346;
+  --party-other: #9a9a97;
   --radius: 10px;
   --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
@@ -59,6 +68,14 @@
   --energy-other: #757575;
   --energy-gas: #e0703c;
   --energy-coal: #93491f;
+  --party-union: #e2e1dc;
+  --party-spd: #f0444c;
+  --party-afd: #2fb3ee;
+  --party-greens: #5bb043;
+  --party-left: #e0569a;
+  --party-fdp: #f2c400;
+  --party-bsw: #b05a86;
+  --party-other: #6e6e6b;
   }
 }
 :root[data-theme="dark"] {
@@ -89,6 +106,14 @@
   --energy-other: #757575;
   --energy-gas: #e0703c;
   --energy-coal: #93491f;
+  --party-union: #e2e1dc;
+  --party-spd: #f0444c;
+  --party-afd: #2fb3ee;
+  --party-greens: #5bb043;
+  --party-left: #e0569a;
+  --party-fdp: #f2c400;
+  --party-bsw: #b05a86;
+  --party-other: #6e6e6b;
 }
 
 * { box-sizing: border-box; }

@@ -231,7 +231,7 @@ function aboutPage(lang) {
   <h1>${t.about}</h1>
   <p class="lede">Gute Debatten brauchen gemeinsame Fakten. Diese Seite sammelt die wichtigsten Zahlen über Deutschland an einem Ort – verständlich aufbereitet, mit Quellen belegt und frei nutzbar.</p>
   <h2>Was ist das?</h2>
-  <p>Eine Sammlung von Diagrammen zu Wirtschaft, Staatsfinanzen, Bevölkerung, Gesundheit, Energie, Klima, Kriminalität und Bildung – für Deutschland insgesamt und, wo möglich, für alle 16 Bundesländer.</p>
+  <p>Eine Sammlung von Diagrammen zu Wirtschaft, Staatsfinanzen, Bevölkerung, Gesundheit, Energie, Klima, Wahlen, Kriminalität und Bildung – für Deutschland insgesamt und, wo möglich, für alle 16 Bundesländer.</p>
   <h2>Woher kommen die Daten?</h2>
   <p>Aus offenen, amtlichen Quellen: vor allem dem Statistischen Bundesamt (Destatis), Eurostat und Bundesbehörden, ergänzt um gepflegte offene Datensätze wie Our World in Data. Jedes Diagramm nennt seine Quelle. Eine vollständige Liste steht unter <a href="${rel}de/sources/">Datenquellen</a>.</p>
   <h2>Darf ich die Diagramme verwenden?</h2>
@@ -247,7 +247,7 @@ function aboutPage(lang) {
   <h1>${t.about}</h1>
   <p class="lede">Good debates need shared facts. This site brings the most important numbers about Germany together in one place – clearly presented, sourced and free to use.</p>
   <h2>What is this?</h2>
-  <p>A collection of charts on the economy, public finances, population, health, energy, climate, crime and education – for Germany as a whole and, where possible, for all 16 federal states (Länder).</p>
+  <p>A collection of charts on the economy, public finances, population, health, energy, climate, elections, crime and education – for Germany as a whole and, where possible, for all 16 federal states (Länder).</p>
   <h2>Where does the data come from?</h2>
   <p>From open, official sources: mainly the Federal Statistical Office (Destatis), Eurostat and federal agencies, complemented by well-maintained open datasets such as Our World in Data. Every chart names its source. The full list is on the <a href="${rel}en/sources/">data sources</a> page.</p>
   <h2>Can I use the charts?</h2>
