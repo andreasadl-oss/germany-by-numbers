@@ -334,7 +334,17 @@
           "TE",
           "TR"
         ]
-      }
+      },
+      "notes": [
+        {
+          "year": 1995,
+          "kind": "event",
+          "text": {
+            "de": "Der Bund übernimmt die Schulden der Treuhand und ostdeutscher Wohnungsunternehmen. Die einmalige Buchung treibt die Ausgaben hoch.",
+            "en": "The federal government takes over the debts of the Treuhand and eastern housing companies. This one-off booking pushes spending up."
+          }
+        }
+      ]
     },
     {
       "id": "tax-revenue-by-type",

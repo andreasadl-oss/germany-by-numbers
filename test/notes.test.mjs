@@ -104,6 +104,11 @@ describe("notes on the real site", () => {
     assert.ok(population?.notes.some((n) => n.year === 2011 && n.kind === "break"));
   });
 
+  test("government revenue and spending has an event note at 1995 (the Treuhand debt takeover)", () => {
+    const finances = definitions.find((ind) => ind.id === "government-revenue-expenditure");
+    assert.ok(finances?.notes.some((n) => n.year === 1995 && n.kind === "event" && /Treuhand/.test(n.text.de) && /Treuhand/.test(n.text.en)));
+  });
+
   for (const ind of definitions) {
     for (const [name, width] of Object.entries(WIDTHS)) {
       for (const lang of LANGS) {
