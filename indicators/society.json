@@ -252,6 +252,116 @@
       }
     },
     {
+      "id": "causes-of-death",
+      "title": {
+        "de": "Todesursachen",
+        "en": "Causes of death"
+      },
+      "subtitle": {
+        "de": "Gestorbene nach Todesursache, neuestes verfügbares Jahr.",
+        "en": "Deaths by cause, latest available year."
+      },
+      "unit": "",
+      "chart": "bar-latest",
+      "series": {
+        "circulatory": {
+          "de": "Herz-Kreislauf-Erkrankungen",
+          "en": "Heart and circulatory diseases"
+        },
+        "cancer": {
+          "de": "Krebs",
+          "en": "Cancer"
+        },
+        "respiratory": {
+          "de": "Atemwegserkrankungen",
+          "en": "Respiratory diseases"
+        },
+        "mental": {
+          "de": "Psychische Erkrankungen (u. a. Demenz)",
+          "en": "Mental disorders (incl. dementia)"
+        },
+        "digestive": {
+          "de": "Erkrankungen der Verdauungsorgane",
+          "en": "Digestive diseases"
+        },
+        "nervous": {
+          "de": "Erkrankungen des Nervensystems",
+          "en": "Diseases of the nervous system"
+        },
+        "endocrine": {
+          "de": "Stoffwechselerkrankungen (u. a. Diabetes)",
+          "en": "Metabolic diseases (incl. diabetes)"
+        },
+        "accidents": {
+          "de": "Unfälle (inkl. Behandlungskomplikationen)",
+          "en": "Accidents (incl. medical complications)"
+        },
+        "suicide": {
+          "de": "Suizid",
+          "en": "Suicide"
+        },
+        "covid": {
+          "de": "COVID-19",
+          "en": "COVID-19"
+        },
+        "other": {
+          "de": "Andere Ursachen",
+          "en": "Other causes"
+        }
+      },
+      "source": {
+        "name": {
+          "de": "Statistisches Bundesamt (Destatis), Tabelle 23211-0001: Todesursachenstatistik",
+          "en": "Federal Statistical Office (Destatis), table 23211-0001: causes of death statistics"
+        },
+        "url": "https://genesis.destatis.de/datenbank/online/statistic/23211/table/23211-0001",
+        "license": "dl-de/by-2-0"
+      },
+      "fetch": {
+        "type": "destatis",
+        "table": "23211-0001",
+        "from_year": 1998,
+        "series_var": "TODUR1",
+        "filters": {
+          "GES": "Insgesamt"
+        },
+        "series": {
+          "circulatory": [
+            "Krankheiten des Kreislaufsystems"
+          ],
+          "cancer": [
+            "Bösartige Neubildungen (BN)"
+          ],
+          "respiratory": [
+            "Krankheiten des Atmungssystems"
+          ],
+          "mental": [
+            "Psychische und Verhaltensstörungen"
+          ],
+          "digestive": [
+            "Krankheiten des Verdauungssystems"
+          ],
+          "nervous": [
+            "Krankheiten d. Nervensystems u. d. Sinnesorgane"
+          ],
+          "endocrine": [
+            "Endokrine, Ernährungs- u. Stoffwechselkrankheiten"
+          ],
+          "accidents": [
+            "Unfälle u. med. Komplikationen einschl. Spätfolgen"
+          ],
+          "suicide": [
+            "Vorsätzliche Selbstbeschädigung"
+          ],
+          "covid": [
+            "COVID-19, Virus nachgewiesen",
+            "COVID-19, Virus nicht nachgewiesen"
+          ]
+        },
+        "total": "Insgesamt"
+      }
+    },
+    {
       "id": "poverty-risk",
       "title": {
         "de": "Armutsgefährdungsquote",

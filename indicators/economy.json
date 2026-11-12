@@ -391,6 +391,93 @@
       }
     },
     {
+      "id": "tax-revenue-by-tax",
+      "title": {
+        "de": "Steuereinnahmen nach Steuer",
+        "en": "Tax revenue by tax"
+      },
+      "subtitle": {
+        "de": "Kassenmäßige Steuereinnahmen von Bund, Ländern und Gemeinden vor der Verteilung, in Milliarden Euro pro Jahr.",
+        "en": "Cash tax revenue of federal, state and local government before it is shared out, in billions of euros per year."
+      },
+      "unit": "",
+      "chart": "area",
+      "series": {
+        "vat": {
+          "de": "Umsatzsteuer (inkl. Einfuhr)",
+          "en": "VAT (incl. import VAT)"
+        },
+        "wage": {
+          "de": "Lohnsteuer",
+          "en": "Wage tax"
+        },
+        "income": {
+          "de": "Veranlagte Einkommensteuer",
+          "en": "Assessed income tax"
+        },
+        "corporate": {
+          "de": "Körperschaftsteuer",
+          "en": "Corporate income tax"
+        },
+        "trade": {
+          "de": "Gewerbesteuer",
+          "en": "Trade tax"
+        },
+        "energy": {
+          "de": "Energiesteuer",
+          "en": "Energy tax"
+        },
+        "soli": {
+          "de": "Solidaritätszuschlag",
+          "en": "Solidarity surcharge"
+        },
+        "other": {
+          "de": "Andere Steuern",
+          "en": "Other taxes"
+        }
+      },
+      "source": {
+        "name": {
+          "de": "Statistisches Bundesamt (Destatis), Tabelle 71211-0001: Kassenmäßige Steuereinnahmen",
+          "en": "Federal Statistical Office (Destatis), table 71211-0001: cash tax revenue"
+        },
+        "url": "https://genesis.destatis.de/datenbank/online/statistic/71211/table/71211-0001",
+        "license": "dl-de/by-2-0"
+      },
+      "fetch": {
+        "type": "destatis",
+        "table": "71211-0001",
+        "from_year": 1991,
+        "series_var": "START1",
+        "series": {
+          "vat": [
+            "Umsatzsteuer",
+            "Einfuhrumsatzsteuer"
+          ],
+          "wage": [
+            "Lohnsteuer"
+          ],
+          "income": [
+            "Veranlagte Einkommensteuer"
+          ],
+          "corporate": [
+            "Körperschaftsteuer"
+          ],
+          "trade": [
+            "Gewerbesteuer (brutto)"
+          ],
+          "energy": [
+            "Energiesteuer"
+          ],
+          "soli": [
+            "Solidaritätszuschlag"
+          ]
+        },
+        "total": "Steuereinnahmen insgesamt",
+        "scale": 1e-06
+      }
+    },
+    {
       "id": "government-debt",
       "title": {
         "de": "Staatsverschuldung",

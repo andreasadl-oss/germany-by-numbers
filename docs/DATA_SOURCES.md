@@ -31,7 +31,7 @@ planned, no fetcher yet.
 |---|---|---|---|---|
 | **Eurostat** | Harmonised German data on GDP, prices, labour, public finances (COFOG), population, health, poverty (EU-SILC), crime, education, emissions. National + Länder (NUTS 1/2) + Kreise (NUTS 3) for some series | Open REST API, JSON-stat, no key | Free reuse with attribution (CC BY 4.0) | ✅ 21 indicators |
 | **Our World in Data** (GitHub) | Energy mix and CO₂ series from 1950 (Ember, Energy Institute, Global Carbon Budget) | CSV on GitHub, no key | CC BY 4.0 (OWID); underlying third-party data have their own terms, credited on each chart | ✅ 6 indicators |
-| **Destatis GENESIS-Online** | The primary source for nearly everything German: Bundeshaushalt, tax revenue by tax (Kassenmäßige Steuereinnahmen), causes of death, Mikrozensus, housing, wages (Verdiensterhebung), Länder and Kreis data | REST API `genesis.destatis.de/genesisWS/rest/2020`; needs a free account/API token | Datenlizenz Deutschland – Namensnennung 2.0 (dl-de/by-2-0) | 📋 needs account (see `docs/DESTATIS_SETUP.md`) |
+| **Destatis GENESIS-Online** | The primary source for nearly everything German: public finances, tax revenue by tax (Kassenmäßige Steuereinnahmen), causes of death, Mikrozensus, housing, wages (Verdiensterhebung), Länder and Kreis data | REST API `genesis.destatis.de/genesisWS/rest/2020`; needs a free account/API token | Datenlizenz Deutschland – Namensnennung 2.0 (dl-de/by-2-0) | 🟡 2 indicators wired; connected via `DESTATIS_TOKEN` (see `docs/DESTATIS_SETUP.md`) |
 | **Regionalstatistik.de** (Statistische Ämter des Bundes und der Länder) | Same GENESIS engine, for Kreise and Gemeinden: the source for a "look up your Kreis" feature | Same API as GENESIS; free account | dl-de/by-2-0 | 📋 for v2 |
 | **Bundeswahlleiterin** | Bundestag and European election results by Land and Wahlkreis. One table holds every Bundestag result since 1949 by Land (`btw_ab49_datenbank_ergebnisse.csv`) | CSV downloads, no key. The file URL contains an ID that changes when the table is republished (after each election): update `fetch.url` in `indicators/public-life.json` then | dl-de/by-2-0 | ✅ 3 indicators |
 | **Bundeskriminalamt – PKS** | Polizeiliche Kriminalstatistik: all recorded offences by type and Land, back to 1987 | Yearly CSV/Excel tables | Free reuse with attribution | 📋 (Eurostat covers headline categories for now) |
@@ -58,6 +58,7 @@ titles (DE/EN), chart type, source and fetch specification.
 | Economy | Government spending by function (COFOG) | Eurostat `gov_10a_exp` | DE | ✅ |
 | Economy | Government revenue vs. spending | Eurostat `gov_10a_main` | DE | ✅ |
 | Economy | Tax revenue by type | Eurostat `gov_10a_taxag` | DE | ✅ |
+| Economy | Tax revenue by individual tax | Destatis `71211-0001` | DE | 🟡 |
 | Economy | Government debt | Eurostat `gov_10dd_edpt1` | DE | ✅ |
 | Society | Population | Eurostat `demo_gind` | DE | ✅ |
 | Society | Population by Land | Eurostat `demo_r_d2jan` | Länder | ✅ |
@@ -65,6 +66,7 @@ titles (DE/EN), chart type, source and fetch specification.
 | Society | Net migration | Eurostat `demo_gind` | DE | ✅ |
 | Society | Life expectancy by sex | Eurostat `demo_mlexpec` | DE | ✅ |
 | Society | Life expectancy by Land | Eurostat `demo_r_mlifexp` | Länder | ✅ |
+| Society | Causes of death | Destatis `23211-0001` | DE | 🟡 |
 | Society | At-risk-of-poverty rate | Eurostat `ilc_li02` | DE | ✅ |
 | Society | House prices | Eurostat `prc_hpi_a` | DE | ✅ |
 | Energy | Electricity generation by source | OWID energy-data | DE | ✅ |
@@ -84,9 +86,10 @@ titles (DE/EN), chart type, source and fetch specification.
 
 ## Next sources to add (suggested order)
 
-1. **Destatis GENESIS** (free account): federal budget by ministry, tax
-   revenue by individual tax (Lohnsteuer, Umsatzsteuer, …), causes of death,
-   rents. The most "German" charts, and the ones people ask about most.
+1. **Destatis GENESIS** (connected): more tables, e.g. public spending by
+   function (`71141-0004`), public debt by level (`71321-0005`), rents.
+   **Federal budget by ministry (Einzelplan)** is not in GENESIS: it comes
+   from the Federal Ministry of Finance (bundeshaushalt.de open data).
 2. **Bundeswahlleiterin, more**: second votes by party per Land, seats,
    European elections.
 3. **PKS (BKA)**: crime by type and Land, the official German series.

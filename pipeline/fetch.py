@@ -249,10 +249,108 @@ def fetch_bundeswahlleiterin(ind: dict) -> list[tuple]:
     return rows
 
 
+# ---------------------------------------------------------------- Destatis GENESIS
+
+GENESIS_API = "https://genesis.destatis.de/genesisWS/rest/2020/"
+
+
+def genesis_table(name: str, startyear: int) -> list[dict]:
+    """Download a GENESIS table as flat CSV ("ffcsv") and return its rows.
+
+    Each row becomes {variable code: attribute label, ..., "year", "value", "unit"},
+    e.g. {"GES": "Insgesamt", "TODUR1": "Diabetes mellitus", "year": 2024, ...}.
+    Needs DESTATIS_TOKEN (or DESTATIS_USER and DESTATIS_PASSWORD), see
+    docs/DESTATIS_SETUP.md.
+    """
+    import os
+    import zipfile
+
+    token = os.environ.get("DESTATIS_TOKEN", "")
+    user = token or os.environ.get("DESTATIS_USER", "")
+    if not user:
+        raise RuntimeError("no Destatis credentials (DESTATIS_TOKEN not set)")
+    password = "" if token else os.environ.get("DESTATIS_PASSWORD", "")
+    body = urllib.parse.urlencode({
+        "name": name, "area": "all", "compress": "false", "format": "ffcsv",
+        "startyear": str(startyear), "language": "de",
+    }).encode()
+    last = None
+    for attempt in range(3):
+        try:
+            req = urllib.request.Request(
+                GENESIS_API + "data/tablefile", data=body,
+                headers={"username": user, "password": password, "User-Agent": USER_AGENT,
+                         "Content-Type": "application/x-www-form-urlencoded"})
+            with urllib.request.urlopen(req, timeout=300) as resp:
+                raw = resp.read()
+            break
+        except Exception as exc:
+            last = exc
+            time.sleep(2 ** attempt)
+    else:
+        raise RuntimeError(f"GENESIS {name} failed: {last}")
+    if raw[:2] == b"PK":  # GENESIS zips the file even with compress=false
+        with zipfile.ZipFile(io.BytesIO(raw)) as z:
+            raw = z.read(z.namelist()[0])
+    text = raw.decode("utf-8-sig")
+    if text.lstrip().startswith("{"):  # an error or status message, not data
+        status = json.loads(text).get("Status", {})
+        raise RuntimeError(f"GENESIS {name}: {status.get('Code')} {status.get('Content')}")
+    out = []
+    for r in csv.DictReader(io.StringIO(text), delimiter=";"):
+        if not r.get("time", "").isdigit() or r.get("value") in (None, "", "-", ".", "...", "x"):
+            continue
+        row = {"year": int(r["time"]), "unit": r.get("value_unit", "")}
+        try:
+            row["value"] = float(r["value"].replace(",", "."))
+        except ValueError:
+            continue
+        i = 1
+        while f"{i}_variable_code" in r:
+            row[r[f"{i}_variable_code"]] = r[f"{i}_variable_attribute_label"]
+            i += 1
+        out.append(row)
+    return out
+
+
+def fetch_destatis(ind: dict) -> list[tuple]:
+    """Series are picked by attribute label, so the spec reads like the table:
+
+    "series_var": "STEUA1", "series": {"wage": ["Lohnsteuer"], ...},
+    "filters": {"GES": "Insgesamt"}, "total": "Steuereinnahmen insgesamt"
+    (the "other" series is total minus the named ones), "scale": 1e-6.
+    """
+    spec = ind["fetch"]
+    rows = genesis_table(spec["table"], spec.get("from_year", UNIFIED_FROM))
+    rows = [r for r in rows if all(r.get(k) == v for k, v in spec.get("filters", {}).items())]
+    var = spec["series_var"]
+    labels_seen = {r.get(var) for r in rows}
+    wanted = [l for ls in spec["series"].values() for l in ls] + ([spec["total"]] if "total" in spec else [])
+    missing = [l for l in wanted if l not in labels_seen]
+    if missing:
+        raise RuntimeError(f"labels not in {spec['table']}/{var}: {missing}; available: {sorted(l for l in labels_seen if l)}")
+    scale = spec.get("scale", 1)
+    by_year: dict[int, dict[str, float]] = {}
+    for r in rows:
+        by_year.setdefault(r["year"], {})[r[var]] = r["value"]
+    out = []
+    for year, vals in sorted(by_year.items()):
+        named = 0.0
+        for key, labels in spec["series"].items():
+            if any(l in vals for l in labels):
+                v = sum(vals.get(l, 0) for l in labels)
+                named += v
+                out.append((year, "DE", key, v * scale))
+        if "total" in spec and spec["total"] in vals:
+            out.append((year, "DE", "other", (vals[spec["total"]] - named) * scale))
+    return out
+
+
 FETCHERS = {
     "owid_github": fetch_owid_github,
     "eurostat": fetch_eurostat,
     "bundeswahlleiterin": fetch_bundeswahlleiterin,
+    "destatis": fetch_destatis,
 }
 
 

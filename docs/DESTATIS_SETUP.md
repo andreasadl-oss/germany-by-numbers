@@ -6,7 +6,7 @@ is a one-off task that only the repository owner can do. It takes about 10 minut
 
 ## 1. Create the account
 
-1. Go to <https://www-genesis.destatis.de/> and choose **Registrieren** (top right).
+1. Go to <https://genesis.destatis.de/> (formerly www-genesis.destatis.de) and choose **Registrieren** (top right).
 2. Use an email address you check and a **new password you don't use anywhere
    else**. The account is free and only allows reading public statistics.
 3. Confirm the email Destatis sends you and log in once.
@@ -24,6 +24,13 @@ is a one-off task that only the repository owner can do. It takes about 10 minut
 3. Save. GitHub encrypts secrets. They are hidden in the logs and stay hidden
    once the repository is public. They are not given to workflows run from
    pull requests opened from forks.
+
+## Status
+
+Connected (November 2026) with a `DESTATIS_TOKEN` secret. The fetcher is
+`fetch_destatis` in `pipeline/fetch.py`. To find tables and their exact labels,
+run the **Destatis probe (read-only)** workflow from the Actions tab: it logs in,
+searches the catalogue and lists every value of each table's columns.
 
 ## 3. Tell Claude
 
