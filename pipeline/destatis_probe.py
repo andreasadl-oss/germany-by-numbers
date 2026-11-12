@@ -31,7 +31,7 @@ def call(method: str, **params) -> bytes:
         data=urllib.parse.urlencode(params).encode(),
         headers={"username": user, "password": password,
                  "Content-Type": "application/x-www-form-urlencoded",
-                 "User-Agent": "de-in-numbers data pipeline"},
+                 "User-Agent": "germany-by-numbers data pipeline"},
     )
     try:
         with urllib.request.urlopen(req, timeout=180) as r:
