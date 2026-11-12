@@ -29,7 +29,7 @@ planned, no fetcher yet.
 
 | Source | What it has | Access | Licence | Status |
 |---|---|---|---|---|
-| **Eurostat** | Harmonised German data on GDP, prices, labour, public finances (COFOG), population, health, poverty (EU-SILC), crime, education, emissions. National + Länder (NUTS 1/2) + Kreise (NUTS 3) for some series | Open REST API, JSON-stat, no key | Free reuse with attribution (CC BY 4.0) | ✅ 20 indicators (1 still being fixed) |
+| **Eurostat** | Harmonised German data on GDP, prices, labour, public finances (COFOG), population, health, poverty (EU-SILC), crime, education, emissions. National + Länder (NUTS 1/2) + Kreise (NUTS 3) for some series | Open REST API, JSON-stat, no key | Free reuse with attribution (CC BY 4.0) | ✅ 21 indicators |
 | **Our World in Data** (GitHub) | Energy mix and CO₂ series from 1950 (Ember, Energy Institute, Global Carbon Budget) | CSV on GitHub, no key | CC BY 4.0 (OWID); underlying third-party data have their own terms, credited on each chart | ✅ 6 indicators |
 | **Destatis GENESIS-Online** | The primary source for nearly everything German: Bundeshaushalt, tax revenue by tax (Kassenmäßige Steuereinnahmen), causes of death, Mikrozensus, housing, wages (Verdiensterhebung), Länder and Kreis data | REST API `genesis.destatis.de/genesisWS/rest/2020`; needs a free account/API token | Datenlizenz Deutschland – Namensnennung 2.0 (dl-de/by-2-0) | 📋 needs account (see `docs/DESTATIS_SETUP.md`) |
 | **Regionalstatistik.de** (Statistische Ämter des Bundes und der Länder) | Same GENESIS engine, for Kreise and Gemeinden: the source for a "look up your Kreis" feature | Same API as GENESIS; free account | dl-de/by-2-0 | 📋 for v2 |
@@ -65,7 +65,7 @@ titles (DE/EN), chart type, source and fetch specification.
 | Society | Net migration | Eurostat `demo_gind` | DE | ✅ |
 | Society | Life expectancy by sex | Eurostat `demo_mlexpec` | DE | ✅ |
 | Society | Life expectancy by Land | Eurostat `demo_r_mlifexp` | Länder | ✅ |
-| Society | At-risk-of-poverty rate | Eurostat `ilc_li02` | DE | 🟡 query being fixed |
+| Society | At-risk-of-poverty rate | Eurostat `ilc_li02` | DE | ✅ |
 | Society | House prices | Eurostat `prc_hpi_a` | DE | ✅ |
 | Energy | Electricity generation by source | OWID energy-data | DE | ✅ |
 | Energy | Renewable share of electricity | OWID energy-data | DE | ✅ |
