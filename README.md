@@ -20,6 +20,21 @@ docs/DATA_SOURCES.md  which source is used for what, licences, status, roadmap
 To add a chart, add an entry to `indicators/<topic>.json`, then run the pipeline
 and the build.
 
+To mark a year on a chart, add a `notes` list to the indicator:
+
+```json
+"notes": [
+  { "year": 2011, "kind": "break", "text": { "de": "…", "en": "…" } },
+  { "year": 2020, "to_year": 2021, "kind": "event", "text": { "de": "…", "en": "…" } }
+]
+```
+
+A `break` means the source changed its method or definition (a dashed line); an
+`event` means something really happened (a solid line, or a shaded band with
+`to_year`). Keep each text to one short line, and check it against the source's
+own metadata. The build stops if a note lacks a language, has another kind, or
+falls outside the indicator's data years.
+
 ## Run locally
 
 ```bash

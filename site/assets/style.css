@@ -180,6 +180,12 @@ p { margin: 0 0 0.8em; }
 .year-chip { font-size: 12px; font-weight: 600; color: var(--text-secondary); border: 1px solid var(--border); border-radius: 999px; padding: 0 8px; }
 .plot { position: relative; min-height: 120px; }
 .plot svg { display: block; max-width: 100%; height: auto; overflow: visible; touch-action: pan-y; }
+.notes { margin-top: 10px; font-size: 13px; color: var(--text-secondary); }
+.notes h4 { font-size: 13px; font-weight: 600; margin: 0 0 4px; color: var(--text-primary); }
+.notes ol { margin: 0; padding-left: 1.6em; }
+.notes li { margin: 2px 0; }
+.note-when { font-weight: 600; color: var(--text-primary); }
+.note-kind { color: var(--text-muted); }
 .card-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 8px 16px; flex-wrap: wrap; border-top: 1px solid var(--border); margin-top: 10px; padding-top: 10px; }
 .source { font-size: 12px; color: var(--text-muted); margin: 0; flex: 1 1 260px; }
 .source a { color: var(--text-secondary); }

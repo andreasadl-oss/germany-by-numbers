@@ -24,6 +24,10 @@ _Avoid_: chart (a chart is how an indicator is drawn), dataset, metric
 One line, bar or band within an indicator, e.g. "Wind" within electricity generation.
 _Avoid_: variable, column
 
+**Note**:
+A marker on an indicator at a year (or year range) with a short bilingual explanation; its kind is *break* (the source changed method or definition) or *event* (something real happened).
+_Avoid_: annotation, footnote
+
 **Source**:
 The organisation that publishes the data an indicator uses, credited on every chart.
 _Avoid_: provider

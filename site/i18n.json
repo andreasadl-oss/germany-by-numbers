@@ -26,7 +26,10 @@
     "back": "Zurück",
     "footer": "Ein unabhängiges, nicht-kommerzielles Projekt. Die Daten stammen aus der amtlichen Statistik und anderen offenen Quellen und gelten unter deren Lizenzen; jedes Diagramm nennt seine Quelle.",
     "embed": "Einbetten",
-    "copied": "Kopiert!"
+    "copied": "Kopiert!",
+    "notes": "Hinweise",
+    "noteBreak": "Bruch in der Reihe",
+    "noteEvent": "Ereignis"
   },
   "en": {
     "htmlLang": "en",
@@ -55,6 +58,9 @@
     "back": "Back",
     "footer": "An independent, non-commercial project. The data comes from official statistics and other open sources and stays under their licences; every chart names its source.",
     "embed": "Embed",
-    "copied": "Copied!"
+    "copied": "Copied!",
+    "notes": "Notes",
+    "noteBreak": "Break in series",
+    "noteEvent": "Event"
   }
 }

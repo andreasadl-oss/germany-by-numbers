@@ -46,7 +46,17 @@
         "series_values": [
           "JAN"
         ]
-      }
+      },
+      "notes": [
+        {
+          "year": 2011,
+          "kind": "break",
+          "text": {
+            "de": "Zensus 2011: Bevölkerung neu gezählt; der Rückgang ist eine Korrektur, keine Abwanderung.",
+            "en": "Census 2011: population recounted; the drop is a revision, not people leaving."
+          }
+        }
+      ]
     },
     {
       "id": "population-laender",
