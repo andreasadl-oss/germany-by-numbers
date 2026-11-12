@@ -15,7 +15,7 @@ import sys
 import urllib.parse
 import urllib.request
 
-API = "https://www-genesis.destatis.de/genesisWS/rest/2020/"
+API = "https://genesis.destatis.de/genesisWS/rest/2020/"
 
 
 def call(method: str, **params) -> bytes:
