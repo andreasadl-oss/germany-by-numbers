@@ -83,15 +83,15 @@
   // it spans years). Each gets a number above the plot area, where it can't collide
   // with the lines or the end-of-line labels; the notes list below the chart uses
   // the same numbers. Every mark carries the note as its tooltip.
+  const TOP = 18; // top margin of a time chart
   const NOTE_ROW = 18; // extra top margin that holds the note numbers
-  const noteTitle = (n, i) => `${i + 1}. ${n.to_year ? `${n.year}–${n.to_year}` : n.year} · ${n.kind === "break" ? T.noteBreak : T.noteEvent}: ${n.text}`;
 
   function noteMarks(notes, tk) {
     if (!notes.length) return { under: [], over: [] };
-    const tagged = notes.map((n, i) => ({ ...n, label: String(i + 1), title: noteTitle(n, i) }));
+    const tagged = notes.map((n, i) => ({ ...n, label: String(i + 1), title: `${i + 1}. ${n.when} · ${n.kind}: ${n.text}` }));
     const bands = tagged.filter((n) => n.to_year);
-    const breaks = tagged.filter((n) => !n.to_year && n.kind === "break");
-    const events = tagged.filter((n) => !n.to_year && n.kind !== "break");
+    const breaks = tagged.filter((n) => !n.to_year && n.dashed);
+    const events = tagged.filter((n) => !n.to_year && !n.dashed);
     return {
       under: [
         Plot.rect(bands, { x1: "year", x2: "to_year", fill: tk.muted, fillOpacity: 0.14, title: "title" }),
@@ -129,7 +129,7 @@
       : [];
     const marginRight = direct ? Math.min(150, 12 + 7 * d3.max(labels, (l) => l.length)) : 16;
     const notes = noteMarks(spec.notes || [], tk);
-    const marginTop = 18 + (spec.notes?.length ? NOTE_ROW : 0);
+    const marginTop = TOP + (spec.notes?.length ? NOTE_ROW : 0);
     const ymax = d3.max(data, (d) => d.value);
     const zero = isArea || spec.chart === "bar-time" || ymin < 0 || ymin < ymax * 0.25;
     // Stacked shares can't exceed 100 %.

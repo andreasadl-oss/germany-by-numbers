@@ -18,6 +18,10 @@ describe("the build checks every note", () => {
   test("a note outside the indicator's data years stops the build, naming the indicator", async () => {
     await assert.rejects(buildSite(fixture("note-year-out-of-range")), /note-year-out-of-range.*2007/s);
   });
+
+  test("a note on a chart without a time axis stops the build, naming the indicator", async () => {
+    await assert.rejects(buildSite(fixture("note-on-bar-chart")), /note-on-bar-chart.*bar-latest/s);
+  });
 });
 
 /** What the chart draws for its notes: every SVG mark whose tooltip (<title>) is a

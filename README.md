@@ -33,7 +33,8 @@ A `break` means the source changed its method or definition (a dashed line); an
 `event` means something really happened (a solid line, or a shaded band with
 `to_year`). Keep each text to one short line, and check it against the source's
 own metadata. The build stops if a note lacks a language, has another kind, or
-falls outside the indicator's data years.
+falls outside the indicator's data years. Notes work on charts with a year
+axis (`line`, `area`, `bar-time`), not on `bar-latest`.
 
 ## Run locally
 

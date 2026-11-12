@@ -42,6 +42,7 @@ for (const t of topics) {
 // A note marks a year (or year range) on an indicator: { year, to_year?, kind, text: { de, en } }.
 // Every note is checked here so a broken one never reaches the site.
 const NOTE_KINDS = ["break", "event"];
+const TIME_CHARTS = ["line", "area", "bar-time"]; // charts with a year axis to mark
 
 function dataYears(ind) {
   const file = path.join(DATA, `${ind.id}.csv`);
@@ -53,6 +54,9 @@ function dataYears(ind) {
 function noteErrors(ind) {
   const errors = [];
   const span = ind.notes?.length ? dataYears(ind) : null;
+  if (ind.notes?.length && !TIME_CHARTS.includes(ind.chart)) {
+    errors.push(`Indicator "${ind.id}": a ${ind.chart} chart has no year axis, so it can't show notes`);
+  }
   (ind.notes ?? []).forEach((note, i) => {
     const where = `Indicator "${ind.id}", note ${i + 1}${note.year != null ? ` (${note.year})` : ""}`;
     const fail = (msg) => errors.push(`${where}: ${msg}`);
@@ -62,12 +66,13 @@ function noteErrors(ind) {
     if (!NOTE_KINDS.includes(note.kind)) fail(`kind "${note.kind}" is not one of ${NOTE_KINDS.join(", ")}`);
     if (!span) return fail("the indicator has no data, so the note's year can't be checked");
     const [first, last] = span;
-    for (const key of ["year", "to_year"]) {
+    const checkYear = (key) => {
       const y = note[key];
-      if (y === undefined && key === "to_year") continue;
       if (!Number.isInteger(y)) fail(`${key} must be a whole year`);
       else if (y < first || y > last) fail(`${key} ${y} is outside the data years ${first}–${last}`);
-    }
+    };
+    checkYear("year");
+    if (note.to_year !== undefined) checkYear("to_year");
     if (Number.isInteger(note.to_year) && note.to_year <= note.year) fail(`to_year ${note.to_year} must be after year ${note.year}`);
   });
   return errors;
@@ -75,11 +80,16 @@ function noteErrors(ind) {
 
 // Notes in year order; the chart's numbered labels and the notes list share this order.
 const sortedNotes = (ind) => [...(ind.notes ?? [])].sort((a, b) => a.year - b.year || (a.to_year ?? a.year) - (b.to_year ?? b.year));
-const noteYears = (n) => (n.to_year ? `${n.year}–${n.to_year}` : String(n.year));
+// A note as the page shows it: { when: "2001–2003", kind: "Break in series", text }.
+const noteForPage = (n, lang) => ({
+  when: n.to_year ? `${n.year}–${n.to_year}` : String(n.year),
+  kind: n.kind === "break" ? i18n[lang].noteBreak : i18n[lang].noteEvent,
+  text: n.text[lang],
+});
 
-const errors = topics.flatMap((t) => t.indicators.flatMap(noteErrors));
-if (errors.length) {
-  console.error(`Build stopped: ${errors.length} broken note(s)\n${errors.map((e) => `  - ${e}`).join("\n")}`);
+const noteProblems = topics.flatMap((t) => t.indicators.flatMap(noteErrors));
+if (noteProblems.length) {
+  console.error(`Build stopped: ${noteProblems.length} broken note(s)\n${noteProblems.map((e) => `  - ${e}`).join("\n")}`);
   process.exit(1);
 }
 
@@ -149,7 +159,7 @@ function chartSpec(ind, lang) {
     colors: ind.colors,
     source: { ...ind.source, name: srcName(ind, lang) },
     updated: ind.updated,
-    notes: sortedNotes(ind).map((n) => ({ year: n.year, to_year: n.to_year, kind: n.kind, text: n.text[lang] })),
+    notes: sortedNotes(ind).map((n) => ({ year: n.year, to_year: n.to_year, dashed: n.kind === "break", ...noteForPage(n, lang) })),
   };
 }
 
@@ -162,7 +172,8 @@ function notesList(ind, lang) {
   return `<section class="notes" aria-labelledby="${id}">
     <h4 id="${id}">${t.notes}</h4>
     <ol>${notes
-      .map((n) => `<li class="note-${n.kind}"><span class="note-when">${noteYears(n)}</span> <span class="note-kind">${n.kind === "break" ? t.noteBreak : t.noteEvent}</span>: ${esc(n.text[lang])}</li>`)
+      .map((n) => noteForPage(n, lang))
+      .map((n) => `<li><span class="note-when">${n.when}</span> <span class="note-kind">${n.kind}</span>: ${esc(n.text)}</li>`)
       .join("")}</ol>
   </section>`;
 }
