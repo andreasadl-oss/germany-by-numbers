@@ -15,3 +15,13 @@ Default vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-
 ### Domain docs
 
 Single-context: one `CONTEXT.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
+## This repository is public
+
+Everything here (code, docs, commit messages, issues, pull requests, workflow logs) can be read by anyone. Write it for a public audience:
+
+- No outreach plans, private intentions or opinions about named people (who we plan to contact, show the site to, or ask for feedback).
+- No personal details: email addresses, private names, contact information.
+- No secrets: tokens, passwords, API keys, request headers. Destatis credentials live only in repository secrets (see `docs/DESTATIS_SETUP.md`).
+
+Private planning stays in the maintainer's own notes, outside the repository.
