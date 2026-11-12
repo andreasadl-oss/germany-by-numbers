@@ -260,6 +260,7 @@
         "type": "eurostat",
         "dataset": "ilc_li02",
         "filters": {
+          "indic_il": "LI_R_MD60",
           "age": "TOTAL",
           "unit": "PC"
         },
