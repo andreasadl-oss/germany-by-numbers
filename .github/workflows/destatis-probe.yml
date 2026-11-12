@@ -1,0 +1,35 @@
+name: Destatis probe (read-only)
+
+# Manual tool for choosing GENESIS tables: logs in, searches the catalogue and
+# prints sample rows. Commits nothing and publishes nothing.
+on:
+  workflow_dispatch:
+    inputs:
+      terms:
+        description: "Search terms, separated by |"
+        default: "Steuereinnahmen|Todesursachen|Bundeshaushalt|Ausgaben des Bundes"
+      tables:
+        description: "Table codes to sample, separated by spaces"
+        default: "71211-0001 23211-0002 23211-0004"
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Probe GENESIS
+        env:
+          DESTATIS_TOKEN: ${{ secrets.DESTATIS_TOKEN }}
+          DESTATIS_USER: ${{ secrets.DESTATIS_USER }}
+          DESTATIS_PASSWORD: ${{ secrets.DESTATIS_PASSWORD }}
+          TERMS: ${{ inputs.terms }}
+          TABLES: ${{ inputs.tables }}
+        run: |
+          IFS='|' read -ra T <<< "$TERMS"
+          python pipeline/destatis_probe.py "${T[@]}" --table $TABLES
