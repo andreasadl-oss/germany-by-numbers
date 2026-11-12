@@ -1,0 +1,330 @@
+{
+  "topic": {
+    "id": "energy",
+    "order": 3,
+    "title": {
+      "de": "Energie & Klima",
+      "en": "Energy & climate"
+    },
+    "intro": {
+      "de": "Wie Deutschland Strom erzeugt, wie viel Energie es verbraucht und wie sich seine Emissionen entwickeln.",
+      "en": "How Germany generates its electricity, how much energy it uses, and how its emissions are changing."
+    }
+  },
+  "indicators": [
+    {
+      "id": "electricity-mix",
+      "title": {
+        "de": "Woher kommt Deutschlands Strom?",
+        "en": "Where does Germany's electricity come from?"
+      },
+      "subtitle": {
+        "de": "Stromerzeugung nach Energieträger, in Terawattstunden (TWh) pro Jahr.",
+        "en": "Electricity generation by source, in terawatt-hours (TWh) per year."
+      },
+      "unit": "TWh",
+      "chart": "area",
+      "series": {
+        "wind_electricity": {
+          "de": "Wind",
+          "en": "Wind"
+        },
+        "solar_electricity": {
+          "de": "Solar",
+          "en": "Solar"
+        },
+        "hydro_electricity": {
+          "de": "Wasserkraft",
+          "en": "Hydropower"
+        },
+        "biofuel_electricity": {
+          "de": "Bioenergie",
+          "en": "Bioenergy"
+        },
+        "nuclear_electricity": {
+          "de": "Kernkraft",
+          "en": "Nuclear"
+        },
+        "other": {
+          "de": "Sonstige (Öl u. a.)",
+          "en": "Other (oil etc.)"
+        },
+        "gas_electricity": {
+          "de": "Gas",
+          "en": "Gas"
+        },
+        "coal_electricity": {
+          "de": "Kohle",
+          "en": "Coal"
+        }
+      },
+      "source": {
+        "name": "Ember & Energy Institute, via Our World in Data",
+        "url": "https://github.com/owid/energy-data",
+        "license": "CC BY 4.0"
+      },
+      "fetch": {
+        "type": "owid_github",
+        "dataset": "energy",
+        "from_year": 1990,
+        "combine": {
+          "other": [
+            "oil_electricity",
+            "other_renewable_exc_biofuel_electricity"
+          ]
+        }
+      }
+    },
+    {
+      "id": "renewables-share-electricity",
+      "title": {
+        "de": "Fast 60 % des Stroms sind inzwischen erneuerbar",
+        "en": "Almost 60% of Germany's electricity is now renewable"
+      },
+      "subtitle": {
+        "de": "Anteil an der Stromerzeugung in Prozent.",
+        "en": "Share of electricity generation, in percent."
+      },
+      "unit": "%",
+      "chart": "line",
+      "series": {
+        "renewables_share_elec": {
+          "de": "Erneuerbare",
+          "en": "Renewables"
+        },
+        "fossil_share_elec": {
+          "de": "Fossile",
+          "en": "Fossil fuels"
+        },
+        "nuclear_share_elec": {
+          "de": "Kernkraft",
+          "en": "Nuclear"
+        }
+      },
+      "source": {
+        "name": "Ember & Energy Institute, via Our World in Data",
+        "url": "https://github.com/owid/energy-data",
+        "license": "CC BY 4.0"
+      },
+      "fetch": {
+        "type": "owid_github",
+        "dataset": "energy",
+        "from_year": 1990
+      }
+    },
+    {
+      "id": "primary-energy-mix",
+      "title": {
+        "de": "Fossile Brennstoffe dominieren noch immer den Energieverbrauch",
+        "en": "Fossil fuels still dominate Germany's energy use"
+      },
+      "subtitle": {
+        "de": "Anteil am Primärenergieverbrauch nach Quelle, in Prozent. Strom ist nur ein Teil davon – Wärme und Verkehr gehören dazu.",
+        "en": "Share of primary energy consumption by source, in percent. Electricity is only one part – heating and transport are included too."
+      },
+      "unit": "%",
+      "chart": "area",
+      "series": {
+        "renewables_share_energy": {
+          "de": "Erneuerbare",
+          "en": "Renewables"
+        },
+        "nuclear_share_energy": {
+          "de": "Kernkraft",
+          "en": "Nuclear"
+        },
+        "gas_share_energy": {
+          "de": "Gas",
+          "en": "Gas"
+        },
+        "oil_share_energy": {
+          "de": "Öl",
+          "en": "Oil"
+        },
+        "coal_share_energy": {
+          "de": "Kohle",
+          "en": "Coal"
+        }
+      },
+      "source": {
+        "name": "Energy Institute Statistical Review, via Our World in Data",
+        "url": "https://github.com/owid/energy-data",
+        "license": "CC BY 4.0"
+      },
+      "fetch": {
+        "type": "owid_github",
+        "dataset": "energy",
+        "from_year": 1965
+      }
+    },
+    {
+      "id": "co2-emissions",
+      "title": {
+        "de": "Deutschlands CO₂-Emissionen haben sich seit 1990 fast halbiert",
+        "en": "Germany's CO₂ emissions have almost halved since 1990"
+      },
+      "subtitle": {
+        "de": "Jährliche CO₂-Emissionen aus fossilen Brennstoffen und Industrie, in Millionen Tonnen.",
+        "en": "Annual CO₂ emissions from fossil fuels and industry, in million tonnes."
+      },
+      "unit": "Mt CO₂",
+      "chart": "line",
+      "series": {
+        "co2": {
+          "de": "CO₂-Emissionen",
+          "en": "CO₂ emissions"
+        }
+      },
+      "source": {
+        "name": "Global Carbon Budget, via Our World in Data",
+        "url": "https://github.com/owid/co2-data",
+        "license": "CC BY 4.0"
+      },
+      "fetch": {
+        "type": "owid_github",
+        "dataset": "co2",
+        "from_year": 1950
+      }
+    },
+    {
+      "id": "co2-by-fuel",
+      "title": {
+        "de": "Die Emissionen aus Kohle sind seit 1990 um fast drei Viertel gesunken",
+        "en": "Emissions from coal have fallen by almost three-quarters since 1990"
+      },
+      "subtitle": {
+        "de": "CO₂-Emissionen nach Brennstoff, in Millionen Tonnen.",
+        "en": "CO₂ emissions by fuel, in million tonnes."
+      },
+      "unit": "Mt CO₂",
+      "chart": "line",
+      "series": {
+        "coal_co2": {
+          "de": "Kohle",
+          "en": "Coal"
+        },
+        "oil_co2": {
+          "de": "Öl",
+          "en": "Oil"
+        },
+        "gas_co2": {
+          "de": "Gas",
+          "en": "Gas"
+        },
+        "cement_co2": {
+          "de": "Zement",
+          "en": "Cement"
+        }
+      },
+      "source": {
+        "name": "Global Carbon Budget, via Our World in Data",
+        "url": "https://github.com/owid/co2-data",
+        "license": "CC BY 4.0"
+      },
+      "fetch": {
+        "type": "owid_github",
+        "dataset": "co2",
+        "from_year": 1950
+      }
+    },
+    {
+      "id": "co2-per-capita",
+      "title": {
+        "de": "Pro-Kopf-Emissionen: territorial vs. konsumbasiert",
+        "en": "Emissions per person: territorial vs. consumption-based"
+      },
+      "subtitle": {
+        "de": "CO₂ pro Person und Jahr, in Tonnen. Konsumbasiert heißt: inklusive der Emissionen importierter Güter, ohne die exportierter.",
+        "en": "CO₂ per person per year, in tonnes. Consumption-based includes emissions embedded in imports and excludes those in exports."
+      },
+      "unit": "t CO₂",
+      "chart": "line",
+      "series": {
+        "co2_per_capita": {
+          "de": "Territorial",
+          "en": "Territorial"
+        },
+        "consumption_co2_per_capita": {
+          "de": "Konsumbasiert",
+          "en": "Consumption-based"
+        }
+      },
+      "source": {
+        "name": "Global Carbon Budget, via Our World in Data",
+        "url": "https://github.com/owid/co2-data",
+        "license": "CC BY 4.0"
+      },
+      "fetch": {
+        "type": "owid_github",
+        "dataset": "co2",
+        "from_year": 1990
+      }
+    },
+    {
+      "id": "ghg-by-sector",
+      "title": {
+        "de": "Treibhausgasemissionen nach Sektor",
+        "en": "Greenhouse gas emissions by sector"
+      },
+      "subtitle": {
+        "de": "Treibhausgasemissionen in Millionen Tonnen CO₂-Äquivalent.",
+        "en": "Greenhouse gas emissions in million tonnes of CO₂-equivalent."
+      },
+      "unit": "Mt CO₂e",
+      "chart": "area",
+      "series": {
+        "CRF1A1": {
+          "de": "Energiewirtschaft",
+          "en": "Energy industries"
+        },
+        "CRF1A2": {
+          "de": "Industrie (Verbrennung)",
+          "en": "Manufacturing (combustion)"
+        },
+        "CRF1A3": {
+          "de": "Verkehr",
+          "en": "Transport"
+        },
+        "CRF1A4": {
+          "de": "Gebäude & Sonstige",
+          "en": "Buildings & other"
+        },
+        "CRF2": {
+          "de": "Industrieprozesse",
+          "en": "Industrial processes"
+        },
+        "CRF3": {
+          "de": "Landwirtschaft",
+          "en": "Agriculture"
+        },
+        "CRF5": {
+          "de": "Abfall",
+          "en": "Waste"
+        }
+      },
+      "source": {
+        "name": "Eurostat (env_air_gge), based on Germany's UNFCCC inventory by the Umweltbundesamt",
+        "url": "https://ec.europa.eu/eurostat/databrowser/view/env_air_gge/default/table",
+        "license": "CC BY 4.0"
+      },
+      "fetch": {
+        "type": "eurostat",
+        "dataset": "env_air_gge",
+        "filters": {
+          "airpol": "GHG",
+          "unit": "MIO_T"
+        },
+        "series_dim": "src_crf",
+        "series_values": [
+          "CRF1A1",
+          "CRF1A2",
+          "CRF1A3",
+          "CRF1A4",
+          "CRF2",
+          "CRF3",
+          "CRF5"
+        ]
+      }
+    }
+  ]
+}

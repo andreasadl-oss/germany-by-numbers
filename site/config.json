@@ -1,0 +1,9 @@
+{
+  "name": { "de": "DE in Zahlen", "en": "DE in Numbers" },
+  "tagline": {
+    "de": "Offene, verlässliche Daten über Deutschland – frei für alle.",
+    "en": "Open, reliable data about Germany – free for everyone."
+  },
+  "repo": "https://github.com/andreasadl-oss/de-in-numbers",
+  "license": "CC BY 4.0"
+}

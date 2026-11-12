@@ -1,0 +1,45 @@
+# DE in Numbers / DE in Zahlen
+
+Open, reliable data about Germany, free for everyone. The charts cover the
+economy, public finances, population, health, energy, climate, crime and
+education, for Germany as a whole and for the 16 Länder. The site is in
+German and English. Inspired by Hannah Ritchie's *UK by Numbers*.
+
+*Working title: the final name is still to be decided.*
+
+## How it works
+
+```
+indicators/*.json   what to show: titles (DE/EN), chart type, source, how to fetch it
+pipeline/fetch.py   downloads each indicator from its official source → data/<id>.csv
+data/               tidy CSVs: year, geo (NUTS code), series, value  (+ _status.json)
+site/build.mjs      generates the static site → dist/  (no framework)
+site/assets/        chart rendering (Observable Plot), styles
+docs/DATA_SOURCES.md  which source is used for what, licences, status, roadmap
+```
+
+To add a chart, add an entry to `indicators/<topic>.json`, then run the pipeline
+and the build.
+
+## Run locally
+
+```bash
+npm install
+python3 pipeline/fetch.py        # or: python3 pipeline/fetch.py <indicator-id>
+npm run build
+npm run serve                    # http://localhost:8080
+```
+
+Python needs only the standard library.
+
+## Publishing
+
+`.github/workflows/site.yml` refreshes the data every Monday, commits any
+changes and deploys `dist/` to GitHub Pages. You can also start it manually
+from the Actions tab. To turn on GitHub Pages, go to repository **Settings → Pages →
+Source: GitHub Actions**.
+
+## Licence
+
+Charts and data: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+Credit the original source named on each chart.

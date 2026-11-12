@@ -1,0 +1,124 @@
+{
+  "topic": {
+    "id": "economy",
+    "order": 1,
+    "title": { "de": "Wirtschaft, Steuern & Staatsausgaben", "en": "Economy, tax & spending" },
+    "intro": {
+      "de": "Wie viel Deutschland erwirtschaftet, wie sich Preise und Arbeitsmarkt entwickeln – und woher der Staat sein Geld bekommt und wofür er es ausgibt.",
+      "en": "How much Germany produces, how prices and jobs are changing – and where the state's money comes from and where it goes."
+    }
+  },
+  "indicators": [
+    {
+      "id": "gdp-per-capita",
+      "title": { "de": "Wirtschaftsleistung pro Kopf", "en": "Economic output per person" },
+      "subtitle": { "de": "Bruttoinlandsprodukt pro Einwohner, preisbereinigt (verkettete Volumen, Euro von 2020).", "en": "Gross domestic product per person, adjusted for inflation (chain-linked volumes, 2020 euros)." },
+      "unit": "€",
+      "chart": "line",
+      "series": { "B1GQ": { "de": "BIP pro Kopf", "en": "GDP per person" } },
+      "source": { "name": "Eurostat (nama_10_pc), based on Destatis national accounts", "url": "https://ec.europa.eu/eurostat/databrowser/view/nama_10_pc/default/table", "license": "CC BY 4.0" },
+      "fetch": { "type": "eurostat", "dataset": "nama_10_pc", "filters": { "unit": "CLV20_EUR_HAB" }, "series_dim": "na_item", "series_values": ["B1GQ"] }
+    },
+    {
+      "id": "gdp-per-capita-laender",
+      "title": { "de": "Wirtschaftsleistung pro Kopf nach Bundesland", "en": "Economic output per person by state" },
+      "subtitle": { "de": "Bruttoinlandsprodukt pro Einwohner in Euro, jeweilige Preise, neuestes verfügbares Jahr. Stadtstaaten liegen hoch, weil Pendler dort arbeiten, aber nicht wohnen.", "en": "GDP per person in euros at current prices, latest available year. City-states score high because commuters work there but live elsewhere." },
+      "unit": "€",
+      "chart": "bar-latest",
+      "geo": "laender",
+      "series": { "EUR_HAB": { "de": "BIP pro Kopf", "en": "GDP per person" } },
+      "source": { "name": "Eurostat (nama_10r_2gdp), based on the Arbeitskreis VGR der Länder", "url": "https://ec.europa.eu/eurostat/databrowser/view/nama_10r_2gdp/default/table", "license": "CC BY 4.0" },
+      "fetch": { "type": "eurostat", "dataset": "nama_10r_2gdp", "filters": {}, "series_dim": "unit", "series_values": ["EUR_HAB"], "geo": "laender" }
+    },
+    {
+      "id": "inflation",
+      "title": { "de": "Inflation", "en": "Inflation" },
+      "subtitle": { "de": "Jährliche Veränderung des Harmonisierten Verbraucherpreisindex (HVPI), in Prozent.", "en": "Annual change in the Harmonised Index of Consumer Prices (HICP), in percent." },
+      "unit": "%",
+      "chart": "bar-time",
+      "series": { "CP00": { "de": "Inflationsrate", "en": "Inflation rate" } },
+      "source": { "name": "Eurostat (prc_hicp_aind), based on Destatis", "url": "https://ec.europa.eu/eurostat/databrowser/view/prc_hicp_aind/default/table", "license": "CC BY 4.0" },
+      "fetch": { "type": "eurostat", "dataset": "prc_hicp_aind", "filters": { "unit": "RCH_A_AVG" }, "series_dim": "coicop", "series_values": ["CP00"] }
+    },
+    {
+      "id": "unemployment",
+      "title": { "de": "Arbeitslosenquote", "en": "Unemployment rate" },
+      "subtitle": { "de": "Erwerbslose in Prozent der Erwerbspersonen (15–74 Jahre), nach ILO-Definition.", "en": "Unemployed people as a share of the labour force (aged 15–74), ILO definition." },
+      "unit": "%",
+      "chart": "line",
+      "series": { "T": { "de": "Insgesamt", "en": "Total" } },
+      "source": { "name": "Eurostat (une_rt_a), based on the German Labour Force Survey", "url": "https://ec.europa.eu/eurostat/databrowser/view/une_rt_a/default/table", "license": "CC BY 4.0" },
+      "fetch": { "type": "eurostat", "dataset": "une_rt_a", "filters": { "age": "Y15-74", "unit": "PC_ACT" }, "series_dim": "sex", "series_values": ["T"] }
+    },
+    {
+      "id": "unemployment-laender",
+      "title": { "de": "Arbeitslosigkeit nach Bundesland", "en": "Unemployment by state" },
+      "subtitle": { "de": "Erwerbslosenquote (15–74 Jahre) in Prozent, ILO-Definition, neuestes verfügbares Jahr.", "en": "Unemployment rate (aged 15–74) in percent, ILO definition, latest available year." },
+      "unit": "%",
+      "chart": "bar-latest",
+      "geo": "laender",
+      "series": { "T": { "de": "Erwerbslosenquote", "en": "Unemployment rate" } },
+      "source": { "name": "Eurostat (lfst_r_lfu3rt)", "url": "https://ec.europa.eu/eurostat/databrowser/view/lfst_r_lfu3rt/default/table", "license": "CC BY 4.0" },
+      "fetch": { "type": "eurostat", "dataset": "lfst_r_lfu3rt", "filters": { "age": "Y15-74", "unit": "PC", "isced11": "TOTAL" }, "series_dim": "sex", "series_values": ["T"], "geo": "laender" }
+    },
+    {
+      "id": "government-spending-by-function",
+      "title": { "de": "Wofür gibt der Staat sein Geld aus?", "en": "What does the German state spend its money on?" },
+      "subtitle": { "de": "Ausgaben des Gesamtstaats (Bund, Länder, Gemeinden, Sozialversicherung) nach Aufgabenbereich, in Prozent des BIP, neuestes Jahr.", "en": "General government spending (federal, states, municipalities and social security) by function, as a share of GDP, latest year." },
+      "unit": "% BIP / GDP",
+      "chart": "bar-latest",
+      "series": {
+        "GF10": { "de": "Soziale Sicherung (Renten u. a.)", "en": "Social protection (pensions etc.)" },
+        "GF07": { "de": "Gesundheit", "en": "Health" },
+        "GF01": { "de": "Allgemeine öffentliche Verwaltung (inkl. Zinsen)", "en": "General public services (incl. interest)" },
+        "GF09": { "de": "Bildung", "en": "Education" },
+        "GF04": { "de": "Wirtschaftliche Angelegenheiten (inkl. Verkehr)", "en": "Economic affairs (incl. transport)" },
+        "GF03": { "de": "Öffentliche Ordnung & Sicherheit", "en": "Public order & safety" },
+        "GF02": { "de": "Verteidigung", "en": "Defence" },
+        "GF08": { "de": "Freizeit, Kultur & Religion", "en": "Recreation, culture & religion" },
+        "GF05": { "de": "Umweltschutz", "en": "Environmental protection" },
+        "GF06": { "de": "Wohnungswesen", "en": "Housing & community amenities" }
+      },
+      "source": { "name": "Eurostat (gov_10a_exp, COFOG), based on Destatis", "url": "https://ec.europa.eu/eurostat/databrowser/view/gov_10a_exp/default/table", "license": "CC BY 4.0" },
+      "fetch": { "type": "eurostat", "dataset": "gov_10a_exp", "filters": { "sector": "S13", "na_item": "TE", "unit": "PC_GDP" }, "series_dim": "cofog99", "series_values": ["GF01", "GF02", "GF03", "GF04", "GF05", "GF06", "GF07", "GF08", "GF09", "GF10"] }
+    },
+    {
+      "id": "government-revenue-expenditure",
+      "title": { "de": "Staatseinnahmen und -ausgaben", "en": "Government revenue and spending" },
+      "subtitle": { "de": "Gesamtstaat, in Prozent des BIP.", "en": "General government, as a share of GDP." },
+      "unit": "% BIP / GDP",
+      "chart": "line",
+      "series": {
+        "TE": { "de": "Ausgaben", "en": "Spending" },
+        "TR": { "de": "Einnahmen", "en": "Revenue" }
+      },
+      "source": { "name": "Eurostat (gov_10a_main), based on Destatis", "url": "https://ec.europa.eu/eurostat/databrowser/view/gov_10a_main/default/table", "license": "CC BY 4.0" },
+      "fetch": { "type": "eurostat", "dataset": "gov_10a_main", "filters": { "sector": "S13", "unit": "PC_GDP" }, "series_dim": "na_item", "series_values": ["TE", "TR"] }
+    },
+    {
+      "id": "tax-revenue-by-type",
+      "title": { "de": "Woher kommt das Geld des Staates?", "en": "Where does the state's money come from?" },
+      "subtitle": { "de": "Steuern und Sozialbeiträge nach Art, in Prozent des BIP.", "en": "Taxes and social contributions by type, as a share of GDP." },
+      "unit": "% BIP / GDP",
+      "chart": "area",
+      "series": {
+        "D61": { "de": "Sozialbeiträge", "en": "Social contributions" },
+        "D5": { "de": "Einkommen- & Vermögensteuern", "en": "Taxes on income & wealth" },
+        "D2": { "de": "Produktions- & Importabgaben (z. B. Mehrwertsteuer)", "en": "Taxes on production & imports (e.g. VAT)" },
+        "D91": { "de": "Vermögensübertragungsteuern (z. B. Erbschaftsteuer)", "en": "Capital taxes (e.g. inheritance tax)" }
+      },
+      "source": { "name": "Eurostat (gov_10a_taxag), based on Destatis", "url": "https://ec.europa.eu/eurostat/databrowser/view/gov_10a_taxag/default/table", "license": "CC BY 4.0" },
+      "fetch": { "type": "eurostat", "dataset": "gov_10a_taxag", "filters": { "sector": "S13_S212", "unit": "PC_GDP" }, "series_dim": "na_item", "series_values": ["D2", "D5", "D61", "D91"] }
+    },
+    {
+      "id": "government-debt",
+      "title": { "de": "Staatsverschuldung", "en": "Government debt" },
+      "subtitle": { "de": "Bruttoschuldenstand des Gesamtstaats (Maastricht-Definition), in Prozent des BIP.", "en": "General government gross debt (Maastricht definition), as a share of GDP." },
+      "unit": "% BIP / GDP",
+      "chart": "line",
+      "series": { "GD": { "de": "Schuldenquote", "en": "Debt-to-GDP ratio" } },
+      "source": { "name": "Eurostat (gov_10dd_edpt1), based on Destatis and the Bundesbank", "url": "https://ec.europa.eu/eurostat/databrowser/view/gov_10dd_edpt1/default/table", "license": "CC BY 4.0" },
+      "fetch": { "type": "eurostat", "dataset": "gov_10dd_edpt1", "filters": { "sector": "S13", "unit": "PC_GDP" }, "series_dim": "na_item", "series_values": ["GD"] }
+    }
+  ]
+}

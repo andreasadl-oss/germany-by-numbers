@@ -1,0 +1,50 @@
+{
+  "co2-by-fuel": {
+    "rows": 304,
+    "updated": "2026-11-12",
+    "years": [
+      1950,
+      2025
+    ]
+  },
+  "co2-emissions": {
+    "rows": 76,
+    "updated": "2026-11-12",
+    "years": [
+      1950,
+      2025
+    ]
+  },
+  "co2-per-capita": {
+    "rows": 71,
+    "updated": "2026-11-12",
+    "years": [
+      1990,
+      2025
+    ]
+  },
+  "electricity-mix": {
+    "rows": 288,
+    "updated": "2026-11-12",
+    "years": [
+      1990,
+      2025
+    ]
+  },
+  "primary-energy-mix": {
+    "rows": 300,
+    "updated": "2026-11-12",
+    "years": [
+      1965,
+      2024
+    ]
+  },
+  "renewables-share-electricity": {
+    "rows": 108,
+    "updated": "2026-11-12",
+    "years": [
+      1990,
+      2025
+    ]
+  }
+}

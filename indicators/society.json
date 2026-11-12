@@ -1,0 +1,101 @@
+{
+  "topic": {
+    "id": "society",
+    "order": 2,
+    "title": { "de": "Bevölkerung, Gesundheit & Gesellschaft", "en": "People, health & society" },
+    "intro": {
+      "de": "Wie viele Menschen in Deutschland leben, wie lange sie leben, wie viele zu- und fortziehen – und wie viele von Armut bedroht sind.",
+      "en": "How many people live in Germany, how long they live, how many move in and out – and how many are at risk of poverty."
+    }
+  },
+  "indicators": [
+    {
+      "id": "population",
+      "title": { "de": "Bevölkerung", "en": "Population" },
+      "subtitle": { "de": "Einwohnerinnen und Einwohner am 1. Januar.", "en": "Residents on 1 January." },
+      "unit": "",
+      "chart": "line",
+      "series": { "JAN": { "de": "Bevölkerung", "en": "Population" } },
+      "source": { "name": "Eurostat (demo_gind), based on Destatis", "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_gind/default/table", "license": "CC BY 4.0" },
+      "fetch": { "type": "eurostat", "dataset": "demo_gind", "filters": {}, "series_dim": "indic_de", "series_values": ["JAN"] }
+    },
+    {
+      "id": "population-laender",
+      "title": { "de": "Bevölkerung nach Bundesland", "en": "Population by state" },
+      "subtitle": { "de": "Einwohnerinnen und Einwohner am 1. Januar, neuestes verfügbares Jahr.", "en": "Residents on 1 January, latest available year." },
+      "unit": "",
+      "chart": "bar-latest",
+      "geo": "laender",
+      "series": { "T": { "de": "Bevölkerung", "en": "Population" } },
+      "source": { "name": "Eurostat (demo_r_d2jan), based on Destatis", "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_r_d2jan/default/table", "license": "CC BY 4.0" },
+      "fetch": { "type": "eurostat", "dataset": "demo_r_d2jan", "filters": { "age": "TOTAL", "unit": "NR" }, "series_dim": "sex", "series_values": ["T"], "geo": "laender" }
+    },
+    {
+      "id": "births-deaths",
+      "title": { "de": "Seit 1972 sterben mehr Menschen, als geboren werden", "en": "More people have died than been born every year since 1972" },
+      "subtitle": { "de": "Lebendgeborene und Gestorbene pro Jahr.", "en": "Live births and deaths per year." },
+      "unit": "",
+      "chart": "line",
+      "series": {
+        "LBIRTH": { "de": "Geburten", "en": "Births" },
+        "DEATH": { "de": "Sterbefälle", "en": "Deaths" }
+      },
+      "source": { "name": "Eurostat (demo_gind), based on Destatis", "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_gind/default/table", "license": "CC BY 4.0" },
+      "fetch": { "type": "eurostat", "dataset": "demo_gind", "filters": {}, "series_dim": "indic_de", "series_values": ["LBIRTH", "DEATH"] }
+    },
+    {
+      "id": "net-migration",
+      "title": { "de": "Nettozuwanderung", "en": "Net migration" },
+      "subtitle": { "de": "Zuzüge minus Fortzüge pro Jahr (bereinigt). Die Spitzen 2015 und 2022 spiegeln Flucht aus Syrien und der Ukraine.", "en": "Immigration minus emigration per year (adjusted). The peaks in 2015 and 2022 reflect refugees from Syria and Ukraine." },
+      "unit": "",
+      "chart": "bar-time",
+      "series": { "CNMIGRATN": { "de": "Nettozuwanderung", "en": "Net migration" } },
+      "source": { "name": "Eurostat (demo_gind), based on Destatis", "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_gind/default/table", "license": "CC BY 4.0" },
+      "fetch": { "type": "eurostat", "dataset": "demo_gind", "filters": {}, "series_dim": "indic_de", "series_values": ["CNMIGRATN"] }
+    },
+    {
+      "id": "life-expectancy",
+      "title": { "de": "Lebenserwartung bei Geburt", "en": "Life expectancy at birth" },
+      "subtitle": { "de": "In Jahren, nach Geschlecht.", "en": "In years, by sex." },
+      "unit": "Jahre / years",
+      "chart": "line",
+      "series": {
+        "F": { "de": "Frauen", "en": "Women" },
+        "M": { "de": "Männer", "en": "Men" }
+      },
+      "source": { "name": "Eurostat (demo_mlexpec), based on Destatis", "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_mlexpec/default/table", "license": "CC BY 4.0" },
+      "fetch": { "type": "eurostat", "dataset": "demo_mlexpec", "filters": { "age": "Y_LT1", "unit": "YR" }, "series_dim": "sex", "series_values": ["F", "M"] }
+    },
+    {
+      "id": "life-expectancy-laender",
+      "title": { "de": "Lebenserwartung nach Bundesland", "en": "Life expectancy by state" },
+      "subtitle": { "de": "Lebenserwartung bei Geburt in Jahren, neuestes verfügbares Jahr.", "en": "Life expectancy at birth in years, latest available year." },
+      "unit": "Jahre / years",
+      "chart": "bar-latest",
+      "geo": "laender",
+      "series": { "T": { "de": "Lebenserwartung", "en": "Life expectancy" } },
+      "source": { "name": "Eurostat (demo_r_mlifexp), based on Destatis", "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_r_mlifexp/default/table", "license": "CC BY 4.0" },
+      "fetch": { "type": "eurostat", "dataset": "demo_r_mlifexp", "filters": { "age": "Y_LT1", "unit": "YR" }, "series_dim": "sex", "series_values": ["T"], "geo": "laender" }
+    },
+    {
+      "id": "poverty-risk",
+      "title": { "de": "Armutsgefährdungsquote", "en": "At-risk-of-poverty rate" },
+      "subtitle": { "de": "Anteil der Menschen mit weniger als 60 % des mittleren Einkommens (nach Sozialleistungen), in Prozent.", "en": "Share of people living on less than 60% of median income (after social transfers), in percent." },
+      "unit": "%",
+      "chart": "line",
+      "series": { "LI_R_MD60": { "de": "Armutsgefährdungsquote", "en": "At-risk-of-poverty rate" } },
+      "source": { "name": "Eurostat (ilc_li02), EU-SILC / Mikrozensus", "url": "https://ec.europa.eu/eurostat/databrowser/view/ilc_li02/default/table", "license": "CC BY 4.0" },
+      "fetch": { "type": "eurostat", "dataset": "ilc_li02", "filters": { "age": "TOTAL", "sex": "T", "unit": "PC" }, "series_dim": "indic_il", "series_values": ["LI_R_MD60"] }
+    },
+    {
+      "id": "house-prices",
+      "title": { "de": "Immobilienpreise", "en": "House prices" },
+      "subtitle": { "de": "Häuserpreisindex, 2015 = 100 (nicht inflationsbereinigt).", "en": "House price index, 2015 = 100 (not adjusted for inflation)." },
+      "unit": "Index",
+      "chart": "line",
+      "series": { "TOTAL": { "de": "Alle Wohnimmobilien", "en": "All dwellings" } },
+      "source": { "name": "Eurostat (prc_hpi_a), based on Destatis", "url": "https://ec.europa.eu/eurostat/databrowser/view/prc_hpi_a/default/table", "license": "CC BY 4.0" },
+      "fetch": { "type": "eurostat", "dataset": "prc_hpi_a", "filters": { "unit": "I15_A_AVG" }, "series_dim": "purchase", "series_values": ["TOTAL"] }
+    }
+  ]
+}
