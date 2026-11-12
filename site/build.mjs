@@ -78,6 +78,8 @@ ${chartsJson ? `<script>window.__CHARTS__=${JSON.stringify(chartsJson).replace(/
 }
 
 // Data the browser needs to draw a chart (only the current language).
+const srcName = (ind, lang) => (typeof ind.source.name === "object" ? ind.source.name[lang] : ind.source.name);
+
 function chartSpec(ind, lang) {
   const series = Object.fromEntries(Object.entries(ind.series).map(([k, v]) => [k, v[lang]]));
   return {
@@ -88,7 +90,8 @@ function chartSpec(ind, lang) {
     chart: ind.chart,
     geo: ind.geo ?? "national",
     series,
-    source: ind.source,
+    colors: ind.colors,
+    source: { ...ind.source, name: srcName(ind, lang) },
     updated: ind.updated,
   };
 }
@@ -105,7 +108,7 @@ function chartCard(ind, lang, rel, { compact = false } = {}) {
   <div class="plot" role="img" aria-label="${esc(ind.title[lang])}"><p class="muted">${t.loading}</p></div>
   <div class="table-view" hidden></div>
   <div class="card-foot">
-    <p class="source">${t.source}: <a href="${esc(ind.source.url)}">${esc(ind.source.name)}</a> · ${esc(ind.source.license)}${ind.updated ? ` · ${t.updated} ${ind.updated}` : ""}</p>
+    <p class="source">${t.source}: <a href="${esc(ind.source.url)}">${esc(srcName(ind, lang))}</a> · ${esc(ind.source.license)}${ind.updated ? ` · ${t.updated} ${ind.updated}` : ""}</p>
     <div class="actions">
       <button type="button" data-action="table">${t.table}</button>
       <button type="button" data-action="png">PNG</button>
@@ -123,7 +126,7 @@ function comingSoon(inds, lang, rel) {
   return `<section class="coming-soon">
   <h3>${t.comingSoon}</h3>
   <p class="muted">${t.comingSoonText}</p>
-  <ul>${inds.map((i) => `<li>${esc(i.title[lang])} <span class="muted">– ${esc(i.source.name)}</span></li>`).join("")}</ul>
+  <ul>${inds.map((i) => `<li>${esc(i.title[lang])} <span class="muted">– ${esc(srcName(i, lang))}</span></li>`).join("")}</ul>
 </section>`;
 }
 
@@ -202,7 +205,7 @@ function sourcesPage(lang) {
   const t = i18n[lang];
   const rows = topics.flatMap((tp) =>
     tp.indicators.map(
-      (i) => `<tr><td>${esc(tp.topic.title[lang])}</td><td>${i.hasData ? `<a href="${rel}${lang}/chart/${i.id}/">${esc(i.title[lang])}</a>` : esc(i.title[lang])}</td><td><a href="${esc(i.source.url)}">${esc(i.source.name)}</a></td><td>${i.updated ?? `<span class="muted">${t.comingSoon}</span>`}</td></tr>`
+      (i) => `<tr><td>${esc(tp.topic.title[lang])}</td><td>${i.hasData ? `<a href="${rel}${lang}/chart/${i.id}/">${esc(i.title[lang])}</a>` : esc(i.title[lang])}</td><td><a href="${esc(i.source.url)}">${esc(srcName(i, lang))}</a></td><td>${i.updated ?? `<span class="muted">${t.comingSoon}</span>`}</td></tr>`
     )
   );
   const body = `

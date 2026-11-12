@@ -58,8 +58,21 @@
           "en": "Coal"
         }
       },
+      "colors": {
+        "wind_electricity": "wind",
+        "solar_electricity": "solar",
+        "hydro_electricity": "hydro",
+        "biofuel_electricity": "bio",
+        "nuclear_electricity": "nuclear",
+        "other": "other",
+        "gas_electricity": "gas",
+        "coal_electricity": "coal"
+      },
       "source": {
-        "name": "Ember & Energy Institute, via Our World in Data",
+        "name": {
+          "de": "Ember & Energy Institute, über Our World in Data",
+          "en": "Ember & Energy Institute, via Our World in Data"
+        },
         "url": "https://github.com/owid/energy-data",
         "license": "CC BY 4.0"
       },
@@ -101,8 +114,16 @@
           "en": "Nuclear"
         }
       },
+      "colors": {
+        "renewables_share_elec": "bio",
+        "fossil_share_elec": "coal",
+        "nuclear_share_elec": "nuclear"
+      },
       "source": {
-        "name": "Ember & Energy Institute, via Our World in Data",
+        "name": {
+          "de": "Ember & Energy Institute, über Our World in Data",
+          "en": "Ember & Energy Institute, via Our World in Data"
+        },
         "url": "https://github.com/owid/energy-data",
         "license": "CC BY 4.0"
       },
@@ -146,8 +167,18 @@
           "en": "Coal"
         }
       },
+      "colors": {
+        "renewables_share_energy": "bio",
+        "nuclear_share_energy": "nuclear",
+        "gas_share_energy": "gas",
+        "oil_share_energy": "other",
+        "coal_share_energy": "coal"
+      },
       "source": {
-        "name": "Energy Institute Statistical Review, via Our World in Data",
+        "name": {
+          "de": "Energy Institute Statistical Review, über Our World in Data",
+          "en": "Energy Institute Statistical Review, via Our World in Data"
+        },
         "url": "https://github.com/owid/energy-data",
         "license": "CC BY 4.0"
       },
@@ -176,7 +207,10 @@
         }
       },
       "source": {
-        "name": "Global Carbon Budget, via Our World in Data",
+        "name": {
+          "de": "Global Carbon Budget, über Our World in Data",
+          "en": "Global Carbon Budget, via Our World in Data"
+        },
         "url": "https://github.com/owid/co2-data",
         "license": "CC BY 4.0"
       },
@@ -216,8 +250,17 @@
           "en": "Cement"
         }
       },
+      "colors": {
+        "coal_co2": "coal",
+        "oil_co2": "other",
+        "gas_co2": "gas",
+        "cement_co2": "wind"
+      },
       "source": {
-        "name": "Global Carbon Budget, via Our World in Data",
+        "name": {
+          "de": "Global Carbon Budget, über Our World in Data",
+          "en": "Global Carbon Budget, via Our World in Data"
+        },
         "url": "https://github.com/owid/co2-data",
         "license": "CC BY 4.0"
       },
@@ -250,7 +293,10 @@
         }
       },
       "source": {
-        "name": "Global Carbon Budget, via Our World in Data",
+        "name": {
+          "de": "Global Carbon Budget, über Our World in Data",
+          "en": "Global Carbon Budget, via Our World in Data"
+        },
         "url": "https://github.com/owid/co2-data",
         "license": "CC BY 4.0"
       },
@@ -303,7 +349,10 @@
         }
       },
       "source": {
-        "name": "Eurostat (env_air_gge), based on Germany's UNFCCC inventory by the Umweltbundesamt",
+        "name": {
+          "de": "Eurostat (env_air_gge), auf Basis des Treibhausgasinventars des Umweltbundesamts",
+          "en": "Eurostat (env_air_gge), based on Germany's UNFCCC inventory by the Umweltbundesamt"
+        },
         "url": "https://ec.europa.eu/eurostat/databrowser/view/env_air_gge/default/table",
         "license": "CC BY 4.0"
       },

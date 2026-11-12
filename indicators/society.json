@@ -31,7 +31,10 @@
         }
       },
       "source": {
-        "name": "Eurostat (demo_gind), based on Destatis",
+        "name": {
+          "de": "Eurostat (demo_gind), auf Basis von Destatis",
+          "en": "Eurostat (demo_gind), based on Destatis"
+        },
         "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_gind/default/table",
         "license": "CC BY 4.0"
       },
@@ -65,7 +68,10 @@
         }
       },
       "source": {
-        "name": "Eurostat (demo_r_d2jan), based on Destatis",
+        "name": {
+          "de": "Eurostat (demo_r_d2jan), auf Basis von Destatis",
+          "en": "Eurostat (demo_r_d2jan), based on Destatis"
+        },
         "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_r_d2jan/default/table",
         "license": "CC BY 4.0"
       },
@@ -106,7 +112,10 @@
         }
       },
       "source": {
-        "name": "Eurostat (demo_gind), based on Destatis",
+        "name": {
+          "de": "Eurostat (demo_gind), auf Basis von Destatis",
+          "en": "Eurostat (demo_gind), based on Destatis"
+        },
         "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_gind/default/table",
         "license": "CC BY 4.0"
       },
@@ -140,7 +149,10 @@
         }
       },
       "source": {
-        "name": "Eurostat (demo_gind), based on Destatis",
+        "name": {
+          "de": "Eurostat (demo_gind), auf Basis von Destatis",
+          "en": "Eurostat (demo_gind), based on Destatis"
+        },
         "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_gind/default/table",
         "license": "CC BY 4.0"
       },
@@ -177,7 +189,10 @@
         }
       },
       "source": {
-        "name": "Eurostat (demo_mlexpec), based on Destatis",
+        "name": {
+          "de": "Eurostat (demo_mlexpec), auf Basis von Destatis",
+          "en": "Eurostat (demo_mlexpec), based on Destatis"
+        },
         "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_mlexpec/default/table",
         "license": "CC BY 4.0"
       },
@@ -215,7 +230,10 @@
         }
       },
       "source": {
-        "name": "Eurostat (demo_r_mlifexp), based on Destatis",
+        "name": {
+          "de": "Eurostat (demo_r_mlifexp), auf Basis von Destatis",
+          "en": "Eurostat (demo_r_mlifexp), based on Destatis"
+        },
         "url": "https://ec.europa.eu/eurostat/databrowser/view/demo_r_mlifexp/default/table",
         "license": "CC BY 4.0"
       },
@@ -252,7 +270,10 @@
         }
       },
       "source": {
-        "name": "Eurostat (ilc_li02), EU-SILC / Mikrozensus",
+        "name": {
+          "de": "Eurostat (ilc_li02), EU-SILC / Mikrozensus",
+          "en": "Eurostat (ilc_li02), EU-SILC / Mikrozensus"
+        },
         "url": "https://ec.europa.eu/eurostat/databrowser/view/ilc_li02/default/table",
         "license": "CC BY 4.0"
       },
@@ -289,7 +310,10 @@
         }
       },
       "source": {
-        "name": "Eurostat (prc_hpi_a), based on Destatis",
+        "name": {
+          "de": "Eurostat (prc_hpi_a), auf Basis von Destatis",
+          "en": "Eurostat (prc_hpi_a), based on Destatis"
+        },
         "url": "https://ec.europa.eu/eurostat/databrowser/view/prc_hpi_a/default/table",
         "license": "CC BY 4.0"
       },

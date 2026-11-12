@@ -18,6 +18,15 @@
   --series-6: #008300;
   --series-7: #6250d6;
   --series-8: #e34948;
+  /* Energy sources: fixed meaning across charts (checked for colour-blind separation) */
+  --energy-wind: #2a78d6;
+  --energy-solar: #eda100;
+  --energy-hydro: #1fa5c4;
+  --energy-bio: #3f8f2a;
+  --energy-nuclear: #7a4fd0;
+  --energy-other: #8c8c8c;
+  --energy-gas: #eb6834;
+  --energy-coal: #8e4a22;
   --radius: 10px;
   --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
@@ -42,6 +51,14 @@
     --series-6: #008300;
     --series-7: #9085e9;
     --series-8: #e66767;
+  --energy-wind: #3987e5;
+  --energy-solar: #c98500;
+  --energy-hydro: #1d93ad;
+  --energy-bio: #4e9a35;
+  --energy-nuclear: #a477e8;
+  --energy-other: #757575;
+  --energy-gas: #e0703c;
+  --energy-coal: #93491f;
   }
 }
 :root[data-theme="dark"] {
@@ -64,6 +81,14 @@
   --series-6: #008300;
   --series-7: #9085e9;
   --series-8: #e66767;
+  --energy-wind: #3987e5;
+  --energy-solar: #c98500;
+  --energy-hydro: #1d93ad;
+  --energy-bio: #4e9a35;
+  --energy-nuclear: #a477e8;
+  --energy-other: #757575;
+  --energy-gas: #e0703c;
+  --energy-coal: #93491f;
 }
 
 * { box-sizing: border-box; }

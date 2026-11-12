@@ -25,6 +25,10 @@
     const v = (n) => cs.getPropertyValue(n).trim();
     return {
       series: [1, 2, 3, 4, 5, 6, 7, 8].map((i) => v(`--series-${i}`)),
+      // Fixed colours for energy sources, so coal is the same colour on every chart.
+      energy: Object.fromEntries(
+        ["wind", "solar", "hydro", "bio", "nuclear", "other", "gas", "coal"].map((k) => [k, v(`--energy-${k}`)])
+      ),
       surface: v("--surface-1"),
       ink: v("--text-primary"),
       ink2: v("--text-secondary"),
@@ -68,11 +72,17 @@
     return { keys, labels: keys.map((k) => spec.series[k]), color, data };
   }
 
+  // One colour per series, in series order. An indicator may name a fixed colour
+  // per series ("colors": {"coal_co2": "coal"}); otherwise the categorical order is used.
+  function seriesColors(spec, prep, tk) {
+    return prep.keys.map((k, i) => (spec.colors && spec.colors[k] && tk.energy[spec.colors[k]]) || tk.series[i % 8]);
+  }
+
   // ------------------------------------------------------------ chart forms
   function timeChart(spec, prep, width, tk) {
     const { data, labels } = prep;
     const isArea = spec.chart === "area";
-    const range = labels.map((_, i) => tk.series[i % 8]);
+    const range = seriesColors(spec, prep, tk);
     const height = Math.round(Math.max(260, Math.min(420, width * 0.55)));
     const ymin = d3.min(data, (d) => d.value);
     const direct = !isArea && labels.length <= 4 && width >= 480;
@@ -155,12 +165,12 @@
       dots
         ? Plot.dot(rows, { x: "value", y: "name", fill: tk.series[0], r: 5 })
         : Plot.barX(rows, { x: "value", y: "name", fill: tk.series[0], rx: 2, insetTop: 3, insetBottom: 3 }),
-      Plot.text(rows, { x: "value", y: "name", text: (d) => fmt(d.value, spec.unit), dx: dots ? 9 : 4, textAnchor: "start", fill: tk.ink2, fontSize: 11 }),
+      avg != null ? Plot.ruleX([avg], { stroke: tk.ink, strokeDasharray: "3,3", strokeOpacity: 0.6 }) : null,
+      Plot.text(rows, { x: "value", y: "name", text: (d) => fmt(d.value, spec.unit), dx: dots ? 9 : 5, textAnchor: "start", fill: tk.ink2, fontSize: 11, stroke: tk.surface, strokeWidth: 4, paintOrder: "stroke" }),
       dots ? null : Plot.ruleX([0], { stroke: tk.axis }),
       Plot.axisY({ lineWidth: Math.floor((marginLeft - 12) / 6.5), tickSize: 0, fill: tk.ink2, label: null }),
     ];
     if (avg != null) {
-      marks.push(Plot.ruleX([avg], { stroke: tk.ink, strokeDasharray: "3,3" }));
       marks.push(Plot.text([avg], { x: (d) => d, frameAnchor: "top", dy: -12, text: () => `${T.germanyAvg}: ${fmt(avg, spec.unit)}`, fill: tk.ink, fontSize: 11 }));
     }
     const maxV = d3.max(rows, (d) => d.value);
@@ -205,7 +215,7 @@
       tip.innerHTML =
         `<strong>${year}</strong>` +
         rows
-          .map((r) => `<div class="tip-row"><span class="sw" style="background:${tk.series[prep.labels.indexOf(r.label) % 8]}"></span><span>${r.label}</span><span class="tip-val">${fmt(r.value, spec.unit)}</span></div>`)
+          .map((r) => `<div class="tip-row"><span class="sw" style="background:${seriesColors(spec, prep, tk)[prep.labels.indexOf(r.label)]}"></span><span>${r.label}</span><span class="tip-val">${fmt(r.value, spec.unit)}</span></div>`)
           .join("");
       tip.hidden = false;
       rule.hidden = false;
@@ -393,7 +403,7 @@
     const legend = fig.querySelector(".legend");
     const showLegend = spec.chart !== "bar-latest" && prep.labels.length >= 2;
     legend.innerHTML = showLegend
-      ? prep.labels.map((l, i) => `<span class="item"><span class="sw" style="background:${tk.series[i % 8]}"></span>${l}</span>`).join("")
+      ? prep.labels.map((l, i) => `<span class="item"><span class="sw" style="background:${seriesColors(spec, prep, tk)[i]}"></span>${l}</span>`).join("")
       : "";
     legend.hidden = !showLegend || fig.querySelector(".table-view").hidden === false;
 

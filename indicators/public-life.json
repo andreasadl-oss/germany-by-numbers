@@ -2,56 +2,180 @@
   "topic": {
     "id": "public-life",
     "order": 4,
-    "title": { "de": "Kriminalität, Bildung & Politik", "en": "Crime, education & politics" },
+    "title": {
+      "de": "Kriminalität & Bildung",
+      "en": "Crime & education"
+    },
     "intro": {
-      "de": "Wie sicher Deutschland ist, wie gut ausgebildet die Menschen sind – und wie sie wählen.",
-      "en": "How safe Germany is, how well educated people are – and how they vote."
+      "de": "Wie sicher Deutschland ist und wie gut ausgebildet die Menschen sind.",
+      "en": "How safe Germany is and how well educated people are."
     }
   },
   "indicators": [
     {
       "id": "homicide-rate",
-      "title": { "de": "Vorsätzliche Tötungsdelikte", "en": "Intentional homicides" },
-      "subtitle": { "de": "Von der Polizei erfasste vorsätzliche Tötungen pro 100.000 Einwohner.", "en": "Police-recorded intentional homicides per 100,000 people." },
-      "unit": "",
-      "chart": "line",
-      "series": { "ICCS0101": { "de": "Vorsätzliche Tötung", "en": "Intentional homicide" } },
-      "source": { "name": "Eurostat (crim_off_cat), based on the Polizeiliche Kriminalstatistik", "url": "https://ec.europa.eu/eurostat/databrowser/view/crim_off_cat/default/table", "license": "CC BY 4.0" },
-      "fetch": { "type": "eurostat", "dataset": "crim_off_cat", "filters": { "unit": "P_HTHAB" }, "series_dim": "iccs", "series_values": ["ICCS0101"] }
-    },
-    {
-      "id": "recorded-crime",
-      "title": { "de": "Erfasste Straftaten nach Art", "en": "Recorded offences by type" },
-      "subtitle": { "de": "Von der Polizei erfasste Fälle pro 100.000 Einwohner.", "en": "Police-recorded offences per 100,000 people." },
+      "title": {
+        "de": "Vorsätzliche Tötungsdelikte",
+        "en": "Intentional homicides"
+      },
+      "subtitle": {
+        "de": "Von der Polizei erfasste vorsätzliche Tötungen pro 100.000 Einwohner.",
+        "en": "Police-recorded intentional homicides per 100,000 people."
+      },
       "unit": "",
       "chart": "line",
       "series": {
-        "ICCS0501": { "de": "Wohnungseinbruch", "en": "Burglary" },
-        "ICCS0502": { "de": "Diebstahl", "en": "Theft" },
-        "ICCS0401": { "de": "Raub", "en": "Robbery" }
+        "ICCS0101": {
+          "de": "Vorsätzliche Tötung",
+          "en": "Intentional homicide"
+        }
       },
-      "source": { "name": "Eurostat (crim_off_cat), based on the Polizeiliche Kriminalstatistik", "url": "https://ec.europa.eu/eurostat/databrowser/view/crim_off_cat/default/table", "license": "CC BY 4.0" },
-      "fetch": { "type": "eurostat", "dataset": "crim_off_cat", "filters": { "unit": "P_HTHAB" }, "series_dim": "iccs", "series_values": ["ICCS0401", "ICCS0501", "ICCS0502"] }
+      "source": {
+        "name": {
+          "de": "Eurostat (crim_off_cat), auf Basis der Polizeilichen Kriminalstatistik",
+          "en": "Eurostat (crim_off_cat), based on the Polizeiliche Kriminalstatistik"
+        },
+        "url": "https://ec.europa.eu/eurostat/databrowser/view/crim_off_cat/default/table",
+        "license": "CC BY 4.0"
+      },
+      "fetch": {
+        "type": "eurostat",
+        "dataset": "crim_off_cat",
+        "filters": {
+          "unit": "P_HTHAB"
+        },
+        "series_dim": "iccs",
+        "series_values": [
+          "ICCS0101"
+        ]
+      }
+    },
+    {
+      "id": "recorded-crime",
+      "title": {
+        "de": "Erfasste Straftaten nach Art",
+        "en": "Recorded offences by type"
+      },
+      "subtitle": {
+        "de": "Von der Polizei erfasste Fälle pro 100.000 Einwohner.",
+        "en": "Police-recorded offences per 100,000 people."
+      },
+      "unit": "",
+      "chart": "line",
+      "series": {
+        "ICCS0501": {
+          "de": "Wohnungseinbruch",
+          "en": "Burglary"
+        },
+        "ICCS0502": {
+          "de": "Diebstahl",
+          "en": "Theft"
+        },
+        "ICCS0401": {
+          "de": "Raub",
+          "en": "Robbery"
+        }
+      },
+      "source": {
+        "name": {
+          "de": "Eurostat (crim_off_cat), auf Basis der Polizeilichen Kriminalstatistik",
+          "en": "Eurostat (crim_off_cat), based on the Polizeiliche Kriminalstatistik"
+        },
+        "url": "https://ec.europa.eu/eurostat/databrowser/view/crim_off_cat/default/table",
+        "license": "CC BY 4.0"
+      },
+      "fetch": {
+        "type": "eurostat",
+        "dataset": "crim_off_cat",
+        "filters": {
+          "unit": "P_HTHAB"
+        },
+        "series_dim": "iccs",
+        "series_values": [
+          "ICCS0401",
+          "ICCS0501",
+          "ICCS0502"
+        ]
+      }
     },
     {
       "id": "tertiary-attainment",
-      "title": { "de": "Hochschul- und Meisterabschlüsse bei jungen Erwachsenen", "en": "Tertiary education among young adults" },
-      "subtitle": { "de": "Anteil der 25- bis 34-Jährigen mit tertiärem Abschluss (ISCED 5–8, inkl. Meister/Techniker), in Prozent.", "en": "Share of 25 to 34-year-olds with a tertiary qualification (ISCED 5–8, incl. master craftsman/technician), in percent." },
+      "title": {
+        "de": "Hochschul- und Meisterabschlüsse bei jungen Erwachsenen",
+        "en": "Tertiary education among young adults"
+      },
+      "subtitle": {
+        "de": "Anteil der 25- bis 34-Jährigen mit tertiärem Abschluss (ISCED 5–8, inkl. Meister/Techniker), in Prozent.",
+        "en": "Share of 25 to 34-year-olds with a tertiary qualification (ISCED 5–8, incl. master craftsman/technician), in percent."
+      },
       "unit": "%",
       "chart": "line",
-      "series": { "ED5-8": { "de": "Tertiärer Abschluss", "en": "Tertiary qualification" } },
-      "source": { "name": "Eurostat (edat_lfse_03), based on the German Labour Force Survey", "url": "https://ec.europa.eu/eurostat/databrowser/view/edat_lfse_03/default/table", "license": "CC BY 4.0" },
-      "fetch": { "type": "eurostat", "dataset": "edat_lfse_03", "filters": { "sex": "T", "age": "Y25-34", "unit": "PC" }, "series_dim": "isced11", "series_values": ["ED5-8"] }
+      "series": {
+        "ED5-8": {
+          "de": "Tertiärer Abschluss",
+          "en": "Tertiary qualification"
+        }
+      },
+      "source": {
+        "name": {
+          "de": "Eurostat (edat_lfse_03), auf Basis der Arbeitskräfteerhebung",
+          "en": "Eurostat (edat_lfse_03), based on the German Labour Force Survey"
+        },
+        "url": "https://ec.europa.eu/eurostat/databrowser/view/edat_lfse_03/default/table",
+        "license": "CC BY 4.0"
+      },
+      "fetch": {
+        "type": "eurostat",
+        "dataset": "edat_lfse_03",
+        "filters": {
+          "sex": "T",
+          "age": "Y25-34",
+          "unit": "PC"
+        },
+        "series_dim": "isced11",
+        "series_values": [
+          "ED5-8"
+        ]
+      }
     },
     {
       "id": "early-school-leavers",
-      "title": { "de": "Frühe Schulabgänger", "en": "Early leavers from education" },
-      "subtitle": { "de": "Anteil der 18- bis 24-Jährigen ohne Abschluss der Sekundarstufe II, die nicht in Ausbildung sind, in Prozent.", "en": "Share of 18 to 24-year-olds with at most lower-secondary education and not in further education or training, in percent." },
+      "title": {
+        "de": "Frühe Schulabgänger",
+        "en": "Early leavers from education"
+      },
+      "subtitle": {
+        "de": "Anteil der 18- bis 24-Jährigen ohne Abschluss der Sekundarstufe II, die nicht in Ausbildung sind, in Prozent.",
+        "en": "Share of 18 to 24-year-olds with at most lower-secondary education and not in further education or training, in percent."
+      },
       "unit": "%",
       "chart": "line",
-      "series": { "T": { "de": "Insgesamt", "en": "Total" } },
-      "source": { "name": "Eurostat (edat_lfse_14), based on the German Labour Force Survey", "url": "https://ec.europa.eu/eurostat/databrowser/view/edat_lfse_14/default/table", "license": "CC BY 4.0" },
-      "fetch": { "type": "eurostat", "dataset": "edat_lfse_14", "filters": { "wstatus": "POP", "unit": "PC" }, "series_dim": "sex", "series_values": ["T"] }
+      "series": {
+        "T": {
+          "de": "Insgesamt",
+          "en": "Total"
+        }
+      },
+      "source": {
+        "name": {
+          "de": "Eurostat (edat_lfse_14), auf Basis der Arbeitskräfteerhebung",
+          "en": "Eurostat (edat_lfse_14), based on the German Labour Force Survey"
+        },
+        "url": "https://ec.europa.eu/eurostat/databrowser/view/edat_lfse_14/default/table",
+        "license": "CC BY 4.0"
+      },
+      "fetch": {
+        "type": "eurostat",
+        "dataset": "edat_lfse_14",
+        "filters": {
+          "wstatus": "POP",
+          "unit": "PC"
+        },
+        "series_dim": "sex",
+        "series_values": [
+          "T"
+        ]
+      }
     }
   ]
 }
