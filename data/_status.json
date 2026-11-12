@@ -160,12 +160,7 @@
     ]
   },
   "poverty-risk": {
-    "rows": 221,
-    "updated": "2026-11-12",
-    "years": [
-      1995,
-      2025
-    ]
+    "last_error": "ambiguous result: several values per year (unfiltered dimension); see next refresh log"
   },
   "primary-energy-mix": {
     "rows": 300,

@@ -139,6 +139,11 @@ def fetch_eurostat(ind: dict) -> list[tuple]:
         if int(time_code) < spec.get("from_year", UNIFIED_FROM):
             continue
         rows.append((int(time_code), rec["geo"], rec[spec["series_dim"]], float(rec["value"])))
+    # Guard: one value per (year, geo, series). More means a dimension is unfiltered.
+    keys = [r[:3] for r in rows]
+    if len(keys) != len(set(keys)):
+        open_dims = [f"{d}({n})" for d, n in zip(doc["id"], doc["size"]) if n > 1 and d not in ("time", "geo", spec["series_dim"])]
+        raise RuntimeError(f"ambiguous result: several values per year; filter these dimensions: {open_dims}")
     return rows
 
 
