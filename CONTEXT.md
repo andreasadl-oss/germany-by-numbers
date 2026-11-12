@@ -1,4 +1,4 @@
-# DE in Numbers
+# Germany by Numbers / Deutschland nach Zahlen
 
 A public website of charts about Germany, built from official open data and free to reuse.
 

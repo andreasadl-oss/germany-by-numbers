@@ -23,9 +23,9 @@
     "chart": "Diagramm",
     "year": "Jahr",
     "value": "Wert",
-    "reuse": "Alle Diagramme und Daten dürfen frei weiterverwendet werden – mit Quellenangabe.",
+    "reuse": "Unsere Diagramme und Texte stehen unter",
     "back": "Zurück",
-    "footer": "Ein unabhängiges, nicht-kommerzielles Projekt. Daten der amtlichen Statistik und anderer offener Quellen.",
+    "footer": "Ein unabhängiges, nicht-kommerzielles Projekt. Die Daten stammen aus der amtlichen Statistik und anderen offenen Quellen und gelten unter deren Lizenzen; jedes Diagramm nennt seine Quelle.",
     "embed": "Einbetten",
     "copied": "Kopiert!"
   },
@@ -53,9 +53,9 @@
     "chart": "Chart",
     "year": "Year",
     "value": "Value",
-    "reuse": "All charts and data are free to reuse – just credit the source.",
+    "reuse": "Our charts and text are licensed",
     "back": "Back",
-    "footer": "An independent, non-commercial project. Data from official statistics and other open sources.",
+    "footer": "An independent, non-commercial project. The data comes from official statistics and other open sources and stays under their licences; every chart names its source.",
     "embed": "Embed",
     "copied": "Copied!"
   }

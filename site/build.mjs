@@ -65,7 +65,7 @@ ${body}
 <footer class="site-footer">
   <div class="wrap">
     <p>${t.footer}</p>
-    <p>${t.reuse} <a href="https://creativecommons.org/licenses/by/4.0/">${config.license}</a> · <a href="${config.repo}">GitHub</a></p>
+    <p>${t.reuse} <a href="${config.licenseUrl[lang]}">${config.license}</a> · <a href="${config.repo}">GitHub</a></p>
   </div>
 </footer>
 ${chartsJson ? `<script>window.__CHARTS__=${JSON.stringify(chartsJson).replace(/</g, "\\u003c")};window.__LANG__="${lang}";window.__ROOT__="${rel}";window.__I18N__=${JSON.stringify(t)};window.__SITE__=${JSON.stringify(name)};</script>
@@ -145,7 +145,7 @@ function home(lang) {
 <section class="hero">
   <h1>${esc(config.name[lang])}</h1>
   <p class="lede">${esc(config.tagline[lang])}</p>
-  <p class="hero-meta">${total} ${t.charts} · ${topics.length} ${lang === "en" ? t.topics.toLowerCase() : t.topics} · ${t.reuse}</p>
+  <p class="hero-meta">${total} ${t.charts} · ${topics.length} ${lang === "en" ? t.topics.toLowerCase() : t.topics} · ${t.reuse} <a href="${config.licenseUrl[lang]}">${config.license}</a></p>
 </section>
 <section id="topics" class="topic-grid">
 ${topics
@@ -232,9 +232,11 @@ function aboutPage(lang) {
   <h2>Woher kommen die Daten?</h2>
   <p>Aus offenen, amtlichen Quellen: vor allem dem Statistischen Bundesamt (Destatis), Eurostat und Bundesbehörden, ergänzt um gepflegte offene Datensätze wie Our World in Data. Jedes Diagramm nennt seine Quelle. Eine vollständige Liste steht unter <a href="${rel}de/sources/">Datenquellen</a>.</p>
   <h2>Darf ich die Diagramme verwenden?</h2>
-  <p>Ja. Alle Diagramme und Daten stehen unter <a href="https://creativecommons.org/licenses/by/4.0/deed.de">CC BY 4.0</a>. Sie können sie herunterladen (PNG, SVG, CSV), einbetten und weiterverwenden – auch kommerziell –, solange Sie die Quelle nennen.</p>
-  <h2>Inspiration</h2>
-  <p>Die Idee stammt von <em>UK by Numbers</em> von Hannah Ritchie, das Daten über das Vereinigte Königreich frei zugänglich macht. Dies ist ein unabhängiges Projekt für Deutschland und nicht mit ihr verbunden.</p>
+  <p>Ja. Unsere Diagramme und Texte stehen unter <a href="https://creativecommons.org/licenses/by/4.0/deed.de">CC BY 4.0</a>: Sie können sie herunterladen (PNG, SVG, CSV), einbetten und weiterverwenden – auch kommerziell –, solange Sie „Deutschland nach Zahlen“ und die Originalquelle nennen.</p>
+  <p>Die Daten selbst gehören den Stellen, die sie veröffentlichen, und gelten unter deren Lizenzen – etwa CC BY 4.0 (Eurostat, Our World in Data) oder Datenlizenz Deutschland – Namensnennung 2.0 (Destatis). Einige Energiedaten, die Our World in Data aufbereitet, stammen von Dritten wie dem Energy Institute, mit eigenen Nutzungsbedingungen. Jedes Diagramm nennt und verlinkt seine Quelle; bitte nennen Sie diese bei jeder Weiterverwendung.</p>
+  <h2>Dank</h2>
+  <p>Die Idee stammt von Hannah Ritchie und ihrem Projekt <em>UK by Numbers</em>, das die wichtigsten Daten über das Vereinigte Königreich frei und verständlich zugänglich macht. Vielen Dank für die Inspiration! Dies ist ein unabhängiges Projekt für Deutschland und nicht mit ihr verbunden.</p>
+  <p>Die Seite wurde mit Hilfe von Claude, einem KI-Assistenten von Anthropic, gebaut. Die Zahlen werden nicht von der KI erzeugt: Sie werden automatisch aus den genannten Quellen geladen.</p>
   <h2>Fehler gefunden?</h2>
   <p>Der gesamte Code und alle Daten liegen offen auf <a href="${config.repo}">GitHub</a>. Hinweise und Korrekturen sind willkommen.</p>
 </section>`
@@ -246,9 +248,11 @@ function aboutPage(lang) {
   <h2>Where does the data come from?</h2>
   <p>From open, official sources: mainly the Federal Statistical Office (Destatis), Eurostat and federal agencies, complemented by well-maintained open datasets such as Our World in Data. Every chart names its source. The full list is on the <a href="${rel}en/sources/">data sources</a> page.</p>
   <h2>Can I use the charts?</h2>
-  <p>Yes. All charts and data are licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. You can download them (PNG, SVG, CSV), embed them and reuse them – commercially too – as long as you credit the source.</p>
-  <h2>Inspiration</h2>
-  <p>The idea comes from Hannah Ritchie's <em>UK by Numbers</em>, which makes data about the United Kingdom freely available. This is an independent project for Germany and is not affiliated with her.</p>
+  <p>Yes. Our charts and text are licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>: you can download them (PNG, SVG, CSV), embed them and reuse them – commercially too – as long as you credit "Germany by Numbers" and the original source.</p>
+  <p>The data itself belongs to the organisations that publish it and stays under their licences, such as CC BY 4.0 (Eurostat, Our World in Data) or the Data Licence Germany – Attribution 2.0 (Destatis). Some energy data processed by Our World in Data comes from third parties such as the Energy Institute, with their own terms. Every chart names and links its source; please credit it whenever you reuse the data.</p>
+  <h2>Thanks</h2>
+  <p>The idea comes from Hannah Ritchie and her project <em>UK by Numbers</em>, which makes the key data about the United Kingdom free and easy to understand. Thank you for the inspiration! This is an independent project for Germany and is not affiliated with her.</p>
+  <p>The site was built with help from Claude, an AI assistant made by Anthropic. The numbers are not generated by AI: they are downloaded automatically from the sources named on each chart.</p>
   <h2>Found a mistake?</h2>
   <p>All code and data are open on <a href="${config.repo}">GitHub</a>. Suggestions and corrections are welcome.</p>
 </section>`;

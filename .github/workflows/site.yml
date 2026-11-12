@@ -31,6 +31,11 @@ jobs:
       - name: Fetch data from official sources
         if: github.event_name != 'push'
         # A failing source keeps its last good CSV; the run continues.
+        env:
+          # Optional; see docs/DESTATIS_SETUP.md. Empty if the secrets are not set.
+          DESTATIS_TOKEN: ${{ secrets.DESTATIS_TOKEN }}
+          DESTATIS_USER: ${{ secrets.DESTATIS_USER }}
+          DESTATIS_PASSWORD: ${{ secrets.DESTATIS_PASSWORD }}
         run: python pipeline/fetch.py || echo "::warning::Some indicators failed to refresh - see log above"
 
       - name: Commit refreshed data

@@ -17,8 +17,8 @@ planned, no fetcher yet.
 1. **Official first.** Destatis, Eurostat (which republishes Destatis data in a
    harmonised, easy-to-query form), federal agencies. Curated aggregators (Our
    World in Data) only when they add real value, e.g. long energy series.
-2. **Licence must allow reuse.** We publish everything under CC BY 4.0. Sources
-   below all permit reuse with attribution.
+2. **Licence must allow reuse.** Our charts are CC BY 4.0; the data stays under
+   each source's licence. Sources below all permit reuse with attribution.
 3. **Same geography codes everywhere.** `DE` for Germany, NUTS 1 `DE1`–`DEG`
    for the 16 Länder. Kreise (NUTS 3) and Gemeinden (AGS) fit in the same
    `geo` column later.
@@ -31,7 +31,7 @@ planned, no fetcher yet.
 |---|---|---|---|---|
 | **Eurostat** | Harmonised German data on GDP, prices, labour, public finances (COFOG), population, health, poverty (EU-SILC), crime, education, emissions. National + Länder (NUTS 1/2) + Kreise (NUTS 3) for some series | Open REST API, JSON-stat, no key | Free reuse with attribution (CC BY 4.0) | ✅ 20 indicators (1 still being fixed) |
 | **Our World in Data** (GitHub) | Energy mix and CO₂ series from 1950 (Ember, Energy Institute, Global Carbon Budget) | CSV on GitHub, no key | CC BY 4.0 (OWID); underlying third-party data have their own terms, credited on each chart | ✅ 6 indicators |
-| **Destatis GENESIS-Online** | The primary source for nearly everything German: Bundeshaushalt, tax revenue by tax (Kassenmäßige Steuereinnahmen), causes of death, Mikrozensus, housing, wages (Verdiensterhebung), Länder and Kreis data | REST API `genesis.destatis.de/genesisWS/rest/2020`; needs a free account/API token | Datenlizenz Deutschland – Namensnennung 2.0 (dl-de/by-2-0) | 📋 needs account |
+| **Destatis GENESIS-Online** | The primary source for nearly everything German: Bundeshaushalt, tax revenue by tax (Kassenmäßige Steuereinnahmen), causes of death, Mikrozensus, housing, wages (Verdiensterhebung), Länder and Kreis data | REST API `genesis.destatis.de/genesisWS/rest/2020`; needs a free account/API token | Datenlizenz Deutschland – Namensnennung 2.0 (dl-de/by-2-0) | 📋 needs account (see `docs/DESTATIS_SETUP.md`) |
 | **Regionalstatistik.de** (Statistische Ämter des Bundes und der Länder) | Same GENESIS engine, for Kreise and Gemeinden: the source for a "look up your Kreis" feature | Same API as GENESIS; free account | dl-de/by-2-0 | 📋 for v2 |
 | **Bundeswahlleiterin** | Bundestag and European election results by Land and Wahlkreis | CSV downloads per election | Free reuse with attribution | 📋 |
 | **Bundeskriminalamt – PKS** | Polizeiliche Kriminalstatistik: all recorded offences by type and Land, back to 1987 | Yearly CSV/Excel tables | Free reuse with attribution | 📋 (Eurostat covers headline categories for now) |
