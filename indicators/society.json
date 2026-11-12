@@ -281,6 +281,8 @@
         "type": "eurostat",
         "dataset": "ilc_li02",
         "filters": {
+          "statinfo": "MED_EI",
+          "rskpovth": "B_60",
           "age": "TOTAL",
           "unit": "PC"
         },
