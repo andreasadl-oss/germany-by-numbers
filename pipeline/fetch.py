@@ -36,7 +36,7 @@ DATA = ROOT / "data"
 LAENDER = ["DE1", "DE2", "DE3", "DE4", "DE5", "DE6", "DE7", "DE8",
            "DE9", "DEA", "DEB", "DEC", "DED", "DEE", "DEF", "DEG"]
 
-USER_AGENT = "de-in-numbers data pipeline (open-source, non-commercial)"
+USER_AGENT = "germany-by-numbers data pipeline (open-source, non-commercial)"
 
 OWID_DATASETS = {
     "energy": "https://raw.githubusercontent.com/owid/energy-data/master/owid-energy-data.csv",

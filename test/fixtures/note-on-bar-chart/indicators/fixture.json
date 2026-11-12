@@ -1,0 +1,20 @@
+{
+  "topic": {
+    "id": "fixture-topic",
+    "order": 1,
+    "title": { "de": "Testthema", "en": "Test topic" },
+    "intro": { "de": "Ein Thema nur für Tests.", "en": "A topic used only by tests." }
+  },
+  "indicators": [
+    {
+      "id": "note-on-bar-chart",
+      "title": { "de": "Ein Testindikator mit Hinweis", "en": "A test indicator with a note" },
+      "subtitle": { "de": "Werte von 2000 bis 2004.", "en": "Values from 2000 to 2004." },
+      "unit": "",
+      "chart": "bar-latest",
+      "series": { "A": { "de": "Reihe A", "en": "Series A" } },
+      "source": { "name": "Fixture Office", "url": "https://example.org/ready", "license": "CC BY 4.0" },
+      "notes": [{ "year": 2002, "kind": "event", "text": { "de": "Etwas", "en": "Something" } }]
+    }
+  ]
+}

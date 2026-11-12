@@ -78,6 +78,41 @@
     return prep.keys.map((k, i) => (spec.colors && spec.colors[k] && tk.fixed(spec.colors[k])) || tk.series[i % 8]);
   }
 
+  // ------------------------------------------------------------ notes
+  // A break is a dashed rule, an event a lighter solid rule (or a shaded band when
+  // it spans years). Each gets a number above the plot area, where it can't collide
+  // with the lines or the end-of-line labels; the notes list below the chart uses
+  // the same numbers. Every mark carries the note as its tooltip.
+  const TOP = 18; // top margin of a time chart
+  const NOTE_ROW = 18; // extra top margin that holds the note numbers
+
+  function noteMarks(notes, tk) {
+    if (!notes.length) return { under: [], over: [] };
+    const tagged = notes.map((n, i) => ({ ...n, label: String(i + 1), title: `${i + 1}. ${n.when} · ${n.kind}: ${n.text}` }));
+    const bands = tagged.filter((n) => n.to_year);
+    const breaks = tagged.filter((n) => !n.to_year && n.dashed);
+    const events = tagged.filter((n) => !n.to_year && !n.dashed);
+    return {
+      under: [
+        Plot.rect(bands, { x1: "year", x2: "to_year", fill: tk.muted, fillOpacity: 0.14, title: "title" }),
+        Plot.ruleX(events, { x: "year", stroke: tk.muted, strokeOpacity: 0.6, strokeWidth: 1.5, title: "title" }),
+      ],
+      over: [
+        Plot.ruleX(breaks, { x: "year", stroke: tk.ink2, strokeWidth: 1.25, strokeDasharray: "4,3", title: "title" }),
+        Plot.text(tagged, {
+          x: (n) => (n.to_year ? (n.year + n.to_year) / 2 : n.year),
+          frameAnchor: "top",
+          dy: -(NOTE_ROW - 2),
+          text: "label",
+          fill: tk.ink2,
+          fontSize: 11,
+          fontWeight: 600,
+          title: "title",
+        }),
+      ],
+    };
+  }
+
   // ------------------------------------------------------------ chart forms
   function timeChart(spec, prep, width, tk) {
     const { data, labels } = prep;
@@ -93,13 +128,15 @@
         }).filter(Boolean)
       : [];
     const marginRight = direct ? Math.min(150, 12 + 7 * d3.max(labels, (l) => l.length)) : 16;
+    const notes = noteMarks(spec.notes || [], tk);
+    const marginTop = TOP + (spec.notes?.length ? NOTE_ROW : 0);
     const ymax = d3.max(data, (d) => d.value);
     const zero = isArea || spec.chart === "bar-time" || ymin < 0 || ymin < ymax * 0.25;
     // Stacked shares can't exceed 100 %.
     const yDomainMax = isArea && spec.unit === "%" ? 100 : undefined;
     // Nudge end labels apart so they never overlap (min 14px between them).
     if (direct && last.length > 1) {
-      const plotH = height - 18 - 30;
+      const plotH = height - marginTop - 30;
       const lo = zero ? Math.min(0, ymin) : ymin;
       const perPx = (ymax - lo) / plotH;
       const sorted = last.map((d) => ({ ...d, ly: d.value })).sort((a, b) => a.ly - b.ly);
@@ -110,6 +147,7 @@
     }
     const marks = [
       Plot.gridY({ stroke: tk.grid, strokeOpacity: 1 }),
+      ...notes.under,
       isArea
         ? Plot.areaY(data, { x: "year", y: "value", fill: "label", order: labels, stroke: tk.surface, strokeWidth: 1, curve: "linear" })
         : spec.chart === "bar-time"
@@ -118,6 +156,7 @@
       // Only draw (and so only include) zero when the axis starts there; an
       // invisible rule at 0 would still stretch a zoomed axis down to 0.
       zero ? Plot.ruleY([0], { stroke: ymin < 0 || isArea || spec.chart === "bar-time" ? tk.axis : "none" }) : null,
+      ...notes.over,
     ];
     if (direct) {
       marks.push(Plot.text(last, { x: "year", y: "ly", text: "label", dx: 6, textAnchor: "start", fill: tk.ink2, fontSize: 12 }));
@@ -127,7 +166,7 @@
       height,
       marginLeft: 52,
       marginRight,
-      marginTop: 18,
+      marginTop,
       style: { background: "transparent", color: tk.muted, fontSize: "12px", fontFamily: "inherit" },
       x: { label: null, tickFormat: (d) => String(d), ticks: Math.max(3, Math.floor(width / 90)), domain: d3.extent(data, (d) => d.year) },
       y: { label: null, tickFormat: axisFormat(spec.unit), ticks: Math.max(4, Math.floor(height / 50)), nice: !yDomainMax, zero, ...(yDomainMax ? { domain: [0, yDomainMax] } : {}) },

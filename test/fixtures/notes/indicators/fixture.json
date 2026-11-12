@@ -1,0 +1,25 @@
+{
+  "topic": {
+    "id": "fixture-topic",
+    "order": 1,
+    "title": { "de": "Testthema", "en": "Test topic" },
+    "intro": { "de": "Ein Thema nur für Tests.", "en": "A topic used only by tests." }
+  },
+  "indicators": [
+    {
+      "id": "fixture-notes",
+      "title": { "de": "Ein Testindikator mit Hinweisen", "en": "A test indicator with notes" },
+      "subtitle": { "de": "Werte von 2000 bis 2010.", "en": "Values from 2000 to 2010." },
+      "unit": "",
+      "chart": "line",
+      "series": { "A": { "de": "Reihe A", "en": "Series A" }, "B": { "de": "Reihe B", "en": "Series B" } },
+      "source": { "name": "Fixture Office", "url": "https://example.org/notes", "license": "CC BY 4.0" },
+      "notes": [
+        { "year": 2005, "kind": "break", "text": { "de": "Neue Zählweise", "en": "New counting method" } },
+        { "year": 2001, "to_year": 2003, "kind": "event", "text": { "de": "Eine Krise", "en": "A crisis" } },
+        { "year": 2008, "kind": "event", "text": { "de": "Ein Ereignis", "en": "Something happened" } },
+        { "year": 2010, "kind": "break", "text": { "de": "Neue Quelle", "en": "New source" } }
+      ]
+    }
+  ]
+}

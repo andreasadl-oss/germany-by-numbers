@@ -1,30 +1,96 @@
 // Static site generator: indicators/*.json + data/*.csv -> dist/
 // No framework on purpose: one file, easy to read, nothing to keep upgrading.
+//
+// Usage: node site/build.mjs [--indicators <dir>] [--data <dir>] [--out <dir>]
+// Each location defaults to the repository's own (indicators/, data/, dist/).
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseArgs } from "node:util";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const DIST = path.join(ROOT, "dist");
-const read = (p) => JSON.parse(fs.readFileSync(path.join(ROOT, p), "utf8"));
+const { values: opts } = parseArgs({
+  options: { indicators: { type: "string" }, data: { type: "string" }, out: { type: "string" } },
+});
+const INDICATORS = path.resolve(opts.indicators ?? path.join(ROOT, "indicators"));
+const DATA = path.resolve(opts.data ?? path.join(ROOT, "data"));
+const DIST = path.resolve(opts.out ?? path.join(ROOT, "dist"));
+const readJson = (file) => JSON.parse(fs.readFileSync(file, "utf8"));
+const read = (p) => readJson(path.join(ROOT, p));
 
 const config = read("site/config.json");
 const i18n = read("site/i18n.json");
-const status = fs.existsSync(path.join(ROOT, "data/_status.json")) ? read("data/_status.json") : {};
+const statusFile = path.join(DATA, "_status.json");
+const status = fs.existsSync(statusFile) ? readJson(statusFile) : {};
 const LANGS = ["de", "en"];
 
 const topics = fs
-  .readdirSync(path.join(ROOT, "indicators"))
+  .readdirSync(INDICATORS)
   .filter((f) => f.endsWith(".json"))
-  .map((f) => read(`indicators/${f}`))
+  .map((f) => readJson(path.join(INDICATORS, f)))
   .sort((a, b) => a.topic.order - b.topic.order);
 
 for (const t of topics) {
   for (const ind of t.indicators) {
     ind.topic = t.topic.id;
-    ind.hasData = fs.existsSync(path.join(ROOT, "data", `${ind.id}.csv`));
+    ind.hasData = fs.existsSync(path.join(DATA, `${ind.id}.csv`));
     ind.updated = status[ind.id]?.updated ?? null;
   }
+}
+
+// ---------------------------------------------------------------- notes
+// A note marks a year (or year range) on an indicator: { year, to_year?, kind, text: { de, en } }.
+// Every note is checked here so a broken one never reaches the site.
+const NOTE_KINDS = ["break", "event"];
+const TIME_CHARTS = ["line", "area", "bar-time"]; // charts with a year axis to mark
+
+function dataYears(ind) {
+  const file = path.join(DATA, `${ind.id}.csv`);
+  if (!fs.existsSync(file)) return null;
+  const years = fs.readFileSync(file, "utf8").trim().split("\n").slice(1).map((line) => Number(line.split(",")[0]));
+  return [Math.min(...years), Math.max(...years)];
+}
+
+function noteErrors(ind) {
+  const errors = [];
+  const span = ind.notes?.length ? dataYears(ind) : null;
+  if (ind.notes?.length && !TIME_CHARTS.includes(ind.chart)) {
+    errors.push(`Indicator "${ind.id}": a ${ind.chart} chart has no year axis, so it can't show notes`);
+  }
+  (ind.notes ?? []).forEach((note, i) => {
+    const where = `Indicator "${ind.id}", note ${i + 1}${note.year != null ? ` (${note.year})` : ""}`;
+    const fail = (msg) => errors.push(`${where}: ${msg}`);
+    for (const lang of LANGS) {
+      if (typeof note.text?.[lang] !== "string" || !note.text[lang].trim()) fail(`text.${lang} is missing`);
+    }
+    if (!NOTE_KINDS.includes(note.kind)) fail(`kind "${note.kind}" is not one of ${NOTE_KINDS.join(", ")}`);
+    if (!span) return fail("the indicator has no data, so the note's year can't be checked");
+    const [first, last] = span;
+    const checkYear = (key) => {
+      const y = note[key];
+      if (!Number.isInteger(y)) fail(`${key} must be a whole year`);
+      else if (y < first || y > last) fail(`${key} ${y} is outside the data years ${first}–${last}`);
+    };
+    checkYear("year");
+    if (note.to_year !== undefined) checkYear("to_year");
+    if (Number.isInteger(note.to_year) && note.to_year <= note.year) fail(`to_year ${note.to_year} must be after year ${note.year}`);
+  });
+  return errors;
+}
+
+// Notes in year order; the chart's numbered labels and the notes list share this order.
+const sortedNotes = (ind) => [...(ind.notes ?? [])].sort((a, b) => a.year - b.year || (a.to_year ?? a.year) - (b.to_year ?? b.year));
+// A note as the page shows it: { when: "2001–2003", kind: "Break in series", text }.
+const noteForPage = (n, lang) => ({
+  when: n.to_year ? `${n.year}–${n.to_year}` : String(n.year),
+  kind: n.kind === "break" ? i18n[lang].noteBreak : i18n[lang].noteEvent,
+  text: n.text[lang],
+});
+
+const noteProblems = topics.flatMap((t) => t.indicators.flatMap(noteErrors));
+if (noteProblems.length) {
+  console.error(`Build stopped: ${noteProblems.length} broken note(s)\n${noteProblems.map((e) => `  - ${e}`).join("\n")}`);
+  process.exit(1);
 }
 
 const esc = (s) =>
@@ -93,7 +159,23 @@ function chartSpec(ind, lang) {
     colors: ind.colors,
     source: { ...ind.source, name: srcName(ind, lang) },
     updated: ind.updated,
+    notes: sortedNotes(ind).map((n) => ({ year: n.year, to_year: n.to_year, dashed: n.kind === "break", ...noteForPage(n, lang) })),
   };
+}
+
+// The accessible version of the chart's note markers: plain page text, numbered like the labels.
+function notesList(ind, lang) {
+  const notes = sortedNotes(ind);
+  if (!notes.length) return "";
+  const t = i18n[lang];
+  const id = `${ind.id}-notes`;
+  return `<section class="notes" aria-labelledby="${id}">
+    <h4 id="${id}">${t.notes}</h4>
+    <ol>${notes
+      .map((n) => noteForPage(n, lang))
+      .map((n) => `<li><span class="note-when">${n.when}</span> <span class="note-kind">${n.kind}</span>: ${esc(n.text)}</li>`)
+      .join("")}</ol>
+  </section>`;
 }
 
 function chartCard(ind, lang, rel, { compact = false } = {}) {
@@ -107,6 +189,7 @@ function chartCard(ind, lang, rel, { compact = false } = {}) {
   <div class="legend" aria-hidden="true"></div>
   <div class="plot" role="img" aria-label="${esc(ind.title[lang])}"><p class="muted">${t.loading}</p></div>
   <div class="table-view" hidden></div>
+  ${notesList(ind, lang)}
   <div class="card-foot">
     <p class="source">${t.source}: <a href="${esc(ind.source.url)}">${esc(srcName(ind, lang))}</a> · ${esc(ind.source.license)}${ind.updated ? ` · ${t.updated} ${ind.updated}` : ""}</p>
     <div class="actions">
@@ -118,16 +201,6 @@ function chartCard(ind, lang, rel, { compact = false } = {}) {
     </div>
   </div>
 </figure>`;
-}
-
-function comingSoon(inds, lang, rel) {
-  if (!inds.length) return "";
-  const t = i18n[lang];
-  return `<section class="coming-soon">
-  <h3>${t.comingSoon}</h3>
-  <p class="muted">${t.comingSoonText}</p>
-  <ul>${inds.map((i) => `<li>${esc(i.title[lang])} <span class="muted">– ${esc(srcName(i, lang))}</span></li>`).join("")}</ul>
-</section>`;
 }
 
 // ---------------------------------------------------------------- pages
@@ -170,7 +243,6 @@ ${featured.map((ind) => chartCard(ind, lang, rel, { compact: true })).join("\n")
 function topicPage(tp, lang) {
   const rel = "../../";
   const ready = tp.indicators.filter((i) => i.hasData);
-  const pending = tp.indicators.filter((i) => !i.hasData);
   const body = `
 <section class="page-head">
   <h1>${esc(tp.topic.title[lang])}</h1>
@@ -179,8 +251,7 @@ function topicPage(tp, lang) {
 </section>
 <section class="chart-list">
 ${ready.map((ind) => chartCard(ind, lang, rel)).join("\n")}
-</section>
-${comingSoon(pending, lang, rel)}`;
+</section>`;
   write(
     `${lang}/${tp.topic.id}/index.html`,
     page({ lang, rel, title: tp.topic.title[lang], description: tp.topic.intro[lang], body, altPath: `${tp.topic.id}/`, chartsJson: ready.map((i) => chartSpec(i, lang)) })
@@ -270,7 +341,7 @@ fs.cpSync(path.join(ROOT, "site/assets"), path.join(DIST, "assets"), { recursive
 fs.mkdirSync(path.join(DIST, "assets/vendor"), { recursive: true });
 fs.copyFileSync(path.join(ROOT, "node_modules/d3/dist/d3.min.js"), path.join(DIST, "assets/vendor/d3.min.js"));
 fs.copyFileSync(path.join(ROOT, "node_modules/@observablehq/plot/dist/plot.umd.min.js"), path.join(DIST, "assets/vendor/plot.umd.min.js"));
-fs.cpSync(path.join(ROOT, "data"), path.join(DIST, "data"), { recursive: true });
+fs.cpSync(DATA, path.join(DIST, "data"), { recursive: true });
 
 for (const lang of LANGS) {
   home(lang);
@@ -294,4 +365,4 @@ write(
 fs.writeFileSync(path.join(DIST, ".nojekyll"), "");
 
 const n = topics.flatMap((t) => t.indicators);
-console.log(`Built ${n.filter((i) => i.hasData).length}/${n.length} charts in ${LANGS.length} languages -> dist/`);
+console.log(`Built ${n.filter((i) => i.hasData).length}/${n.length} charts in ${LANGS.length} languages -> ${path.relative(ROOT, DIST)}/`);

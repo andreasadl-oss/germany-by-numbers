@@ -13,11 +13,28 @@ pipeline/fetch.py   downloads each indicator from its official source → data/<
 data/               tidy CSVs: year, geo (NUTS code), series, value  (+ _status.json)
 site/build.mjs      generates the static site → dist/  (no framework)
 site/assets/        chart rendering (Observable Plot), styles
+test/               browser tests (Playwright + node:test)
 docs/DATA_SOURCES.md  which source is used for what, licences, status, roadmap
 ```
 
 To add a chart, add an entry to `indicators/<topic>.json`, then run the pipeline
 and the build.
+
+To mark a year on a chart, add a `notes` list to the indicator:
+
+```json
+"notes": [
+  { "year": 2011, "kind": "break", "text": { "de": "…", "en": "…" } },
+  { "year": 2020, "to_year": 2021, "kind": "event", "text": { "de": "…", "en": "…" } }
+]
+```
+
+A `break` means the source changed its method or definition (a dashed line); an
+`event` means something really happened (a solid line, or a shaded band with
+`to_year`). Keep each text to one short line, and check it against the source's
+own metadata. The build stops if a note lacks a language, has another kind, or
+falls outside the indicator's data years. Notes work on charts with a year
+axis (`line`, `area`, `bar-time`), not on `bar-latest`.
 
 ## Run locally
 
@@ -29,6 +46,25 @@ npm run serve                    # http://localhost:8080
 ```
 
 Python needs only the standard library.
+
+## Tests
+
+```bash
+npx playwright install chromium   # once; cloud sessions already have a browser
+npm test
+```
+
+`npm test` builds the site into a temporary folder, serves it and opens pages
+in headless Chromium at a phone width (390 px) and a desktop width (1280 px).
+Tests check only what a reader sees: page text, chart labels and element boxes.
+They live in `test/`; `test/harness.mjs` has the helpers (`buildSite`, `serve`,
+`open`), and `test/fixtures/` holds small indicator definitions and data for
+cases the real data can't show. To build from other locations yourself:
+`node site/build.mjs --indicators <dir> --data <dir> --out <dir>`.
+
+If Playwright's own Chromium isn't installed, the tests fall back to a shared one
+at `$PLAYWRIGHT_BROWSERS_PATH/chromium` (as in cloud sessions), which may be built
+for a slightly older Playwright version.
 
 ## Publishing
 
