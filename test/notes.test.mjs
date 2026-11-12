@@ -110,3 +110,111 @@ describe("notes on the real site", () => {
     }
   }
 });
+
+// ---------------------------------------------------------------- notes beyond the chart
+// The same notes reach the reader in the table view, the tooltip and exported images.
+
+/** The years a note covers: one year, or every year of a range. */
+const noteYears = (n) => Array.from({ length: (n.to_year ?? n.year) - n.year + 1 }, (_, i) => n.year + i);
+
+/** Switch a chart to its table view and return the header and the rows as cell texts. */
+async function openTable(page) {
+  const fig = page.locator("figure[data-chart]").first();
+  await fig.getByRole("button", { name: /^(Tabelle|Table)$/ }).click();
+  const table = fig.locator(".table-view table");
+  const header = await table.locator("thead th").allInnerTexts();
+  const rows = await table.locator("tbody tr").evaluateAll((trs) => trs.map((tr) => Array.from(tr.cells, (td) => td.innerText.trim())));
+  return { header: header.map((h) => h.trim()), rows };
+}
+
+/** Download the chart as SVG and return the file's text. */
+async function exportedSvg(page) {
+  const fig = page.locator("figure[data-chart]").first();
+  const [download] = await Promise.all([page.waitForEvent("download"), fig.getByRole("button", { name: "SVG" }).click()]);
+  return fs.readFileSync(await download.path(), "utf8");
+}
+
+/** Hover the chart at the x position of a note's mark (the middle of a band) and
+ *  return what the tooltip says. */
+async function tooltipAt(page, x) {
+  const svg = page.locator("figure[data-chart] .plot svg").first();
+  const box = await svg.boundingBox();
+  await page.mouse.move(x, box.y + box.height / 2);
+  const tip = page.locator("figure[data-chart] .tooltip").first();
+  await tip.waitFor({ state: "visible" });
+  const tipBox = await tip.boundingBox();
+  assert.ok(tipBox.x >= box.x - 0.5 && tipBox.x + tipBox.width <= box.x + box.width + 0.5, "the tooltip stays inside the chart");
+  return tip.innerText();
+}
+
+describe("notes beyond the chart", () => {
+  let site;
+  const notes = JSON.parse(fs.readFileSync(path.join(fixture("notes").indicators, "fixture.json"), "utf8")).indicators[0].notes;
+  const sorted = [...notes].sort((a, b) => a.year - b.year);
+  before(async () => { site = await servedSite(fixture("notes")); });
+  after(async () => { await site?.close(); });
+
+  for (const [name, width] of Object.entries(WIDTHS)) {
+    for (const lang of LANGS) {
+      const url = () => `${site.url}${lang}/chart/fixture-notes/`;
+
+      test(`the table view marks noted years and shows the note text (${lang}, ${name})`, () =>
+        withPage(browser, url(), width, async (page) => {
+          const { header, rows } = await openTable(page);
+          assert.equal(header.at(-1), NOTES_HEADING[lang], "the last column is headed Notes");
+          const row = (year) => rows.find((r) => r[0] === String(year));
+          const noted = new Set();
+          sorted.forEach((n, i) => {
+            for (const year of noteYears(n)) {
+              noted.add(year);
+              const cell = row(year)?.at(-1) ?? "";
+              assert.ok(cell.startsWith(`${i + 1}`), `${year} is marked with note ${i + 1}`);
+              assert.ok(cell.includes(n.text[lang]), `${year} shows "${n.text[lang]}"`);
+            }
+          });
+          for (const r of rows.filter((r) => !noted.has(Number(r[0])))) assert.equal(r.at(-1), "", `${r[0]} has no note`);
+        }));
+
+      test(`hovering a noted year shows the note in the tooltip (${lang}, ${name})`, () =>
+        withPage(browser, url(), width, async (page) => {
+          const { marks } = await chartNotes(page);
+          const markOf = (n) => marks.find((m) => m.title.includes(n.text[lang]) && m.tag !== "text");
+          for (const n of sorted) {
+            const m = markOf(n);
+            const tip = await tooltipAt(page, (m.box.left + m.box.right) / 2);
+            assert.ok(tip.includes(n.text[lang]), `tooltip at ${n.year} shows "${n.text[lang]}"`);
+          }
+          // 2004 lies between the crisis band (to 2003) and the 2005 break, and has no note.
+          const band = markOf(sorted[0]);
+          const rule = markOf(sorted[1]);
+          const tip = await tooltipAt(page, (band.box.right + (rule.box.left + rule.box.right) / 2) / 2);
+          assert.ok(tip.startsWith("2004"), "hovering between them shows 2004");
+          for (const n of notes) assert.ok(!tip.includes(n.text[lang]), `tooltip at 2004 doesn't mention "${n.text[lang]}"`);
+        }));
+
+      test(`the exported SVG lists the notes (${lang}, ${name})`, () =>
+        withPage(browser, url(), width, async (page) => {
+          const svg = await exportedSvg(page);
+          assert.ok(svg.includes(`>${NOTES_HEADING[lang]}<`), "has a Notes heading");
+          for (const n of notes) assert.ok(svg.includes(n.text[lang]), `contains "${n.text[lang]}"`);
+        }));
+    }
+  }
+});
+
+describe("an indicator without notes", () => {
+  let site;
+  before(async () => { site = await servedSite(fixture("planned")); });
+  after(async () => { await site?.close(); });
+
+  for (const lang of LANGS) {
+    test(`tabulates and exports without a notes column or list (${lang})`, () =>
+      withPage(browser, `${site.url}${lang}/chart/fixture-ready/`, WIDTHS.desktop, async (page) => {
+        const { header, rows } = await openTable(page);
+        assert.deepEqual(header, [lang === "de" ? "Jahr" : "Year", lang === "de" ? "Reihe A" : "Series A"]);
+        assert.ok(rows.every((r) => r.length === 2), "every row has a year and one value");
+        const svg = await exportedSvg(page);
+        assert.ok(!svg.includes(`>${NOTES_HEADING[lang]}<`), "has no Notes heading");
+      }));
+  }
+});

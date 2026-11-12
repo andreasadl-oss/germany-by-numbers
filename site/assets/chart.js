@@ -113,6 +113,15 @@
     };
   }
 
+  // The notes that cover a year, with the number they carry on the chart and in the
+  // notes list: [{ number, note }]. Used by the tooltip and the table view.
+  function notesAt(spec, year) {
+    return (spec.notes || [])
+      .map((note, i) => ({ number: i + 1, note }))
+      .filter(({ note }) => year >= note.year && year <= (note.to_year ?? note.year));
+  }
+  const noteLine = ({ number, note }) => `${number}. ${note.kind}: ${note.text}`;
+
   // ------------------------------------------------------------ chart forms
   function timeChart(spec, prep, width, tk) {
     const { data, labels } = prep;
@@ -257,12 +266,15 @@
         `<strong>${year}</strong>` +
         rows
           .map((r) => `<div class="tip-row"><span class="sw" style="background:${seriesColors(spec, prep, tk)[prep.labels.indexOf(r.label)]}"></span><span>${r.label}</span><span class="tip-val">${fmt(r.value, spec.unit)}</span></div>`)
-          .join("");
+          .join("") +
+        notesAt(spec, year).map((n) => `<div class="tip-note">${escapeXml(noteLine(n))}</div>`).join("");
       tip.hidden = false;
       rule.hidden = false;
       rule.style.left = `${xpos}px`;
       const w = tip.offsetWidth;
-      tip.style.left = `${xpos + 12 + w > box.width ? xpos - 12 - w : xpos + 12}px`;
+      // Beside the pointer, on whichever side has room, and never outside the chart.
+      const left = xpos + 12 + w > box.width ? xpos - 12 - w : xpos + 12;
+      tip.style.left = `${Math.max(0, Math.min(left, box.width - w))}px`;
     }
     function hide() {
       tip.hidden = true;
@@ -311,9 +323,20 @@
       const years = Array.from(new Set(prep.data.map((d) => d.year))).sort((a, b) => b - a);
       rows = years.map((y) => [y, ...prep.labels.map((l) => prep.data.find((d) => d.year === y && d.label === l))]);
     }
+    // Indicators with notes get a last column: each noted year is marked and shows its notes.
+    const hasNotes = spec.geo !== "laender" && spec.notes?.length > 0;
+    const noteCell = (year) => {
+      const here = notesAt(spec, year);
+      return `<td class="note-cell">${here.map((n) => `<div><span class="note-ref">${n.number}</span> ${escapeXml(n.note.kind)}: ${escapeXml(n.note.text)}</div>`).join("")}</td>`;
+    };
     el.innerHTML =
-      `<div class="table-scroll"><table class="data-table"><thead><tr>${cols.map((c) => `<th>${c}</th>`).join("")}</tr></thead><tbody>` +
-      rows.map((r) => `<tr><td>${r[0]}</td>${r.slice(1).map((c) => `<td class="num">${c ? fmt(c.value, "") : "–"}</td>`).join("")}</tr>`).join("") +
+      `<div class="table-scroll"><table class="data-table"><thead><tr>${[...cols, ...(hasNotes ? [T.notes] : [])].map((c) => `<th>${c}</th>`).join("")}</tr></thead><tbody>` +
+      rows
+        .map((r) => {
+          const noted = hasNotes && notesAt(spec, r[0]).length > 0;
+          return `<tr${noted ? ' class="noted"' : ""}><td>${r[0]}</td>${r.slice(1).map((c) => `<td class="num">${c ? fmt(c.value, "") : "–"}</td>`).join("")}${hasNotes ? noteCell(r[0]) : ""}</tr>`;
+        })
+        .join("") +
       `</tbody></table></div>`;
   }
 
@@ -359,6 +382,19 @@
     }
     const plotY = y;
     y += h + 18;
+    // The notes list, so a chart shared on its own keeps its context.
+    const notes = spec.notes || [];
+    if (notes.length) {
+      parts.push(`<text x="${pad}" y="${y}" font-size="12" font-weight="600" fill="${tk.ink}">${escapeXml(T.notes)}</text>`);
+      y += 17;
+      notes.forEach((note, i) => {
+        wrapText(`${i + 1}. ${note.when} · ${note.kind}: ${note.text}`, 12, w).forEach((l) => {
+          parts.push(`<text x="${pad}" y="${y}" font-size="12" fill="${tk.ink2}">${escapeXml(l)}</text>`);
+          y += 16;
+        });
+      });
+      y += 6;
+    }
     const src = `${T.source}: ${spec.source.name} · ${spec.source.license} · ${window.__SITE__}`;
     wrapText(src, 11, w).forEach((l) => { parts.push(`<text x="${pad}" y="${y}" font-size="11" fill="${tk.muted}">${escapeXml(l)}</text>`); y += 15; });
     const totalH = y + pad - 10;
