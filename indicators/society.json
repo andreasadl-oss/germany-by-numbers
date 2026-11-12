@@ -164,7 +164,7 @@
         "de": "In Jahren, nach Geschlecht.",
         "en": "In years, by sex."
       },
-      "unit": "Jahre / years",
+      "unit": "",
       "chart": "line",
       "series": {
         "F": {
@@ -205,7 +205,7 @@
         "de": "Lebenserwartung bei Geburt in Jahren, neuestes verfügbares Jahr.",
         "en": "Life expectancy at birth in years, latest available year."
       },
-      "unit": "Jahre / years",
+      "unit": "",
       "chart": "bar-latest",
       "geo": "laender",
       "series": {
@@ -246,7 +246,7 @@
       "unit": "%",
       "chart": "line",
       "series": {
-        "LI_R_MD60": {
+        "T": {
           "de": "Armutsgefährdungsquote",
           "en": "At-risk-of-poverty rate"
         }
@@ -261,12 +261,11 @@
         "dataset": "ilc_li02",
         "filters": {
           "age": "TOTAL",
-          "sex": "T",
           "unit": "PC"
         },
-        "series_dim": "indic_il",
+        "series_dim": "sex",
         "series_values": [
-          "LI_R_MD60"
+          "T"
         ]
       }
     },

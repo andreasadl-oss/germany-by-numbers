@@ -65,7 +65,7 @@
       "id": "government-spending-by-function",
       "title": { "de": "Wofür gibt der Staat sein Geld aus?", "en": "What does the German state spend its money on?" },
       "subtitle": { "de": "Ausgaben des Gesamtstaats (Bund, Länder, Gemeinden, Sozialversicherung) nach Aufgabenbereich, in Prozent des BIP, neuestes Jahr.", "en": "General government spending (federal, states, municipalities and social security) by function, as a share of GDP, latest year." },
-      "unit": "% BIP / GDP",
+      "unit": "%",
       "chart": "bar-latest",
       "series": {
         "GF10": { "de": "Soziale Sicherung (Renten u. a.)", "en": "Social protection (pensions etc.)" },
@@ -86,7 +86,7 @@
       "id": "government-revenue-expenditure",
       "title": { "de": "Staatseinnahmen und -ausgaben", "en": "Government revenue and spending" },
       "subtitle": { "de": "Gesamtstaat, in Prozent des BIP.", "en": "General government, as a share of GDP." },
-      "unit": "% BIP / GDP",
+      "unit": "%",
       "chart": "line",
       "series": {
         "TE": { "de": "Ausgaben", "en": "Spending" },
@@ -99,7 +99,7 @@
       "id": "tax-revenue-by-type",
       "title": { "de": "Woher kommt das Geld des Staates?", "en": "Where does the state's money come from?" },
       "subtitle": { "de": "Steuern und Sozialbeiträge nach Art, in Prozent des BIP.", "en": "Taxes and social contributions by type, as a share of GDP." },
-      "unit": "% BIP / GDP",
+      "unit": "%",
       "chart": "area",
       "series": {
         "D61": { "de": "Sozialbeiträge", "en": "Social contributions" },
@@ -114,7 +114,7 @@
       "id": "government-debt",
       "title": { "de": "Staatsverschuldung", "en": "Government debt" },
       "subtitle": { "de": "Bruttoschuldenstand des Gesamtstaats (Maastricht-Definition), in Prozent des BIP.", "en": "General government gross debt (Maastricht definition), as a share of GDP." },
-      "unit": "% BIP / GDP",
+      "unit": "%",
       "chart": "line",
       "series": { "GD": { "de": "Schuldenquote", "en": "Debt-to-GDP ratio" } },
       "source": { "name": "Eurostat (gov_10dd_edpt1), based on Destatis and the Bundesbank", "url": "https://ec.europa.eu/eurostat/databrowser/view/gov_10dd_edpt1/default/table", "license": "CC BY 4.0" },

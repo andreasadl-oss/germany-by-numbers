@@ -13,7 +13,7 @@
       "id": "homicide-rate",
       "title": { "de": "Vorsätzliche Tötungsdelikte", "en": "Intentional homicides" },
       "subtitle": { "de": "Von der Polizei erfasste vorsätzliche Tötungen pro 100.000 Einwohner.", "en": "Police-recorded intentional homicides per 100,000 people." },
-      "unit": "pro / per 100k",
+      "unit": "",
       "chart": "line",
       "series": { "ICCS0101": { "de": "Vorsätzliche Tötung", "en": "Intentional homicide" } },
       "source": { "name": "Eurostat (crim_off_cat), based on the Polizeiliche Kriminalstatistik", "url": "https://ec.europa.eu/eurostat/databrowser/view/crim_off_cat/default/table", "license": "CC BY 4.0" },
@@ -23,7 +23,7 @@
       "id": "recorded-crime",
       "title": { "de": "Erfasste Straftaten nach Art", "en": "Recorded offences by type" },
       "subtitle": { "de": "Von der Polizei erfasste Fälle pro 100.000 Einwohner.", "en": "Police-recorded offences per 100,000 people." },
-      "unit": "pro / per 100k",
+      "unit": "",
       "chart": "line",
       "series": {
         "ICCS0501": { "de": "Wohnungseinbruch", "en": "Burglary" },

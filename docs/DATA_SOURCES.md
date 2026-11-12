@@ -7,11 +7,10 @@ records what has been verified. Use it to decide what to add next.
 (the dataset code and filters still need checking against the live API) · 📋
 planned, no fetcher yet.
 
-> Why many items are 🟡: the cloud sandbox this was built in could only reach
-> GitHub, so the Eurostat fetcher was written against the documented API but
-> not yet run. The first GitHub Actions run (or a local
-> `python pipeline/fetch.py`) will show which codes need fixing. Failures are
-> listed in `data/_status.json`.
+> Eurostat data is fetched by the GitHub Actions workflow (the build sandbox
+> cannot reach Eurostat). Failures and their API error messages are recorded
+> in `data/_status.json`. Eurostat's national series start in 1991 because its
+> "DE" means West Germany before then (see `docs/adr/0001-unified-germany-only.md`).
 
 ## Principles
 
@@ -30,7 +29,7 @@ planned, no fetcher yet.
 
 | Source | What it has | Access | Licence | Status |
 |---|---|---|---|---|
-| **Eurostat** | Harmonised German data on GDP, prices, labour, public finances (COFOG), population, health, poverty (EU-SILC), crime, education, emissions. National + Länder (NUTS 1/2) + Kreise (NUTS 3) for some series | Open REST API, JSON-stat, no key | Free reuse with attribution (CC BY 4.0) | 🟡 21 indicators wired |
+| **Eurostat** | Harmonised German data on GDP, prices, labour, public finances (COFOG), population, health, poverty (EU-SILC), crime, education, emissions. National + Länder (NUTS 1/2) + Kreise (NUTS 3) for some series | Open REST API, JSON-stat, no key | Free reuse with attribution (CC BY 4.0) | ✅ 20 indicators (1 still being fixed) |
 | **Our World in Data** (GitHub) | Energy mix and CO₂ series from 1950 (Ember, Energy Institute, Global Carbon Budget) | CSV on GitHub, no key | CC BY 4.0 (OWID); underlying third-party data have their own terms, credited on each chart | ✅ 6 indicators |
 | **Destatis GENESIS-Online** | The primary source for nearly everything German: Bundeshaushalt, tax revenue by tax (Kassenmäßige Steuereinnahmen), causes of death, Mikrozensus, housing, wages (Verdiensterhebung), Länder and Kreis data | REST API `genesis.destatis.de/genesisWS/rest/2020`; needs a free account/API token | Datenlizenz Deutschland – Namensnennung 2.0 (dl-de/by-2-0) | 📋 needs account |
 | **Regionalstatistik.de** (Statistische Ämter des Bundes und der Länder) | Same GENESIS engine, for Kreise and Gemeinden: the source for a "look up your Kreis" feature | Same API as GENESIS; free account | dl-de/by-2-0 | 📋 for v2 |
@@ -51,34 +50,34 @@ titles (DE/EN), chart type, source and fetch specification.
 
 | Topic | Indicator | Source dataset | Geography | Status |
 |---|---|---|---|---|
-| Economy | GDP per person (real) | Eurostat `nama_10_pc` | DE | 🟡 |
-| Economy | GDP per person by Land | Eurostat `nama_10r_2gdp` | Länder | 🟡 |
-| Economy | Inflation (HICP) | Eurostat `prc_hicp_aind` | DE | 🟡 |
-| Economy | Unemployment rate | Eurostat `une_rt_a` | DE | 🟡 |
-| Economy | Unemployment by Land | Eurostat `lfst_r_lfu3rt` | Länder | 🟡 |
-| Economy | Government spending by function (COFOG) | Eurostat `gov_10a_exp` | DE | 🟡 |
-| Economy | Government revenue vs. spending | Eurostat `gov_10a_main` | DE | 🟡 |
-| Economy | Tax revenue by type | Eurostat `gov_10a_taxag` | DE | 🟡 |
-| Economy | Government debt | Eurostat `gov_10dd_edpt1` | DE | 🟡 |
-| Society | Population | Eurostat `demo_gind` | DE | 🟡 |
-| Society | Population by Land | Eurostat `demo_r_d2jan` | Länder | 🟡 |
-| Society | Births and deaths | Eurostat `demo_gind` | DE | 🟡 |
-| Society | Net migration | Eurostat `demo_gind` | DE | 🟡 |
-| Society | Life expectancy by sex | Eurostat `demo_mlexpec` | DE | 🟡 |
-| Society | Life expectancy by Land | Eurostat `demo_r_mlifexp` | Länder | 🟡 |
-| Society | At-risk-of-poverty rate | Eurostat `ilc_li02` | DE | 🟡 |
-| Society | House prices | Eurostat `prc_hpi_a` | DE | 🟡 |
+| Economy | GDP per person (real) | Eurostat `nama_10_pc` | DE | ✅ |
+| Economy | GDP per person by Land | Eurostat `nama_10r_2gdp` | Länder | ✅ |
+| Economy | Inflation (HICP) | Eurostat `prc_hicp_aind` | DE | ✅ |
+| Economy | Unemployment rate | Eurostat `une_rt_a` | DE | ✅ |
+| Economy | Unemployment by Land | Eurostat `lfst_r_lfu3rt` | Länder | ✅ |
+| Economy | Government spending by function (COFOG) | Eurostat `gov_10a_exp` | DE | ✅ |
+| Economy | Government revenue vs. spending | Eurostat `gov_10a_main` | DE | ✅ |
+| Economy | Tax revenue by type | Eurostat `gov_10a_taxag` | DE | ✅ |
+| Economy | Government debt | Eurostat `gov_10dd_edpt1` | DE | ✅ |
+| Society | Population | Eurostat `demo_gind` | DE | ✅ |
+| Society | Population by Land | Eurostat `demo_r_d2jan` | Länder | ✅ |
+| Society | Births and deaths | Eurostat `demo_gind` | DE | ✅ |
+| Society | Net migration | Eurostat `demo_gind` | DE | ✅ |
+| Society | Life expectancy by sex | Eurostat `demo_mlexpec` | DE | ✅ |
+| Society | Life expectancy by Land | Eurostat `demo_r_mlifexp` | Länder | ✅ |
+| Society | At-risk-of-poverty rate | Eurostat `ilc_li02` | DE | 🟡 query being fixed |
+| Society | House prices | Eurostat `prc_hpi_a` | DE | ✅ |
 | Energy | Electricity generation by source | OWID energy-data | DE | ✅ |
 | Energy | Renewable share of electricity | OWID energy-data | DE | ✅ |
 | Energy | Primary energy by source | OWID energy-data | DE | ✅ |
 | Energy | CO₂ emissions | OWID co2-data | DE | ✅ |
 | Energy | CO₂ by fuel | OWID co2-data | DE | ✅ |
 | Energy | CO₂ per person, territorial vs. consumption | OWID co2-data | DE | ✅ |
-| Energy | GHG emissions by sector | Eurostat `env_air_gge` | DE | 🟡 |
-| Public life | Intentional homicide rate | Eurostat `crim_off_cat` | DE | 🟡 |
-| Public life | Recorded burglary, theft, robbery | Eurostat `crim_off_cat` | DE | 🟡 |
-| Public life | Tertiary attainment, 25–34 | Eurostat `edat_lfse_03` | DE | 🟡 |
-| Public life | Early school leavers | Eurostat `edat_lfse_14` | DE | 🟡 |
+| Energy | GHG emissions by sector | Eurostat `env_air_gge` | DE | ✅ |
+| Public life | Intentional homicide rate | Eurostat `crim_off_cat` | DE | ✅ |
+| Public life | Recorded burglary, theft, robbery | Eurostat `crim_off_cat` | DE | ✅ |
+| Public life | Tertiary attainment, 25–34 | Eurostat `edat_lfse_03` | DE | ✅ |
+| Public life | Early school leavers | Eurostat `edat_lfse_14` | DE | ✅ |
 
 ## Next sources to add (suggested order)
 

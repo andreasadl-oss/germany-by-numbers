@@ -145,11 +145,18 @@
     const marginLeft = narrow ? Math.round(width * 0.42) : 230;
     const rowH = narrow ? 34 : 28;
     const height = rows.length * rowH + 40;
+    const minV = d3.min(rows, (d) => d.value);
+    const maxV0 = d3.max(rows, (d) => d.value);
+    // When all values are close together (e.g. life expectancy), bars from zero
+    // hide the differences: use dots on a zoomed axis instead.
+    const dots = minV > 0 && minV > maxV0 * 0.6;
     const marks = [
       Plot.gridX({ stroke: tk.grid, strokeOpacity: 1 }),
-      Plot.barX(rows, { x: "value", y: "name", fill: tk.series[0], rx: 2, insetTop: 3, insetBottom: 3 }),
-      Plot.text(rows, { x: "value", y: "name", text: (d) => fmt(d.value, spec.unit), dx: 4, textAnchor: "start", fill: tk.ink2, fontSize: 11 }),
-      Plot.ruleX([0], { stroke: tk.axis }),
+      dots
+        ? Plot.dot(rows, { x: "value", y: "name", fill: tk.series[0], r: 5 })
+        : Plot.barX(rows, { x: "value", y: "name", fill: tk.series[0], rx: 2, insetTop: 3, insetBottom: 3 }),
+      Plot.text(rows, { x: "value", y: "name", text: (d) => fmt(d.value, spec.unit), dx: dots ? 9 : 4, textAnchor: "start", fill: tk.ink2, fontSize: 11 }),
+      dots ? null : Plot.ruleX([0], { stroke: tk.axis }),
       Plot.axisY({ lineWidth: Math.floor((marginLeft - 12) / 6.5), tickSize: 0, fill: tk.ink2, label: null }),
     ];
     if (avg != null) {
@@ -164,7 +171,7 @@
       marginRight: 64,
       marginTop: avg != null ? 26 : 10,
       style: { background: "transparent", color: tk.muted, fontSize: "12px", fontFamily: "inherit" },
-      x: { label: null, axis: "bottom", tickFormat: axisFormat(spec.unit), domain: [Math.min(0, d3.min(rows, (d) => d.value)), maxV], nice: true, ticks: Math.max(2, Math.floor((width - marginLeft) / 90)) },
+      x: { label: null, axis: "bottom", tickFormat: axisFormat(spec.unit), domain: dots ? [Math.min(minV, avg ?? minV) - (maxV - minV) * 0.15, maxV] : [Math.min(0, minV), maxV], nice: true, ticks: Math.max(2, Math.floor((width - marginLeft) / 90)) },
       y: { label: null, domain: rows.map((d) => d.name), axis: null },
       marks,
     });
