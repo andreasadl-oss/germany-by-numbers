@@ -25,6 +25,7 @@ import json
 import sys
 import time
 import urllib.parse
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -41,6 +42,9 @@ OWID_DATASETS = {
     "energy": "https://raw.githubusercontent.com/owid/energy-data/master/owid-energy-data.csv",
     "co2": "https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv",
 }
+
+# Eurostat's "DE" means West Germany before 1991. Only unified Germany is shown.
+UNIFIED_FROM = 1991
 
 EUROSTAT_API = "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/"
 
@@ -121,7 +125,10 @@ def fetch_eurostat(ind: dict) -> list[tuple]:
         params.append((k, v))
     params += [(spec["series_dim"], s) for s in spec["series_values"]]
     url = EUROSTAT_API + spec["dataset"] + "?" + urllib.parse.urlencode(params)
-    doc = json.loads(http_get(url))
+    try:
+        doc = json.loads(http_get(url))
+    except RuntimeError as exc:
+        raise RuntimeError(f"{exc} | {eurostat_error(url)}") from None
     rows = []
     for rec in parse_jsonstat(doc):
         if rec["value"] is None:
@@ -129,8 +136,21 @@ def fetch_eurostat(ind: dict) -> list[tuple]:
         time_code = rec["time"]
         if not time_code[:4].isdigit() or len(time_code) != 4:
             continue  # annual data only for now
+        if int(time_code) < spec.get("from_year", UNIFIED_FROM):
+            continue
         rows.append((int(time_code), rec["geo"], rec[spec["series_dim"]], float(rec["value"])))
     return rows
+
+
+def eurostat_error(url: str) -> str:
+    """Eurostat explains a bad query in the error body; surface it in the log."""
+    try:
+        urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": USER_AGENT}), timeout=60)
+        return ""
+    except urllib.error.HTTPError as e:
+        return e.read().decode("utf-8", "replace")[:400]
+    except Exception as e:
+        return str(e)
 
 
 FETCHERS = {
@@ -158,7 +178,7 @@ def write_csv(ind_id: str, rows: list[tuple]) -> None:
         w = csv.writer(f)
         w.writerow(["year", "geo", "series", "value"])
         for year, geo, series, value in rows:
-            w.writerow([year, geo, series, f"{value:.6g}"])
+            w.writerow([year, geo, series, f"{value:.10g}"])
 
 
 def main(argv: list[str]) -> int:
@@ -187,7 +207,7 @@ def main(argv: list[str]) -> int:
             print(f"ok    {ind['id']:40s} {len(rows):5d} rows  {min(years)}–{max(years)}")
         except Exception as exc:
             failures.append(ind["id"])
-            status[ind["id"]] = {"ok": False, "error": str(exc)[:300]}
+            status[ind["id"]] = {"ok": False, "error": str(exc)[:800]}
             print(f"FAIL  {ind['id']:40s} {exc}", file=sys.stderr)
 
     # Keep a record of when each indicator was last refreshed successfully.
