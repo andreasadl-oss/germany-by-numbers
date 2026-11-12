@@ -160,7 +160,7 @@
     ]
   },
   "poverty-risk": {
-    "last_error": "GET https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ilc_li02?format=JSON&lang=EN&geo=DE&indic_il=LI_R_MD60&age=TOTAL&unit=PC&sex=T failed: HTTP Error 400: Bad Request | { \"error\": [{\"status\": 400,\"id\": 150,\"label\": \"INVALID_QUERY_DIMENSION: Query is invalid as per its structure's definition. Dimension \\\"INDIC_IL\\\" is not defined\"}]}"
+    "last_error": "ambiguous result: several values per year; filter these dimensions: ['statinfo(2)', 'rskpovth(8)']"
   },
   "primary-energy-mix": {
     "rows": 300,
