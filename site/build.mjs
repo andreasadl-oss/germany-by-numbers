@@ -293,4 +293,4 @@ write(
 fs.writeFileSync(path.join(DIST, ".nojekyll"), "");
 
 const n = topics.flatMap((t) => t.indicators);
-console.log(`Built ${n.filter((i) => i.hasData).length}/${n.length} charts in ${LANGS.length} languages -> ${path.relative(process.cwd(), DIST) || "."}/`);
+console.log(`Built ${n.filter((i) => i.hasData).length}/${n.length} charts in ${LANGS.length} languages -> ${path.relative(ROOT, DIST)}/`);

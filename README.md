@@ -46,6 +46,10 @@ They live in `test/`; `test/harness.mjs` has the helpers (`buildSite`, `serve`,
 cases the real data can't show. To build from other locations yourself:
 `node site/build.mjs --indicators <dir> --data <dir> --out <dir>`.
 
+If Playwright's own Chromium isn't installed, the tests fall back to a shared one
+at `$PLAYWRIGHT_BROWSERS_PATH/chromium` (as in cloud sessions), which may be built
+for a slightly older Playwright version.
+
 ## Publishing
 
 `.github/workflows/site.yml` refreshes the data every Monday, commits any

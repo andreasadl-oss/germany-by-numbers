@@ -210,7 +210,6 @@ p { margin: 0 0 0.8em; }
 .data-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
 .page-head + .table-scroll { max-height: none; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius); }
 
-
 @media (max-width: 560px) {
   .chart-card { padding: 16px 12px 12px; }
   .header-inner { padding: 8px 0; }

@@ -15,13 +15,19 @@ export const LANGS = ["de", "en"];
 
 const run = promisify(execFile);
 
-/** Build the site into a fresh temp folder. `indicators`/`data` default to the real ones. */
+/** Build the site into a fresh temp folder and return its path. `indicators`/`data`
+ *  default to the real ones. If the build fails, the error message is its stderr. */
 export async function buildSite({ indicators, data } = {}) {
   const out = fs.mkdtempSync(path.join(os.tmpdir(), "gbn-site-"));
   const args = [path.join(ROOT, "site/build.mjs"), "--out", out];
   if (indicators) args.push("--indicators", indicators);
   if (data) args.push("--data", data);
-  await run(process.execPath, args, { cwd: ROOT });
+  try {
+    await run(process.execPath, args, { cwd: ROOT });
+  } catch (e) {
+    fs.rmSync(out, { recursive: true, force: true });
+    throw new Error(e.stderr || e.message);
+  }
   return out;
 }
 
@@ -35,16 +41,22 @@ const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", "
 /** Serve a folder on a free local port. Returns { url, close }. */
 export async function serve(dir) {
   const server = http.createServer((req, res) => {
-    let p = decodeURIComponent(new URL(req.url, "http://x").pathname);
-    let file = path.join(dir, p);
+    let file = path.join(dir, decodeURIComponent(new URL(req.url, "http://localhost").pathname));
     if (!file.startsWith(dir)) return res.writeHead(403).end();
     if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, "index.html");
     if (!fs.existsSync(file)) return res.writeHead(404).end("Not found");
     res.writeHead(200, { "content-type": TYPES[path.extname(file)] ?? "application/octet-stream" });
     fs.createReadStream(file).pipe(res);
   });
-  await new Promise((r) => server.listen(0, "127.0.0.1", r));
-  return { url: `http://127.0.0.1:${server.address().port}/`, close: () => new Promise((r) => server.close(r)) };
+  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+  return { url: `http://127.0.0.1:${server.address().port}/`, close: () => new Promise((resolve) => server.close(resolve)) };
+}
+
+/** Build and serve a site. `close()` stops the server and deletes the build. */
+export async function servedSite(opts) {
+  const out = await buildSite(opts);
+  const site = await serve(out);
+  return { url: site.url, close: async () => { await site.close(); fs.rmSync(out, { recursive: true, force: true }); } };
 }
 
 /** Start Chromium. Uses the browser for this Playwright version, or a shared one
@@ -56,18 +68,32 @@ export async function launch() {
   return chromium.launch({ executablePath });
 }
 
-/** Open a page at a given width and scroll every chart into view so lazy charts draw. */
+/** Open a page at a given width and scroll every chart into view so lazy charts
+ *  draw. Fails if a chart doesn't draw. */
 export async function open(browser, url, width) {
   const page = await browser.newPage({ viewport: { width, height: 900 } });
-  const res = await page.goto(url);
-  if (!res.ok()) throw new Error(`${url}: HTTP ${res.status()}`);
-  for (const fig of await page.locator("figure[data-chart]").all()) {
-    await fig.scrollIntoViewIfNeeded();
-    // Drawn = an SVG, or a message other than the "Loading …" placeholder.
-    const drawn = fig.locator(".plot svg, .plot p:not(:has-text('…'))").first();
-    await drawn.waitFor({ timeout: 10_000 }).catch(async () => {
-      throw new Error(`${url}: chart "${await fig.getAttribute("data-chart")}" did not draw`);
-    });
+  try {
+    const res = await page.goto(url);
+    if (!res.ok()) throw new Error(`${url}: HTTP ${res.status()}`);
+    for (const fig of await page.locator("figure[data-chart]").all()) {
+      await fig.scrollIntoViewIfNeeded();
+      await fig.locator(".plot svg").first().waitFor({ timeout: 10_000 }).catch(async () => {
+        throw new Error(`${url}: chart "${await fig.getAttribute("data-chart")}" did not draw`);
+      });
+    }
+    return page;
+  } catch (e) {
+    await page.close();
+    throw e;
   }
-  return page;
+}
+
+/** Open a page, run `fn(page)`, and always close the page afterwards. */
+export async function withPage(browser, url, width, fn) {
+  const page = await open(browser, url, width);
+  try {
+    return await fn(page);
+  } finally {
+    await page.close();
+  }
 }
