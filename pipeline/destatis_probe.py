@@ -9,7 +9,10 @@ Usage: python pipeline/destatis_probe.py [search terms...] [--table CODE ...]
 
 from __future__ import annotations
 
+import csv
+import io
 import json
+import zipfile
 import os
 import sys
 import urllib.parse
@@ -60,14 +63,23 @@ def main(argv: list[str]) -> None:
             print("  ", raw[:400])
 
     for code in tables:
-        print(f"\n=== tablefile {code} (ffcsv, first 25 lines)")
+        print(f"\n=== tablefile {code} (ffcsv)")
         raw = call("data/tablefile", name=code, area="all", compress="false", format="ffcsv")
+        if raw[:2] == b"PK":  # GENESIS answers with a zip even when compress=false
+            with zipfile.ZipFile(io.BytesIO(raw)) as z:
+                raw = z.read(z.namelist()[0])
         text = raw.decode("utf-8-sig", "replace")
         lines = text.splitlines()
         print(f"  {len(lines)} lines")
-        for line in lines[:25]:
-            print("  ", line[:300])
-
+        for line in lines[:6]:
+            print("  ", line[:400])
+        rows = list(csv.reader(io.StringIO(text), delimiter=";"))
+        if len(rows) > 1:
+            head = rows[0]
+            for i, col in enumerate(head):
+                vals = sorted({r[i] for r in rows[1:] if i < len(r)})
+                if 1 < len(vals) <= 80 or col.endswith("_label") or "label" in col:
+                    print(f"  column {col}: {len(vals)} values: {vals[:80]}")
 
 if __name__ == "__main__":
     main(sys.argv[1:])

@@ -7,10 +7,10 @@ on:
     inputs:
       terms:
         description: "Search terms, separated by |"
-        default: "Steuereinnahmen|Todesursachen|Bundeshaushalt|Ausgaben des Bundes"
+        default: "Haushalt|Ausgaben|Einzelplan|Rechnungsergebnisse|Schulden"
       tables:
         description: "Table codes to sample, separated by spaces"
-        default: "71211-0001 23211-0002 23211-0004"
+        default: "71211-0001 23211-0001"
 
 permissions:
   contents: read
