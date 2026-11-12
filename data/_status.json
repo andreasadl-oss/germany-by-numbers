@@ -1,9 +1,9 @@
 {
   "births-deaths": {
-    "rows": 120,
+    "rows": 70,
     "updated": "2026-11-12",
     "years": [
-      1960,
+      1991,
       2025
     ]
   },
@@ -64,10 +64,10 @@
     ]
   },
   "ghg-by-sector": {
-    "rows": 245,
+    "rows": 238,
     "updated": "2026-11-12",
     "years": [
-      1990,
+      1991,
       2024
     ]
   },
@@ -120,42 +120,47 @@
     ]
   },
   "life-expectancy": {
-    "rows": 80,
+    "rows": 68,
     "updated": "2026-11-12",
     "years": [
-      1985,
+      1991,
       2024
     ]
   },
   "life-expectancy-laender": {
-    "rows": 403,
+    "rows": 402,
     "updated": "2026-11-12",
     "years": [
-      1990,
+      1991,
       2024
     ]
   },
   "net-migration": {
-    "last_error": "no rows returned"
-  },
-  "population": {
-    "rows": 67,
+    "rows": 35,
     "updated": "2026-11-12",
     "years": [
-      1960,
+      1991,
+      2025
+    ]
+  },
+  "population": {
+    "rows": 36,
+    "updated": "2026-11-12",
+    "years": [
+      1991,
       2026
     ]
   },
   "population-laender": {
-    "rows": 595,
+    "rows": 578,
     "updated": "2026-11-12",
     "years": [
-      1990,
+      1991,
       2025
     ]
   },
   "poverty-risk": {
-    "last_error": "GET https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ilc_li02?format=JSON&lang=EN&geo=DE&age=TOTAL&sex=T&unit=PC&indic_il=LI_R_MD60 failed: HTTP Error 400: Bad Request"
+    "last_error": "GET https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ilc_li02?format=JSON&lang=EN&geo=DE&age=TOTAL&sex=T&unit=PC&indic_il=LI_R_MD60 failed: HTTP Error 400: Bad Request | { \"error\": [{\"status\": 400,\"id\": 150,\"label\": \"INVALID_QUERY_DIMENSION: Query is invalid as per its structure's definition. Dimension \\\"INDIC_IL\\\" is not defined\"}]}"
   },
   "primary-energy-mix": {
     "rows": 300,
