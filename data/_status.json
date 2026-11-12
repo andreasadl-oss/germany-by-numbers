@@ -160,7 +160,7 @@
     ]
   },
   "poverty-risk": {
-    "last_error": "ambiguous result: several values per year; filter these dimensions: ['statinfo(2)', 'rskpovth(8)']"
+    "last_error": "ambiguous result: several values per year; filter these dimensions: [\"statinfo: {'MEAN_EI': 'Mean equivalised income', 'MED_EI': 'Median equivalised income'}\", \"rskpovth: {'A_40': 'Above 40%', 'A_50': 'Above 50%', 'A_60': 'Above 60%', 'A_70': 'Above 70%', 'B_40': 'Below 40%', 'B_50': 'Below 50%', 'B_60': 'Below 60%', 'B_70': 'Below 70%'}\"]"
   },
   "primary-energy-mix": {
     "rows": 300,
