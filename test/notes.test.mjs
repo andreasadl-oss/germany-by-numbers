@@ -105,8 +105,8 @@ describe("notes on the real site", () => {
   });
 
   test("government revenue and spending has an event note at 1995 (the Treuhand debt takeover)", () => {
-    const finances = definitions.find((ind) => ind.id === "government-revenue-expenditure");
-    assert.ok(finances?.notes.some((n) => n.year === 1995 && n.kind === "event" && /Treuhand/.test(n.text.de) && /Treuhand/.test(n.text.en)));
+    const revenueSpending = definitions.find((ind) => ind.id === "government-revenue-expenditure");
+    assert.ok(revenueSpending?.notes.some((n) => n.year === 1995 && n.kind === "event" && /Treuhand/.test(n.text.de) && /Treuhand/.test(n.text.en)));
   });
 
   for (const ind of definitions) {
