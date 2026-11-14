@@ -206,15 +206,26 @@ p { margin: 0 0 0.8em; }
 .tooltip strong { display: block; margin-bottom: 4px; font-size: 13px; }
 .tip-row { display: flex; align-items: center; gap: 6px; color: var(--text-secondary); }
 .tip-val { margin-left: auto; padding-left: 12px; color: var(--text-primary); font-variant-numeric: tabular-nums; font-weight: 600; }
+.tip-note { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--grid); color: var(--text-secondary); max-width: 240px; white-space: normal; }
 .crosshair { position: absolute; top: 18px; bottom: 28px; width: 1px; background: var(--text-muted); pointer-events: none; }
 
 /* tables */
-.table-scroll { overflow-x: auto; max-height: 420px; }
+.table-scroll { overflow-x: auto; max-height: 420px; container-type: inline-size; }
 .data-table { border-collapse: collapse; width: 100%; font-size: 13px; }
 .data-table th, .data-table td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
 .data-table th { position: sticky; top: 0; background: var(--surface-1); color: var(--text-secondary); font-weight: 600; }
 .data-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
 .page-head + .table-scroll { max-height: none; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius); }
+.data-table tr.noted td:first-child { font-weight: 600; }
+.data-table tr.noted td:first-child, .data-table tr.note-row td { box-shadow: inset 3px 0 0 var(--text-muted); }
+.data-table tr.note-row td { white-space: normal; color: var(--text-secondary); }
+/* A note row spans every column, so in a table wider than the screen its text would
+   wrap at the table's width and run off screen. Instead the row is a zero-width block
+   (so it doesn't widen the first column) whose cell is as wide as the visible scroll
+   area (100cqi of .table-scroll). */
+.data-table tr.note-row { display: block; width: 0; }
+.data-table tr.note-row td { display: block; width: 100cqi; box-sizing: border-box; }
+.note-ref { display: inline-block; min-width: 1.4em; padding: 0 4px; border-radius: 4px; background: var(--grid); color: var(--text-primary); font-weight: 600; text-align: center; }
 
 @media (max-width: 560px) {
   .chart-card { padding: 16px 12px 12px; }
