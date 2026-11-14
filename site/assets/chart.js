@@ -88,12 +88,10 @@
 
   // A note as one line of text, as the chart, tooltip, table and export all show it.
   const noteText = (n) => `${n.when} · ${n.kind}: ${n.text}`;
-  // The same line with the note's number in front, as on the chart and in the notes list.
-  const numberedNote = (number, n) => `${number}. ${noteText(n)}`;
 
   function noteMarks(notes, tk) {
     if (!notes.length) return { under: [], over: [] };
-    const tagged = notes.map((n, i) => ({ ...n, label: String(i + 1), title: numberedNote(i + 1, n) }));
+    const tagged = notes.map((n, i) => ({ ...n, label: String(i + 1), title: `${i + 1}. ${noteText(n)}` }));
     const bands = tagged.filter((n) => n.to_year);
     const breaks = tagged.filter((n) => !n.to_year && n.dashed);
     const events = tagged.filter((n) => !n.to_year && !n.dashed);
@@ -272,7 +270,7 @@
         rows
           .map((r) => `<div class="tip-row"><span class="sw" style="background:${seriesColors(spec, prep, tk)[prep.labels.indexOf(r.label)]}"></span><span>${r.label}</span><span class="tip-val">${fmt(r.value, spec.unit)}</span></div>`)
           .join("") +
-        notesAt(spec, year).map((n) => `<div class="tip-note">${escapeXml(numberedNote(n.number, n.note))}</div>`).join("");
+        notesAt(spec, year).map((n) => `<div class="tip-note">${n.number}. ${escapeXml(noteText(n.note))}</div>`).join("");
       tip.hidden = false;
       rule.hidden = false;
       rule.style.left = `${xpos}px`;
@@ -398,7 +396,7 @@
       parts.push(`<text x="${pad}" y="${y}" font-size="12" font-weight="600" fill="${tk.ink}">${escapeXml(T.notes)}</text>`);
       y += 17;
       notes.forEach((note, i) => {
-        wrapText(numberedNote(i + 1, note), 12, w).forEach((l) => {
+        wrapText(`${i + 1}. ${noteText(note)}`, 12, w).forEach((l) => {
           parts.push(`<text x="${pad}" y="${y}" font-size="12" fill="${tk.ink2}">${escapeXml(l)}</text>`);
           y += 16;
         });
