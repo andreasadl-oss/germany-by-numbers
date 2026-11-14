@@ -5,9 +5,11 @@ import { after, before, describe, test } from "node:test";
 import { buildSite, fixture, launch, LANGS, ROOT, servedSite, WIDTHS, withPage } from "./harness.mjs";
 
 const NOTES_HEADING = { de: "Hinweise", en: "Notes" };
-// The notes of the "notes" fixture, in year order (the order the page numbers them).
-const FIXTURE_NOTES = JSON.parse(fs.readFileSync(path.join(fixture("notes").indicators, "fixture.json"), "utf8")).indicators[0].notes
-  .sort((a, b) => a.year - b.year);
+/** Notes in the order the page numbers them: by year, then by end year. */
+const inPageOrder = (notes) => [...notes].sort((a, b) => a.year - b.year || (a.to_year ?? a.year) - (b.to_year ?? b.year));
+/** The notes of a fixture's only indicator, in page order. */
+const fixtureNotes = (name) => inPageOrder(JSON.parse(fs.readFileSync(path.join(fixture(name).indicators, "fixture.json"), "utf8")).indicators[0].notes);
+const FIXTURE_NOTES = fixtureNotes("notes");
 
 describe("the build checks every note", () => {
   test("a note missing a language stops the build, naming the indicator", async () => {
@@ -50,7 +52,7 @@ async function assertNotesShown(page, notes, lang) {
   // The notes list repeats every note as page text, in year order.
   const list = page.locator("figure").getByRole("region", { name: NOTES_HEADING[lang] });
   const items = await list.getByRole("listitem").allInnerTexts();
-  const sorted = [...notes].sort((a, b) => a.year - b.year);
+  const sorted = inPageOrder(notes);
   assert.equal(items.length, sorted.length, "one list item per note");
   sorted.forEach((n, i) => {
     assert.ok(items[i].includes(n.text[lang]), `item ${i + 1} shows "${n.text[lang]}"`);
@@ -176,8 +178,11 @@ describe("notes beyond the chart", () => {
         withPage(browser, url(), width, async (page) => {
           const { rows } = await openTable(page);
           // A year row starts with the year, followed by the numbers of its notes.
-          const yearRows = rows.filter((r) => /^\d{4}\b/.test(r.cells[0]));
-          const marks = (year) => yearRows.find((r) => r.cells[0].split(/\s+/)[0] === String(year))?.cells[0].split(/\s+/).slice(1) ?? [];
+          const yearRows = rows.filter((r) => /^\d{4}\b/.test(r.cells[0])).map((r) => {
+            const [year, ...marks] = r.cells[0].split(/\s+/);
+            return { year: Number(year), marks };
+          });
+          const marks = (year) => yearRows.find((r) => r.year === year)?.marks ?? [];
           const noted = new Set();
           notes.forEach((n, i) => {
             for (const year of noteYears(n)) {
@@ -188,10 +193,7 @@ describe("notes beyond the chart", () => {
             assert.equal(text.length, 1, `"${n.text[lang]}" is shown once`);
             assert.ok(text[0].visible, `"${n.text[lang]}" is readable without scrolling sideways`);
           });
-          for (const r of yearRows) {
-            const year = Number(r.cells[0].split(/\s+/)[0]);
-            if (!noted.has(year)) assert.deepEqual(marks(year), [], `${year} is not marked`);
-          }
+          for (const r of yearRows) if (!noted.has(r.year)) assert.deepEqual(r.marks, [], `${r.year} is not marked`);
         }));
 
       test(`hovering a noted year shows the note in the tooltip (${lang}, ${name})`, () =>
@@ -202,13 +204,15 @@ describe("notes beyond the chart", () => {
             const tip = await hoverTooltip(page, centre(n));
             assert.ok(tip.includes(n.text[lang]), `tooltip at ${n.year} shows "${n.text[lang]}"`);
           }
-          // Halfway between the middle of the crisis band (2002) and the 2005 break is
-          // 2003.5; a little further right is 2004, which has no note.
-          const [crisis, counting] = notes;
-          const x2004 = centre(crisis) + (centre(counting) - centre(crisis)) * (2 / 3);
-          const tip = await hoverTooltip(page, x2004);
-          assert.ok(tip.startsWith("2004"), "the tooltip shows 2004");
-          for (const n of notes) assert.ok(!tip.includes(n.text[lang]), `tooltip at 2004 doesn't mention "${n.text[lang]}"`);
+          // A year with no note, between the first and last noted years, placed on the
+          // x axis from two single-year notes.
+          const noted = new Set(notes.flatMap(noteYears));
+          const free = noteYears({ year: notes[0].year, to_year: notes.at(-1).to_year ?? notes.at(-1).year }).find((y) => !noted.has(y));
+          const [a, b] = notes.filter((n) => !n.to_year);
+          const xFree = centre(a) + ((centre(b) - centre(a)) * (free - a.year)) / (b.year - a.year);
+          const tip = await hoverTooltip(page, xFree);
+          assert.ok(tip.startsWith(String(free)), `the tooltip shows ${free}`);
+          for (const n of notes) assert.ok(!tip.includes(n.text[lang]), `tooltip at ${free} doesn't mention "${n.text[lang]}"`);
         }));
 
       test(`the exported SVG lists the notes (${lang}, ${name})`, () =>
