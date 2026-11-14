@@ -225,6 +225,25 @@ describe("notes beyond the chart", () => {
   }
 });
 
+describe("notes in a table wider than the screen", () => {
+  let site;
+  const [note] = fixtureNotes("notes-wide");
+  before(async () => { site = await servedSite(fixture("notes-wide")); });
+  after(async () => { await site?.close(); });
+
+  for (const [name, width] of Object.entries(WIDTHS)) {
+    for (const lang of LANGS) {
+      test(`the note text is readable without scrolling sideways (${lang}, ${name})`, () =>
+        withPage(browser, `${site.url}${lang}/chart/fixture-notes-wide/`, width, async (page) => {
+          const { rows } = await openTable(page);
+          const text = rows.filter((r) => r.cells.join(" ").includes(note.text[lang]));
+          assert.equal(text.length, 1, `"${note.text[lang]}" is shown once`);
+          assert.ok(text[0].visible, `"${note.text[lang]}" is readable without scrolling sideways`);
+        }));
+    }
+  }
+});
+
 describe("an indicator without notes", () => {
   let site;
   before(async () => { site = await servedSite(fixture("planned")); });
