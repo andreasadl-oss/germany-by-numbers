@@ -86,9 +86,12 @@
   const TOP = 18; // top margin of a time chart
   const NOTE_ROW = 18; // extra top margin that holds the note numbers
 
+  // A note as one line of text, as the chart, tooltip, table and export all show it.
+  const noteText = (n) => `${n.when} · ${n.kind}: ${n.text}`;
+
   function noteMarks(notes, tk) {
     if (!notes.length) return { under: [], over: [] };
-    const tagged = notes.map((n, i) => ({ ...n, label: String(i + 1), title: `${i + 1}. ${n.when} · ${n.kind}: ${n.text}` }));
+    const tagged = notes.map((n, i) => ({ ...n, label: String(i + 1), title: `${i + 1}. ${noteText(n)}` }));
     const bands = tagged.filter((n) => n.to_year);
     const breaks = tagged.filter((n) => !n.to_year && n.dashed);
     const events = tagged.filter((n) => !n.to_year && !n.dashed);
@@ -111,6 +114,14 @@
         }),
       ],
     };
+  }
+
+  // The notes that cover a year, with the number they carry on the chart and in the
+  // notes list: [{ number, note }]. Used by the tooltip and the table view.
+  function notesAt(spec, year) {
+    return (spec.notes || [])
+      .map((note, i) => ({ number: i + 1, note }))
+      .filter(({ note }) => year >= note.year && year <= (note.to_year ?? note.year));
   }
 
   // ------------------------------------------------------------ chart forms
@@ -234,6 +245,7 @@
     const wrap = fig.querySelector(".plot");
     const tip = document.createElement("div");
     tip.className = "tooltip";
+    tip.setAttribute("role", "tooltip");
     tip.hidden = true;
     const rule = document.createElement("div");
     rule.className = "crosshair";
@@ -257,12 +269,15 @@
         `<strong>${year}</strong>` +
         rows
           .map((r) => `<div class="tip-row"><span class="sw" style="background:${seriesColors(spec, prep, tk)[prep.labels.indexOf(r.label)]}"></span><span>${r.label}</span><span class="tip-val">${fmt(r.value, spec.unit)}</span></div>`)
-          .join("");
+          .join("") +
+        notesAt(spec, year).map((n) => `<div class="tip-note">${n.number}. ${escapeXml(noteText(n.note))}</div>`).join("");
       tip.hidden = false;
       rule.hidden = false;
       rule.style.left = `${xpos}px`;
       const w = tip.offsetWidth;
-      tip.style.left = `${xpos + 12 + w > box.width ? xpos - 12 - w : xpos + 12}px`;
+      // Beside the pointer, on whichever side has room, and never outside the chart.
+      const left = xpos + 12 + w > box.width ? xpos - 12 - w : xpos + 12;
+      tip.style.left = `${Math.max(0, Math.min(left, box.width - w))}px`;
     }
     function hide() {
       tip.hidden = true;
@@ -311,9 +326,25 @@
       const years = Array.from(new Set(prep.data.map((d) => d.year))).sort((a, b) => b - a);
       rows = years.map((y) => [y, ...prep.labels.map((l) => prep.data.find((d) => d.year === y && d.label === l))]);
     }
+    // A noted year carries the numbers of its notes; each note's text follows as a
+    // full-width row under the first of its years in the table, so it's readable
+    // without scrolling sideways. Länder tables (years as columns) have no notes.
+    const hasNotes = spec.geo !== "laender" && spec.notes?.length > 0;
+    const shown = new Set();
     el.innerHTML =
       `<div class="table-scroll"><table class="data-table"><thead><tr>${cols.map((c) => `<th>${c}</th>`).join("")}</tr></thead><tbody>` +
-      rows.map((r) => `<tr><td>${r[0]}</td>${r.slice(1).map((c) => `<td class="num">${c ? fmt(c.value, "") : "–"}</td>`).join("")}</tr>`).join("") +
+      rows
+        .map((r) => {
+          const here = hasNotes ? notesAt(spec, r[0]) : [];
+          const fresh = here.filter((n) => !shown.has(n.number));
+          fresh.forEach((n) => shown.add(n.number));
+          const refs = here.map((n) => ` <span class="note-ref">${n.number}</span>`).join("");
+          return (
+            `<tr${here.length ? ' class="noted"' : ""}><td>${r[0]}${refs}</td>${r.slice(1).map((c) => `<td class="num">${c ? fmt(c.value, "") : "–"}</td>`).join("")}</tr>` +
+            fresh.map((n) => `<tr class="note-row"><td colspan="${cols.length}"><span class="note-ref">${n.number}</span> ${escapeXml(noteText(n.note))}</td></tr>`).join("")
+          );
+        })
+        .join("") +
       `</tbody></table></div>`;
   }
 
@@ -359,6 +390,19 @@
     }
     const plotY = y;
     y += h + 18;
+    // The notes list, so a chart shared on its own keeps its context.
+    const notes = spec.notes || [];
+    if (notes.length) {
+      parts.push(`<text x="${pad}" y="${y}" font-size="12" font-weight="600" fill="${tk.ink}">${escapeXml(T.notes)}</text>`);
+      y += 17;
+      notes.forEach((note, i) => {
+        wrapText(`${i + 1}. ${noteText(note)}`, 12, w).forEach((l) => {
+          parts.push(`<text x="${pad}" y="${y}" font-size="12" fill="${tk.ink2}">${escapeXml(l)}</text>`);
+          y += 16;
+        });
+      });
+      y += 6;
+    }
     const src = `${T.source}: ${spec.source.name} · ${spec.source.license} · ${window.__SITE__}`;
     wrapText(src, 11, w).forEach((l) => { parts.push(`<text x="${pad}" y="${y}" font-size="11" fill="${tk.muted}">${escapeXml(l)}</text>`); y += 15; });
     const totalH = y + pad - 10;

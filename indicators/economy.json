@@ -334,7 +334,17 @@
           "TE",
           "TR"
         ]
-      }
+      },
+      "notes": [
+        {
+          "year": 1995,
+          "kind": "event",
+          "text": {
+            "de": "Bund übernimmt Schulden von Treuhand und DDR-Wohnungswirtschaft (einmalig).",
+            "en": "Federal government takes over Treuhand and East German housing debt (one-off)."
+          }
+        }
+      ]
     },
     {
       "id": "tax-revenue-by-type",

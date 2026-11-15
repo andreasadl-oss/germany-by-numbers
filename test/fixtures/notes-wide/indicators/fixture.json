@@ -1,0 +1,78 @@
+{
+  "topic": {
+    "id": "fixture-topic",
+    "order": 1,
+    "title": {
+      "de": "Testthema",
+      "en": "Test topic"
+    },
+    "intro": {
+      "de": "Ein Thema nur für Tests.",
+      "en": "A topic used only by tests."
+    }
+  },
+  "indicators": [
+    {
+      "id": "fixture-notes-wide",
+      "title": {
+        "de": "Ein breiter Testindikator mit Hinweis",
+        "en": "A wide test indicator with a note"
+      },
+      "subtitle": {
+        "de": "Acht Reihen, mehr als ein Telefon breit ist.",
+        "en": "Eight series, more than a phone is wide."
+      },
+      "unit": "",
+      "chart": "line",
+      "series": {
+        "A": {
+          "de": "Reihe A",
+          "en": "Series A"
+        },
+        "B": {
+          "de": "Reihe B",
+          "en": "Series B"
+        },
+        "C": {
+          "de": "Reihe C",
+          "en": "Series C"
+        },
+        "D": {
+          "de": "Reihe D",
+          "en": "Series D"
+        },
+        "E": {
+          "de": "Reihe E",
+          "en": "Series E"
+        },
+        "F": {
+          "de": "Reihe F",
+          "en": "Series F"
+        },
+        "G": {
+          "de": "Reihe G",
+          "en": "Series G"
+        },
+        "H": {
+          "de": "Reihe H",
+          "en": "Series H"
+        }
+      },
+      "source": {
+        "name": "Fixture Office",
+        "url": "https://example.org/notes-wide",
+        "license": "CC BY 4.0"
+      },
+      "notes": [
+        {
+          "year": 2005,
+          "kind": "break",
+          "text": {
+            "de": "Neue Zählweise: alle Reihen ab diesem Jahr nach neuer Methode erhoben.",
+            "en": "New counting method: every series collected with a new method from this year on."
+          }
+        }
+      ]
+    }
+  ]
+}
