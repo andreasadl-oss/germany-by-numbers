@@ -31,6 +31,8 @@
   };
   const landName = (code) => (LAENDER[code] ? LAENDER[code][LANG][0] : code);
   const landShort = (code) => (LAENDER[code] ? LAENDER[code][LANG][1] : code);
+  // The shortest name a chart row may show: a Land's short form, else the name itself.
+  const shortestName = (name, geo) => (LAENDER[geo] ? landShort(geo) : name);
 
   // ------------------------------------------------------------ text fitting
   // Width in px of a line of chart text, measured as the browser draws SVG text
@@ -85,7 +87,7 @@
   // if it fits, else a Land's short form (or another name), wrapped if need be.
   function fitLabel(name, geo, maxW) {
     if (textWidth(name) <= maxW) return name;
-    return wrapLines(LAENDER[geo] ? landShort(geo) : name, maxW).join("\n");
+    return wrapLines(shortestName(name, geo), maxW).join("\n");
   }
 
   // Build a plot whose y-axis tick labels fit its left margin: draw it with
@@ -294,7 +296,7 @@
     const narrow = width < 560;
     // Wide enough for the longest word of any label, up to 55 % of the chart.
     // (A Land counts with its short form, which is what a narrow chart falls back to.)
-    const longestWord = d3.max(rows, (d) => d3.max((LAENDER[d.geo] ? landShort(d.geo) : d.name).split(/\s+/), (w) => textWidth(w)));
+    const longestWord = d3.max(rows, (d) => d3.max(shortestName(d.name, d.geo).split(/\s+/), (w) => textWidth(w)));
     const marginLeft = Math.min(Math.round(width * 0.55), Math.max(narrow ? Math.round(width * 0.42) : 230, longestWord + 12));
     // Each row's label fits the label column (the margin less the tick padding and
     // a little air): full name, a Land's short form, or wrapped onto more lines.
@@ -305,11 +307,10 @@
     const rowH = Math.max(narrow ? 34 : 28, lines * 12 + 10);
     const height = rows.length * rowH + 40;
     const minV = d3.min(rows, (d) => d.value);
-    const maxV0 = d3.max(rows, (d) => d.value);
+    const maxV = d3.max(rows, (d) => d.value);
     // When all values are close together (e.g. life expectancy), bars from zero
     // hide the differences: use dots on a zoomed axis instead.
-    const dots = minV > 0 && minV > maxV0 * 0.6;
-    const maxV = d3.max(rows, (d) => d.value);
+    const dots = minV > 0 && minV > maxV * 0.6;
     // The Germany figure is drawn only where it falls on the axis: for a count
     // like population it is the total of all Länder, far past the longest bar.
     if (avg != null && (avg > maxV || avg < Math.min(0, minV))) avg = null;
