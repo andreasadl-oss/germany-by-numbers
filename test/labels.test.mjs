@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
 import { after, before, describe, test } from "node:test";
-import { launch, LANGS, servedSite, WIDTHS, withPage } from "./harness.mjs";
+import { launch, LANGS, ROOT, servedSite, WIDTHS, withPage } from "./harness.mjs";
 
 // The full Land name a reader must find in tooltips and tables.
 const MV = { de: "Mecklenburg-Vorpommern", en: "Mecklenburg-Western Pomerania" };
@@ -30,7 +32,10 @@ async function textOutsideCharts(page) {
 
 /** The y-axis labels of a bar or dot chart (the Land names), with their boxes.
  *  `read` is the label as a reader reads it: its lines joined by a space, or
- *  directly after a line that ends in a hyphen. */
+ *  directly after a line that ends in a hyphen. `reads` is every way a reader may
+ *  read it: a hyphen at a line end is part of the name ("Herz-Kreislauf-" /
+ *  "Erkrankungen") or only marks a word broken across lines ("Behandlungs-" /
+ *  "komplikationen"). */
 async function barLabels(page) {
   return page.locator("figure[data-chart] .plot svg").first().evaluate((svg) => {
     const box = (el) => { const b = el.getBoundingClientRect(); return { left: b.left, right: b.right, top: b.top, bottom: b.bottom }; };
@@ -38,11 +43,17 @@ async function barLabels(page) {
       const lines = t.querySelectorAll("tspan").length ? Array.from(t.querySelectorAll("tspan"), (s) => s.textContent) : [t.textContent];
       return lines.reduce((acc, l) => (!acc ? l : acc.endsWith("-") ? acc + l : `${acc} ${l}`), "");
     };
-    return Array.from(svg.querySelectorAll("[aria-label='y-axis tick label'] text")).map((t) => ({ text: t.textContent, read: read(t), box: box(t) }));
+    const reads = (t) => {
+      const lines = t.querySelectorAll("tspan").length ? Array.from(t.querySelectorAll("tspan"), (s) => s.textContent) : [t.textContent];
+      return lines.reduce((accs, l) => accs.flatMap((acc) =>
+        !acc ? [l] : acc.endsWith("-") ? [acc + l, acc.slice(0, -1) + l] : [`${acc} ${l}`]), [""]);
+    };
+    return Array.from(svg.querySelectorAll("[aria-label='y-axis tick label'] text")).map((t) => ({ text: t.textContent, read: read(t), reads: reads(t), box: box(t) }));
   });
 }
 
 const overlaps = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+const inside = (a, b) => a.left >= b.left - 0.5 && a.right <= b.right + 0.5 && a.top >= b.top - 0.5 && a.bottom <= b.bottom + 0.5;
 
 let browser;
 before(async () => { browser = await launch(); });
@@ -95,16 +106,51 @@ describe("chart labels on the real site", () => {
     }
   }
 
+  // Bar and dot charts carry the longest labels (category and Land names), so they
+  // are checked at every phone width the spec names as well as on a desktop.
+  const BAR_WIDTHS = [320, 360, 390, 1280];
+  const barCharts = fs.readdirSync(path.join(ROOT, "indicators"))
+    .flatMap((f) => JSON.parse(fs.readFileSync(path.join(ROOT, "indicators", f), "utf8")).indicators)
+    .filter((ind) => ind.chart === "bar-latest")
+    .map((ind) => ind.id);
+
+  for (const lang of LANGS) {
+    test(`bar and dot chart row labels stay inside the chart and clear of each other at 320–1280 px (${lang})`, async () => {
+      assert.ok(barCharts.length > 0, "the site has bar or dot charts");
+      const problems = [];
+      const queue = barCharts.flatMap((id) => BAR_WIDTHS.map((width) => ({ id, width })));
+      await Promise.all(Array.from({ length: 4 }, async () => {
+        for (let job; (job = queue.shift()); ) {
+          await withPage(browser, `${site.url}${lang}/chart/${job.id}/`, job.width, async (page) => {
+            const where = `${job.id} at ${job.width}px`;
+            const labels = await barLabels(page);
+            const svg = await page.locator("figure[data-chart] .plot svg").first().evaluate((s) => {
+              const b = s.getBoundingClientRect();
+              return { left: b.left, right: b.right, top: b.top, bottom: b.bottom };
+            });
+            for (const l of labels) if (!inside(l.box, svg)) problems.push(`${where}: "${l.read}" sticks out of the chart`);
+            labels.forEach((a, i) => labels.slice(i + 1).forEach((b) => {
+              if (overlaps(a.box, b.box)) problems.push(`${where}: "${a.read}" overlaps "${b.read}"`);
+            }));
+          });
+        }
+      }));
+      assert.deepEqual(problems, [], "every row label is fully inside its chart and overlaps no other");
+    });
+  }
+
   for (const id of ["causes-of-death", "government-spending-by-function"]) {
     for (const lang of LANGS) {
-      test(`${id}: category labels wrapped on a phone keep every word of the name (${lang})`, () =>
-        withPage(browser, `${site.url}${lang}/chart/${id}/`, WIDTHS.phone, async (page) => {
-          const labels = await barLabels(page);
-          const fig = page.locator("figure[data-chart]").first();
-          await fig.locator("[data-action=table]").click();
-          const names = await fig.locator(".table-view thead th").allInnerTexts();
-          for (const l of labels) assert.ok(names.includes(l.read), `"${l.read}" reads as one of the categories in the table`);
-        }));
+      for (const width of [320, 360, WIDTHS.phone]) {
+        test(`${id}: category labels wrapped on a phone keep every word of the name (${lang}, ${width} px)`, () =>
+          withPage(browser, `${site.url}${lang}/chart/${id}/`, width, async (page) => {
+            const labels = await barLabels(page);
+            const fig = page.locator("figure[data-chart]").first();
+            await fig.locator("[data-action=table]").click();
+            const names = await fig.locator(".table-view thead th").allInnerTexts();
+            for (const l of labels) assert.ok(l.reads.some((r) => names.includes(r)), `"${l.read}" reads as one of the categories in the table`);
+          }));
+      }
     }
   }
 

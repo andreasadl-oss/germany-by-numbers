@@ -52,9 +52,25 @@
     return Math.ceil(measureEl.getComputedTextLength());
   }
 
-  // Break text into lines no wider than `maxW`, at spaces and after hyphens.
+  // Break a word wider than `maxW` into pieces that fit, each but the last ending
+  // in a hyphen. A word that fits comes back whole. The last piece keeps at least
+  // five characters where it can, so no lone "en)" ends up on a line of its own.
+  function hyphenate(word, maxW, size) {
+    const pieces = [];
+    let rest = word;
+    while (textWidth(rest, size) > maxW && rest.length > 2) {
+      let n = rest.length > 7 ? rest.length - 5 : rest.length - 1;
+      while (n > 1 && textWidth(rest.slice(0, n) + "-", size) > maxW) n--;
+      pieces.push(rest.slice(0, n) + "-");
+      rest = rest.slice(n);
+    }
+    return [...pieces, rest];
+  }
+
+  // Break text into lines no wider than `maxW`, at spaces and after hyphens; a
+  // single word too wide for a line of its own is hyphenated.
   function wrapLines(text, maxW, size = 12) {
-    const words = text.match(/[^\s-]+-?|-/g) || [text];
+    const words = (text.match(/[^\s-]+-?|-/g) || [text]).flatMap((w) => hyphenate(w, maxW, size));
     const lines = [];
     let line = "";
     for (const w of words) {
@@ -283,7 +299,10 @@
     // Each row's label fits the label column (the margin less the tick padding and
     // a little air): full name, a Land's short form, or wrapped onto more lines.
     const label = new Map(rows.map((d) => [d.name, fitLabel(d.name, d.geo, marginLeft - 12)]));
-    const rowH = narrow ? 34 : 28;
+    // Rows grow with the most lines any label needs (12 px a line plus air), so
+    // wrapped labels never run into their neighbours.
+    const lines = d3.max(rows, (d) => label.get(d.name).split("\n").length);
+    const rowH = Math.max(narrow ? 34 : 28, lines * 12 + 10);
     const height = rows.length * rowH + 40;
     const minV = d3.min(rows, (d) => d.value);
     const maxV0 = d3.max(rows, (d) => d.value);
