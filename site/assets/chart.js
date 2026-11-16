@@ -9,15 +9,108 @@
   const SPECS = Object.fromEntries((window.__CHARTS__ || []).map((s) => [s.id, s]));
   const LOCALE = LANG === "de" ? "de-DE" : "en-GB";
 
+  // Every Land's name per language: [full, short]. Charts use the short form only
+  // where the full one doesn't fit; tooltips and tables always show the full name.
   const LAENDER = {
-    DE1: ["Baden-Württemberg", "Baden-Württemberg"], DE2: ["Bayern", "Bavaria"], DE3: ["Berlin", "Berlin"],
-    DE4: ["Brandenburg", "Brandenburg"], DE5: ["Bremen", "Bremen"], DE6: ["Hamburg", "Hamburg"],
-    DE7: ["Hessen", "Hesse"], DE8: ["Mecklenburg-Vorpommern", "Mecklenburg-Western Pomerania"],
-    DE9: ["Niedersachsen", "Lower Saxony"], DEA: ["Nordrhein-Westfalen", "North Rhine-Westphalia"],
-    DEB: ["Rheinland-Pfalz", "Rhineland-Palatinate"], DEC: ["Saarland", "Saarland"], DED: ["Sachsen", "Saxony"],
-    DEE: ["Sachsen-Anhalt", "Saxony-Anhalt"], DEF: ["Schleswig-Holstein", "Schleswig-Holstein"], DEG: ["Thüringen", "Thuringia"],
+    DE1: { de: ["Baden-Württemberg", "Baden-Württ."], en: ["Baden-Württemberg", "Baden-Württ."] },
+    DE2: { de: ["Bayern", "Bayern"], en: ["Bavaria", "Bavaria"] },
+    DE3: { de: ["Berlin", "Berlin"], en: ["Berlin", "Berlin"] },
+    DE4: { de: ["Brandenburg", "Brandenburg"], en: ["Brandenburg", "Brandenburg"] },
+    DE5: { de: ["Bremen", "Bremen"], en: ["Bremen", "Bremen"] },
+    DE6: { de: ["Hamburg", "Hamburg"], en: ["Hamburg", "Hamburg"] },
+    DE7: { de: ["Hessen", "Hessen"], en: ["Hesse", "Hesse"] },
+    DE8: { de: ["Mecklenburg-Vorpommern", "Meckl.-Vorpommern"], en: ["Mecklenburg-Western Pomerania", "Mecklenburg-W. Pom."] },
+    DE9: { de: ["Niedersachsen", "Niedersachsen"], en: ["Lower Saxony", "Lower Saxony"] },
+    DEA: { de: ["Nordrhein-Westfalen", "Nordrhein-Westf."], en: ["North Rhine-Westphalia", "N. Rhine-Westphalia"] },
+    DEB: { de: ["Rheinland-Pfalz", "Rheinland-Pf."], en: ["Rhineland-Palatinate", "Rhineland-Pal."] },
+    DEC: { de: ["Saarland", "Saarland"], en: ["Saarland", "Saarland"] },
+    DED: { de: ["Sachsen", "Sachsen"], en: ["Saxony", "Saxony"] },
+    DEE: { de: ["Sachsen-Anhalt", "Sachsen-Anhalt"], en: ["Saxony-Anhalt", "Saxony-Anhalt"] },
+    DEF: { de: ["Schleswig-Holstein", "Schleswig-Holst."], en: ["Schleswig-Holstein", "Schleswig-Holst."] },
+    DEG: { de: ["Thüringen", "Thüringen"], en: ["Thuringia", "Thuringia"] },
   };
-  const landName = (code) => (LAENDER[code] ? LAENDER[code][LANG === "de" ? 0 : 1] : code);
+  const landName = (code) => (LAENDER[code] ? LAENDER[code][LANG][0] : code);
+  const landShort = (code) => (LAENDER[code] ? LAENDER[code][LANG][1] : code);
+  // The shortest name a chart row may show: a Land's short form, else the name itself.
+  const shortestName = (name, geo) => (LAENDER[geo] ? landShort(geo) : name);
+
+  // ------------------------------------------------------------ text fitting
+  // Width in px of a line of chart text, measured as the browser draws SVG text
+  // in the page's font (a hidden SVG text element, reused).
+  let measureEl;
+  function textWidth(text, size = 12, weight = 400) {
+    if (!measureEl?.isConnected) {
+      const ns = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(ns, "svg");
+      svg.setAttribute("aria-hidden", "true");
+      svg.style.cssText = "position:absolute;left:-9999px;top:0;width:0;height:0;visibility:hidden";
+      measureEl = document.createElementNS(ns, "text");
+      svg.append(measureEl);
+      document.body.append(svg);
+    }
+    measureEl.setAttribute("font-size", size);
+    measureEl.setAttribute("font-weight", weight);
+    measureEl.textContent = text;
+    return Math.ceil(measureEl.getComputedTextLength());
+  }
+
+  // A series label may mark where a long word breaks with a soft hyphen (U+00AD),
+  // between the parts of a compound: "Behandlungs\u00adkomplikationen". Readers
+  // only ever see the plain name.
+  const SHY = "\u00ad";
+  const plain = (s) => s.replaceAll(SHY, "");
+
+  // Break a word wider than `maxW` into pieces that fit, each but the last ending
+  // in a hyphen. A word that fits comes back whole. It breaks at the last marked
+  // break that fits; failing that, the last piece keeps at least five characters
+  // where it can, so no lone "en)" ends up on a line of its own.
+  function hyphenate(word, maxW, size) {
+    const pieces = [];
+    let rest = word;
+    while (textWidth(plain(rest), size) > maxW && rest.length > 2) {
+      const marked = [...rest.matchAll(SHY)].map((m) => m.index).reverse()
+        .find((i) => textWidth(plain(rest.slice(0, i)) + "-", size) <= maxW);
+      if (marked) { pieces.push(plain(rest.slice(0, marked)) + "-"); rest = rest.slice(marked + 1); continue; }
+      rest = plain(rest);
+      let n = rest.length > 7 ? rest.length - 5 : rest.length - 1;
+      while (n > 1 && textWidth(rest.slice(0, n) + "-", size) > maxW) n--;
+      pieces.push(rest.slice(0, n) + "-");
+      rest = rest.slice(n);
+    }
+    return [...pieces, plain(rest)];
+  }
+
+  // Break text into lines no wider than `maxW`, at spaces and after hyphens; a
+  // single word too wide for a line of its own is hyphenated.
+  function wrapLines(text, maxW, size = 12) {
+    const words = (text.match(/[^\s-]+-?|-/g) || [text]).flatMap((w) => hyphenate(w, maxW, size));
+    const lines = [];
+    let line = "";
+    for (const w of words) {
+      const glue = line && !line.endsWith("-") ? " " : "";
+      if (line && textWidth(line + glue + w, size) > maxW) { lines.push(line); line = w; } else line += glue + w;
+    }
+    if (line) lines.push(line);
+    return lines;
+  }
+
+  // The label of a bar or dot chart row that fits its label column: the full name
+  // if it fits, else a Land's short form (or the name with its marked breaks),
+  // wrapped if need be.
+  function fitLabel(name, geo, maxW, marked) {
+    if (textWidth(name) <= maxW) return name;
+    return wrapLines(marked ?? shortestName(name, geo), maxW).join("\n");
+  }
+
+  // Build a plot whose y-axis tick labels fit its left margin: draw it with
+  // `minLeft`, and draw it again with a wider margin if a label needs more room
+  // (tick + padding + label + a little air).
+  function fitLeft(make, minLeft) {
+    const plot = make(minLeft);
+    const labels = Array.from(plot.querySelectorAll("[aria-label='y-axis tick label'] text"), (t) => textWidth(t.textContent));
+    const need = labels.length ? Math.max(...labels) + 13 : 0;
+    return need > minLeft ? make(need) : plot;
+  }
 
   // ------------------------------------------------------------ helpers
   function tokens() {
@@ -64,11 +157,14 @@
   // Turn tidy rows into what a chart needs, labelled in the page language.
   function prepare(spec, rows) {
     const keys = Object.keys(spec.series);
-    const color = Object.fromEntries(keys.map((k, i) => [spec.series[k], i]));
+    const label = (k) => plain(spec.series[k]);
+    const color = Object.fromEntries(keys.map((k, i) => [label(k), i]));
     const data = rows
       .filter((r) => keys.includes(String(r.series)))
-      .map((r) => ({ ...r, series: String(r.series), label: spec.series[String(r.series)] }));
-    return { keys, labels: keys.map((k) => spec.series[k]), color, data };
+      .map((r) => ({ ...r, series: String(r.series), label: label(String(r.series)) }));
+    // Each label as the definition writes it, with its marked breaks.
+    const marked = Object.fromEntries(keys.map((k) => [label(k), spec.series[k]]));
+    return { keys, labels: keys.map(label), marked, color, data };
   }
 
   // One colour per series, in series order. An indicator may name a fixed colour
@@ -138,13 +234,22 @@
           return pts[pts.length - 1];
         }).filter(Boolean)
       : [];
-    const marginRight = direct ? Math.min(150, 12 + 7 * d3.max(labels, (l) => l.length)) : 16;
+    // Room for the longest series name at the line ends (offset + label + air).
+    const marginRight = direct ? d3.max(labels, (l) => textWidth(l)) + 12 : 16;
     const notes = noteMarks(spec.notes || [], tk);
     const marginTop = TOP + (spec.notes?.length ? NOTE_ROW : 0);
     const ymax = d3.max(data, (d) => d.value);
-    const zero = isArea || spec.chart === "bar-time" || ymin < 0 || ymin < ymax * 0.25;
-    // Stacked shares can't exceed 100 %.
-    const yDomainMax = isArea && spec.unit === "%" ? 100 : undefined;
+    // Start at zero unless the indicator opts out with baseline "data" (zoomed to
+    // the data range). Area charts always start at zero.
+    const zero = isArea || spec.baseline !== "data";
+    const yTicks = Math.max(4, Math.floor(height / 50));
+    // Stacked shares that add up to about 100 % keep a 0–100 axis; others end at
+    // the first tick above the largest yearly total.
+    let yDomain;
+    if (isArea && spec.unit === "%") {
+      const largestStack = d3.max(d3.rollup(data, (v) => d3.sum(v, (d) => d.value), (d) => d.year).values());
+      yDomain = largestStack >= 95 ? [0, 100] : d3.scaleLinear().domain([0, largestStack]).nice(yTicks).domain();
+    }
     // Nudge end labels apart so they never overlap (min 14px between them).
     if (direct && last.length > 1) {
       const plotH = height - marginTop - 30;
@@ -172,18 +277,18 @@
     if (direct) {
       marks.push(Plot.text(last, { x: "year", y: "ly", text: "label", dx: 6, textAnchor: "start", fill: tk.ink2, fontSize: 12 }));
     }
-    const plot = Plot.plot({
+    const plot = fitLeft((marginLeft) => Plot.plot({
       width,
       height,
-      marginLeft: 52,
+      marginLeft,
       marginRight,
       marginTop,
       style: { background: "transparent", color: tk.muted, fontSize: "12px", fontFamily: "inherit" },
       x: { label: null, tickFormat: (d) => String(d), ticks: Math.max(3, Math.floor(width / 90)), domain: d3.extent(data, (d) => d.year) },
-      y: { label: null, tickFormat: axisFormat(spec.unit), ticks: Math.max(4, Math.floor(height / 50)), nice: !yDomainMax, zero, ...(yDomainMax ? { domain: [0, yDomainMax] } : {}) },
+      y: { label: null, tickFormat: axisFormat(spec.unit), ticks: yTicks, nice: !yDomain, zero, ...(yDomain ? { domain: yDomain } : {}) },
       color: { domain: labels, range },
       marks,
-    });
+    }), 52);
     return { node: plot, height };
   }
 
@@ -204,14 +309,26 @@
     }
     rows.sort((a, b) => b.value - a.value);
     const narrow = width < 560;
-    const marginLeft = narrow ? Math.round(width * 0.42) : 230;
-    const rowH = narrow ? 34 : 28;
+    // Wide enough for the longest word of any label, up to 55 % of the chart.
+    // (A Land counts with its short form, which is what a narrow chart falls back to.)
+    const longestWord = d3.max(rows, (d) => d3.max(shortestName(d.name, d.geo).split(/\s+/), (w) => textWidth(w)));
+    const marginLeft = Math.min(Math.round(width * 0.55), Math.max(narrow ? Math.round(width * 0.42) : 230, longestWord + 12));
+    // Each row's label fits the label column (the margin less the tick padding and
+    // a little air): full name, a Land's short form, or wrapped onto more lines.
+    const label = new Map(rows.map((d) => [d.name, fitLabel(d.name, d.geo, marginLeft - 12, prep.marked[d.name])]));
+    // Rows grow with the most lines any label needs (12 px a line plus air), so
+    // wrapped labels never run into their neighbours.
+    const lines = d3.max(rows, (d) => label.get(d.name).split("\n").length);
+    const rowH = Math.max(narrow ? 34 : 28, lines * 12 + 10);
     const height = rows.length * rowH + 40;
     const minV = d3.min(rows, (d) => d.value);
-    const maxV0 = d3.max(rows, (d) => d.value);
+    const maxV = d3.max(rows, (d) => d.value);
     // When all values are close together (e.g. life expectancy), bars from zero
     // hide the differences: use dots on a zoomed axis instead.
-    const dots = minV > 0 && minV > maxV0 * 0.6;
+    const dots = minV > 0 && minV > maxV * 0.6;
+    // The Germany figure is drawn only where it falls on the axis: for a count
+    // like population it is the total of all Länder, far past the longest bar.
+    if (avg != null && (avg > maxV || avg < Math.min(0, minV))) avg = null;
     const marks = [
       Plot.gridX({ stroke: tk.grid, strokeOpacity: 1 }),
       dots
@@ -220,12 +337,11 @@
       avg != null ? Plot.ruleX([avg], { stroke: tk.ink, strokeDasharray: "3,3", strokeOpacity: 0.6 }) : null,
       Plot.text(rows, { x: "value", y: "name", text: (d) => fmt(d.value, spec.unit), dx: dots ? 9 : 5, textAnchor: "start", fill: tk.ink2, fontSize: 11, stroke: tk.surface, strokeWidth: 4, paintOrder: "stroke" }),
       dots ? null : Plot.ruleX([0], { stroke: tk.axis }),
-      Plot.axisY({ lineWidth: Math.floor((marginLeft - 12) / 6.5), tickSize: 0, fill: tk.ink2, label: null }),
+      Plot.axisY({ tickFormat: (d) => label.get(d), tickSize: 0, fill: tk.ink2, label: null }),
     ];
     if (avg != null) {
       marks.push(Plot.text([avg], { x: (d) => d, frameAnchor: "top", dy: -12, text: () => `${T.germanyAvg}: ${fmt(avg, spec.unit)}`, fill: tk.ink, fontSize: 11 }));
     }
-    const maxV = d3.max(rows, (d) => d.value);
     const plot = Plot.plot({
       width,
       height,

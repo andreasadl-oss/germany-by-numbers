@@ -15,12 +15,12 @@
     {
       "id": "gdp-per-capita",
       "title": {
-        "de": "Wirtschaftsleistung pro Kopf",
-        "en": "Economic output per person"
+        "de": "Die reale Wirtschaftsleistung pro Kopf liegt über ein Drittel höher als 1991, stagniert aber seit 2019",
+        "en": "Real output per person is over a third higher than in 1991, but has stalled since 2019"
       },
       "subtitle": {
-        "de": "Bruttoinlandsprodukt pro Einwohner, preisbereinigt (verkettete Volumen, Euro von 2020).",
-        "en": "Gross domestic product per person, adjusted for inflation (chain-linked volumes, 2020 euros)."
+        "de": "Bruttoinlandsprodukt pro Einwohner, preisbereinigt (verkettete Volumen, Euro von 2020), Deutschland insgesamt.",
+        "en": "Gross domestic product per person, adjusted for inflation (chain-linked volumes, 2020 euros), Germany as a whole."
       },
       "unit": "€",
       "chart": "line",
@@ -53,12 +53,12 @@
     {
       "id": "gdp-per-capita-laender",
       "title": {
-        "de": "Wirtschaftsleistung pro Kopf nach Bundesland",
-        "en": "Economic output per person by state"
+        "de": "Pro Kopf erwirtschaftet Hamburg am meisten, die ostdeutschen Flächenländer am wenigsten",
+        "en": "Output per person is highest in Hamburg and lowest in the five eastern Länder"
       },
       "subtitle": {
-        "de": "Bruttoinlandsprodukt pro Einwohner in Euro, jeweilige Preise, neuestes verfügbares Jahr. Stadtstaaten liegen hoch, weil Pendler dort arbeiten, aber nicht wohnen.",
-        "en": "GDP per person in euros at current prices, latest available year. City-states score high because commuters work there but live elsewhere."
+        "de": "Bruttoinlandsprodukt pro Einwohner je Land in Euro, jeweilige Preise (nicht preisbereinigt), neuestes verfügbares Jahr. Ostdeutsche Flächenländer: Brandenburg, Mecklenburg-Vorpommern, Sachsen, Sachsen-Anhalt, Thüringen. Stadtstaaten liegen hoch, weil Pendler dort arbeiten, aber nicht wohnen.",
+        "en": "GDP per person in each Land, in euros at current prices (not adjusted for inflation), latest available year. Eastern Länder: Brandenburg, Mecklenburg-Western Pomerania, Saxony, Saxony-Anhalt and Thuringia. City-states score high because commuters work there but live elsewhere."
       },
       "unit": "€",
       "chart": "bar-latest",
@@ -91,12 +91,12 @@
     {
       "id": "inflation",
       "title": {
-        "de": "Inflation",
-        "en": "Inflation"
+        "de": "Bis 2020 lag die Inflation jedes Jahr unter 3 % – 2021 bis 2023 schnellte sie in die Höhe, dann ließ sie wieder nach",
+        "en": "Inflation stayed below 3% every year until 2020, then surged in 2021–2023 before easing again"
       },
       "subtitle": {
-        "de": "Jährliche Veränderung des Harmonisierten Verbraucherpreisindex (HVPI), in Prozent.",
-        "en": "Annual change in the Harmonised Index of Consumer Prices (HICP), in percent."
+        "de": "Jährliche Veränderung des Harmonisierten Verbraucherpreisindex (HVPI) für Deutschland, in Prozent.",
+        "en": "Annual change in the Harmonised Index of Consumer Prices (HICP) for Germany, in percent."
       },
       "unit": "%",
       "chart": "bar-time",
@@ -129,12 +129,12 @@
     {
       "id": "unemployment",
       "title": {
-        "de": "Arbeitslosenquote",
-        "en": "Unemployment rate"
+        "de": "Die Erwerbslosenquote hat sich von 2009 bis 2019 mehr als halbiert und ist seitdem wieder gestiegen",
+        "en": "Unemployment fell by more than half from 2009 to 2019 and has risen again since"
       },
       "subtitle": {
-        "de": "Erwerbslose in Prozent der Erwerbspersonen (15–74 Jahre), nach ILO-Definition.",
-        "en": "Unemployed people as a share of the labour force (aged 15–74), ILO definition."
+        "de": "Erwerbslose in Prozent der Erwerbspersonen (15–74 Jahre), nach ILO-Definition, Deutschland insgesamt.",
+        "en": "Unemployed people as a share of the labour force (aged 15–74), ILO definition, Germany as a whole."
       },
       "unit": "%",
       "chart": "line",
@@ -168,12 +168,12 @@
     {
       "id": "unemployment-laender",
       "title": {
-        "de": "Arbeitslosigkeit nach Bundesland",
-        "en": "Unemployment by state"
+        "de": "Am niedrigsten ist die Erwerbslosigkeit in Bayern, am höchsten in Berlin",
+        "en": "Unemployment is lowest in Bavaria and highest in Berlin"
       },
       "subtitle": {
-        "de": "Erwerbslosenquote (15–74 Jahre) in Prozent, ILO-Definition, neuestes verfügbares Jahr.",
-        "en": "Unemployment rate (aged 15–74) in percent, ILO definition, latest available year."
+        "de": "Erwerbslosenquote je Land (15–74 Jahre) in Prozent, ILO-Definition, neuestes verfügbares Jahr.",
+        "en": "Unemployment rate in each Land (aged 15–74) in percent, ILO definition, latest available year."
       },
       "unit": "%",
       "chart": "bar-latest",
@@ -210,12 +210,12 @@
     {
       "id": "government-spending-by-function",
       "title": {
-        "de": "Wofür gibt der Staat sein Geld aus?",
-        "en": "What does the German state spend its money on?"
+        "de": "Größter Ausgabenposten des Staates ist mit Abstand die soziale Sicherung, etwa für Renten",
+        "en": "Social protection, including pensions, is by far the biggest area of government spending"
       },
       "subtitle": {
         "de": "Ausgaben des Gesamtstaats (Bund, Länder, Gemeinden, Sozialversicherung) nach Aufgabenbereich, in Prozent des BIP, neuestes Jahr.",
-        "en": "General government spending (federal, states, municipalities and social security) by function, as a share of GDP, latest year."
+        "en": "General government spending (federal government, Länder, municipalities and social security) by function, as a share of GDP, latest year."
       },
       "unit": "%",
       "chart": "bar-latest",
@@ -295,12 +295,12 @@
     {
       "id": "government-revenue-expenditure",
       "title": {
-        "de": "Staatseinnahmen und -ausgaben",
-        "en": "Government revenue and spending"
+        "de": "Der Staat gibt rund die Hälfte des BIP aus – meist mehr, als er einnimmt",
+        "en": "Government spending is about half of GDP and in most years exceeds revenue"
       },
       "subtitle": {
-        "de": "Gesamtstaat, in Prozent des BIP.",
-        "en": "General government, as a share of GDP."
+        "de": "Einnahmen und Ausgaben des Gesamtstaats (Bund, Länder, Gemeinden, Sozialversicherung), in Prozent des BIP.",
+        "en": "General government revenue and spending (federal government, Länder, municipalities and social security), as a share of GDP."
       },
       "unit": "%",
       "chart": "line",
@@ -349,12 +349,12 @@
     {
       "id": "tax-revenue-by-type",
       "title": {
-        "de": "Woher kommt das Geld des Staates?",
-        "en": "Where does the state's money come from?"
+        "de": "Steuern und Sozialbeiträge machen rund 40 % des BIP aus – größter Posten sind die Sozialbeiträge",
+        "en": "Taxes and social contributions add up to about 40% of GDP, with social contributions the largest part"
       },
       "subtitle": {
-        "de": "Steuern und Sozialbeiträge nach Art, in Prozent des BIP.",
-        "en": "Taxes and social contributions by type, as a share of GDP."
+        "de": "Steuern und Sozialbeiträge, die an den Staat und an EU-Institutionen fließen, nach Art, in Prozent des BIP.",
+        "en": "Taxes and social contributions paid to German government and EU institutions, by type, as a share of GDP."
       },
       "unit": "%",
       "chart": "area",
@@ -403,12 +403,12 @@
     {
       "id": "tax-revenue-by-tax",
       "title": {
-        "de": "Steuereinnahmen nach Steuer",
-        "en": "Tax revenue by tax"
+        "de": "Umsatzsteuer und Lohnsteuer bringen mehr ein als jede andere Steuer",
+        "en": "VAT and wage tax raise more than any other tax"
       },
       "subtitle": {
-        "de": "Kassenmäßige Steuereinnahmen von Bund, Ländern und Gemeinden vor der Verteilung, in Milliarden Euro pro Jahr.",
-        "en": "Cash tax revenue of federal, state and local government before it is shared out, in billions of euros per year."
+        "de": "Kassenmäßige Steuereinnahmen von Bund, Ländern und Gemeinden vor der Verteilung, in Milliarden Euro pro Jahr, nicht preisbereinigt.",
+        "en": "Cash tax revenue of the federal government, Länder and municipalities before it is shared out, in billions of euros per year, not adjusted for inflation."
       },
       "unit": "",
       "chart": "area",
@@ -490,12 +490,12 @@
     {
       "id": "government-debt",
       "title": {
-        "de": "Staatsverschuldung",
-        "en": "Government debt"
+        "de": "Die Staatsschulden liegen deutlich unter ihrem Höchststand von rund 80 % des BIP im Jahr 2010",
+        "en": "Government debt is well below its 2010 peak of about 80% of GDP"
       },
       "subtitle": {
-        "de": "Bruttoschuldenstand des Gesamtstaats (Maastricht-Definition), in Prozent des BIP.",
-        "en": "General government gross debt (Maastricht definition), as a share of GDP."
+        "de": "Bruttoschuldenstand des Gesamtstaats (Maastricht-Definition), in Prozent des BIP, Deutschland, seit 1995.",
+        "en": "General government gross debt (Maastricht definition), as a share of GDP, Germany, since 1995."
       },
       "unit": "%",
       "chart": "line",
