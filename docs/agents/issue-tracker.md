@@ -2,6 +2,8 @@
 
 Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all operations.
 
+In cloud sessions `gh issue`/`gh pr` commands fail (GraphQL is blocked); use the `gh api repos/{owner}/{repo}/…` REST equivalents.
+
 ## Conventions
 
 - **Create an issue**: `gh issue create --title "..." --body "..."`. Use a heredoc for multi-line bodies.

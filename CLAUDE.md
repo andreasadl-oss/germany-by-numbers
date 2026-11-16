@@ -6,7 +6,7 @@ See `CONTEXT.md` for the domain glossary and `README.md` for an overview.
 
 ### Issue tracker
 
-Issues are tracked in GitHub Issues on `andreasadl-oss/germany-by-numbers` (via the `gh` CLI). See `docs/agents/issue-tracker.md`.
+Issues are tracked in GitHub Issues on `andreasadl-oss/germany-by-numbers`. See `docs/agents/issue-tracker.md` for the commands.
 
 ### Triage labels
 
@@ -15,6 +15,10 @@ Default vocabulary: `needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-
 ### Domain docs
 
 Single-context: one `CONTEXT.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
+## Browser
+
+To drive the site in a browser outside `npm test` (QA, screenshots), import `servedSite`, `launch` and `open` from test/harness.mjs; a bare `chromium.launch()` finds no browser in cloud sessions.
 
 ## This repository is public
 
