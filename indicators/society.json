@@ -376,8 +376,8 @@
     {
       "id": "poverty-risk",
       "title": {
-        "de": "Seit 2007 gelten Jahr für Jahr rund 15 % der Menschen in Deutschland als armutsgefährdet",
-        "en": "Every year since 2007, around 15% of people in Germany have been at risk of poverty"
+        "de": "Der Anteil armutsgefährdeter Menschen hat sich seit 2007 kaum verändert",
+        "en": "The share of people at risk of poverty has barely changed since 2007"
       },
       "subtitle": {
         "de": "Armutsgefährdungsquote: Anteil der Menschen mit weniger als 60 % des mittleren Einkommens (Median, nach Sozialleistungen), in Prozent, Deutschland. Ein relatives Einkommensmaß, keine Messung von Armut selbst.",
