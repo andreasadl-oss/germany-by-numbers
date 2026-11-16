@@ -15,7 +15,7 @@
     {
       "id": "gdp-per-capita",
       "title": {
-        "de": "Pro Kopf erwirtschaftet Deutschland real über ein Drittel mehr als 1991 – seit 2019 aber kaum noch mehr",
+        "de": "Die reale Wirtschaftsleistung pro Kopf liegt über ein Drittel höher als 1991, stagniert aber seit 2019",
         "en": "Real output per person is over a third higher than in 1991, but has stalled since 2019"
       },
       "subtitle": {
@@ -91,8 +91,8 @@
     {
       "id": "inflation",
       "title": {
-        "de": "Bis 2020 lag die Inflation jedes Jahr unter 3 % – dann schnellte sie in die Höhe",
-        "en": "Inflation stayed below 3% every year until 2020, then surged"
+        "de": "Bis 2020 lag die Inflation jedes Jahr unter 3 % – 2021 bis 2023 schnellte sie in die Höhe, dann ließ sie wieder nach",
+        "en": "Inflation stayed below 3% every year until 2020, then surged in 2021–2023 before easing again"
       },
       "subtitle": {
         "de": "Jährliche Veränderung des Harmonisierten Verbraucherpreisindex (HVPI) für Deutschland, in Prozent.",
@@ -129,8 +129,8 @@
     {
       "id": "unemployment",
       "title": {
-        "de": "Die Erwerbslosenquote liegt weit unter dem Stand von 2009",
-        "en": "Unemployment is far lower than in 2009"
+        "de": "Die Erwerbslosenquote hat sich von 2009 bis 2019 mehr als halbiert und ist seitdem leicht gestiegen",
+        "en": "Unemployment fell by more than half from 2009 to 2019 and has risen slightly since"
       },
       "subtitle": {
         "de": "Erwerbslose in Prozent der Erwerbspersonen (15–74 Jahre), nach ILO-Definition, Deutschland insgesamt.",
@@ -494,8 +494,8 @@
         "en": "Government debt is well below its 2010 peak of about 80% of GDP"
       },
       "subtitle": {
-        "de": "Bruttoschuldenstand des Gesamtstaats (Maastricht-Definition), in Prozent des BIP.",
-        "en": "General government gross debt (Maastricht definition), as a share of GDP."
+        "de": "Bruttoschuldenstand des Gesamtstaats (Maastricht-Definition), in Prozent des BIP, Deutschland, seit 1995.",
+        "en": "General government gross debt (Maastricht definition), as a share of GDP, Germany, since 1995."
       },
       "unit": "%",
       "chart": "line",
