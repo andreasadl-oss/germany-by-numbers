@@ -154,6 +154,25 @@ describe("chart labels on the real site", () => {
     }
   }
 
+  // The Germany figure on a Länder chart, as the chart labels it.
+  const GERMANY = { de: "Deutschland gesamt", en: "Germany overall" };
+  const chartTexts = (page) => page.locator("figure[data-chart] .plot svg").first().locator("text").allTextContents();
+
+  for (const lang of LANGS) {
+    test(`a Länder rate chart marks the Germany figure on its axis (${lang})`, () =>
+      withPage(browser, `${site.url}${lang}/chart/unemployment-laender/`, WIDTHS.desktop, async (page) => {
+        const marked = (await chartTexts(page)).filter((t) => t.startsWith(GERMANY[lang]));
+        assert.equal(marked.length, 1, `the chart shows "${GERMANY[lang]}" once`);
+      }));
+
+    test(`a Länder count chart leaves out the Germany figure, which is the sum of all bars (${lang})`, () =>
+      withPage(browser, `${site.url}${lang}/chart/population-laender/`, WIDTHS.desktop, async (page) => {
+        const texts = await chartTexts(page);
+        assert.ok(texts.length > 0, "the chart has drawn its text");
+        assert.deepEqual(texts.filter((t) => t.startsWith(GERMANY[lang])), [], `no "${GERMANY[lang]}" label`);
+      }));
+  }
+
   for (const lang of LANGS) {
     test(`tooltip and table show the full Land name where the phone chart shortens it (${lang})`, () =>
       withPage(browser, `${site.url}${lang}/chart/${TURNOUT_BY_LAND}/`, WIDTHS.phone, async (page) => {
