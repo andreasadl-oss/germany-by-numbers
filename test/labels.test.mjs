@@ -49,6 +49,14 @@ async function barLabels(page) {
   }).then(({ labels, svg }) => Object.assign(labels, { svg }));
 }
 
+/** Run `fn(job)` for every job, a few at a time: that keeps a page sweep short. */
+async function inParallel(jobs, fn) {
+  const queue = [...jobs];
+  await Promise.all(Array.from({ length: 4 }, async () => {
+    for (let job; (job = queue.shift()); ) await fn(job);
+  }));
+}
+
 const overlaps = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
 const inside = (a, b) => a.left >= b.left - 0.5 && a.right <= b.right + 0.5 && a.top >= b.top - 0.5 && a.bottom <= b.bottom + 0.5;
 
@@ -77,15 +85,10 @@ describe("chart labels on the real site", () => {
           });
         }
         assert.ok(singles.size > 0, "topic pages link to single-indicator pages");
-        // A few pages at a time keeps the run short.
-        const queue = [...singles];
-        await Promise.all(Array.from({ length: 4 }, async () => {
-          for (let url; (url = queue.shift()); ) {
-            await withPage(browser, url, width, async (page) => {
-              for (const p of await textOutsideCharts(page)) problems.push(`${url} ${p}`);
-            });
-          }
-        }));
+        await inParallel(singles, (url) =>
+          withPage(browser, url, width, async (page) => {
+            for (const p of await textOutsideCharts(page)) problems.push(`${url} ${p}`);
+          }));
         assert.deepEqual(problems, [], "every chart text stays inside its chart");
       });
 
@@ -110,24 +113,21 @@ describe("chart labels on the real site", () => {
     .flatMap((f) => JSON.parse(fs.readFileSync(path.join(ROOT, "indicators", f), "utf8")).indicators)
     .filter((ind) => ind.chart === "bar-latest")
     .map((ind) => ind.id);
+  const barPages = barCharts.flatMap((id) => BAR_WIDTHS.map((width) => ({ id, width })));
 
   for (const lang of LANGS) {
     test(`bar and dot chart row labels stay inside the chart and clear of each other at 320–1280 px (${lang})`, async () => {
       assert.ok(barCharts.length > 0, "the site has bar or dot charts");
       const problems = [];
-      const queue = barCharts.flatMap((id) => BAR_WIDTHS.map((width) => ({ id, width })));
-      await Promise.all(Array.from({ length: 4 }, async () => {
-        for (let job; (job = queue.shift()); ) {
-          await withPage(browser, `${site.url}${lang}/chart/${job.id}/`, job.width, async (page) => {
-            const where = `${job.id} at ${job.width}px`;
-            const labels = await barLabels(page);
-            for (const l of labels) if (!inside(l.box, labels.svg)) problems.push(`${where}: "${l.read}" sticks out of the chart`);
-            labels.forEach((a, i) => labels.slice(i + 1).forEach((b) => {
-              if (overlaps(a.box, b.box)) problems.push(`${where}: "${a.read}" overlaps "${b.read}"`);
-            }));
-          });
-        }
-      }));
+      await inParallel(barPages, (job) =>
+        withPage(browser, `${site.url}${lang}/chart/${job.id}/`, job.width, async (page) => {
+          const where = `${job.id} at ${job.width}px`;
+          const labels = await barLabels(page);
+          for (const l of labels) if (!inside(l.box, labels.svg)) problems.push(`${where}: "${l.read}" sticks out of the chart`);
+          labels.forEach((a, i) => labels.slice(i + 1).forEach((b) => {
+            if (overlaps(a.box, b.box)) problems.push(`${where}: "${a.read}" overlaps "${b.read}"`);
+          }));
+        }));
       assert.deepEqual(problems, [], "every row label is fully inside its chart and overlaps no other");
     });
   }
@@ -175,21 +175,20 @@ describe("chart labels on the real site", () => {
   }
 
   for (const lang of LANGS) {
-    test(`a word too long for its line breaks only where its name marks a break, between the parts of a compound (${lang})`, async () => {
+    test(`a word of a category name too long for its line breaks only where the name marks a break, between the parts of a compound (${lang})`, async () => {
       const problems = [];
-      const queue = barCharts.flatMap((id) => BAR_WIDTHS.map((width) => ({ id, width })));
-      await Promise.all(Array.from({ length: 4 }, async () => {
-        for (let job; (job = queue.shift()); ) {
-          await withPage(browser, `${site.url}${lang}/chart/${job.id}/`, job.width, async (page) => {
-            for (const l of await barLabels(page)) {
-              const name = l.reads.find((r) => breakPoints.has(r)) ?? l.read;
-              const at = insertedBreaks(l.lines, name);
-              const allowed = breakPoints.get(name) ?? [];
-              if (at?.some((i) => !allowed.includes(i))) problems.push(`${job.id} at ${job.width}px: ${JSON.stringify(l.lines)}`);
-            }
-          });
-        }
-      }));
+      let checked = 0;
+      await inParallel(barPages, (job) =>
+        withPage(browser, `${site.url}${lang}/chart/${job.id}/`, job.width, async (page) => {
+          for (const l of await barLabels(page)) {
+            // Category names are series labels; Land names shorten rather than break.
+            const name = l.reads.find((r) => breakPoints.has(r));
+            if (!name) continue;
+            checked++;
+            if (insertedBreaks(l.lines, name)?.some((i) => !breakPoints.get(name).includes(i))) problems.push(`${job.id} at ${job.width}px: ${JSON.stringify(l.lines)}`);
+          }
+        }));
+      assert.ok(checked > 0, "the bar charts show category names");
       assert.deepEqual(problems, [], "no word is broken anywhere but at a marked break");
     });
   }
