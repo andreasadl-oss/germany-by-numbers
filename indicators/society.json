@@ -15,12 +15,12 @@
     {
       "id": "population",
       "title": {
-        "de": "Bevölkerung",
-        "en": "Population"
+        "de": "Deutschlands Bevölkerung ist seit 1991 gewachsen – nur dank Zuwanderung",
+        "en": "Germany's population has grown since 1991 – thanks to immigration alone"
       },
       "subtitle": {
-        "de": "Einwohnerinnen und Einwohner am 1. Januar.",
-        "en": "Residents on 1 January."
+        "de": "Einwohnerinnen und Einwohner Deutschlands am 1. Januar, seit 1991. Da jedes Jahr mehr Menschen sterben als geboren werden, wächst die Bevölkerung nur durch Zuwanderung.",
+        "en": "Residents of Germany on 1 January, since 1991. More people die than are born every year, so the population grows only through immigration."
       },
       "unit": "",
       "chart": "line",
@@ -61,12 +61,12 @@
     {
       "id": "population-laender",
       "title": {
-        "de": "Bevölkerung nach Bundesland",
-        "en": "Population by state"
+        "de": "Mehr als ein Fünftel der Menschen in Deutschland lebt in Nordrhein-Westfalen",
+        "en": "More than one in five people in Germany live in North Rhine-Westphalia"
       },
       "subtitle": {
-        "de": "Einwohnerinnen und Einwohner am 1. Januar, neuestes verfügbares Jahr.",
-        "en": "Residents on 1 January, latest available year."
+        "de": "Einwohnerinnen und Einwohner je Land am 1. Januar, neuestes verfügbares Jahr.",
+        "en": "Residents of each Land on 1 January, latest available year."
       },
       "unit": "",
       "chart": "bar-latest",
@@ -106,8 +106,8 @@
         "en": "Every year since reunification, more people have died in Germany than were born"
       },
       "subtitle": {
-        "de": "Lebendgeborene und Gestorbene pro Jahr.",
-        "en": "Live births and deaths per year."
+        "de": "Lebendgeborene und Gestorbene in Deutschland pro Jahr, seit 1991.",
+        "en": "Live births and deaths in Germany per year, since 1991."
       },
       "unit": "",
       "chart": "line",
@@ -143,12 +143,12 @@
     {
       "id": "net-migration",
       "title": {
-        "de": "Nettozuwanderung",
-        "en": "Net migration"
+        "de": "Fast jedes Jahr ziehen mehr Menschen nach Deutschland, als fortziehen",
+        "en": "In almost every year, more people move to Germany than leave"
       },
       "subtitle": {
-        "de": "Zuzüge minus Fortzüge pro Jahr (bereinigt). Die Spitzen 2015 und 2022 spiegeln Flucht aus Syrien und der Ukraine.",
-        "en": "Immigration minus emigration per year (adjusted). The peaks in 2015 and 2022 reflect refugees from Syria and Ukraine."
+        "de": "Nettozuwanderung: Zuzüge minus Fortzüge pro Jahr, einschließlich statistischer Korrekturen, seit 1991. Negative Werte bedeuten mehr Fort- als Zuzüge. Die Spitze 2015 spiegelt vor allem die Flucht aus Syrien.",
+        "en": "Net migration: people moving in minus people moving out per year, including statistical adjustments, since 1991. Negative values mean more people left than arrived. The 2015 peak mainly reflects refugees from Syria."
       },
       "unit": "",
       "chart": "bar-time",
@@ -179,12 +179,12 @@
     {
       "id": "life-expectancy",
       "title": {
-        "de": "Lebenserwartung bei Geburt",
-        "en": "Life expectancy at birth"
+        "de": "Die Lebenserwartung ist seit 1991 deutlich gestiegen, seit etwa 2010 aber kaum noch",
+        "en": "Life expectancy has risen markedly since 1991, but has barely improved since around 2010"
       },
       "subtitle": {
-        "de": "In Jahren, nach Geschlecht.",
-        "en": "In years, by sex."
+        "de": "Lebenserwartung bei Geburt in Jahren, Frauen und Männer, Deutschland, seit 1991.",
+        "en": "Life expectancy at birth in years, women and men, Germany, since 1991."
       },
       "unit": "",
       "chart": "line",
@@ -223,12 +223,12 @@
     {
       "id": "life-expectancy-laender",
       "title": {
-        "de": "Lebenserwartung nach Bundesland",
-        "en": "Life expectancy by state"
+        "de": "In Baden-Württemberg leben die Menschen am längsten, in Sachsen-Anhalt am kürzesten",
+        "en": "Life expectancy is highest in Baden-Württemberg and lowest in Saxony-Anhalt"
       },
       "subtitle": {
-        "de": "Lebenserwartung bei Geburt in Jahren, neuestes verfügbares Jahr.",
-        "en": "Life expectancy at birth in years, latest available year."
+        "de": "Lebenserwartung bei Geburt in Jahren je Land, Frauen und Männer zusammen, neuestes verfügbares Jahr.",
+        "en": "Life expectancy at birth in years for each Land, women and men combined, latest available year."
       },
       "unit": "",
       "chart": "bar-latest",
@@ -264,12 +264,12 @@
     {
       "id": "causes-of-death",
       "title": {
-        "de": "Todesursachen",
-        "en": "Causes of death"
+        "de": "Herz-Kreislauf-Erkrankungen und Krebs verursachen mehr als die Hälfte aller Todesfälle",
+        "en": "Heart and circulatory diseases and cancer cause more than half of all deaths"
       },
       "subtitle": {
-        "de": "Gestorbene nach Todesursache, neuestes verfügbares Jahr.",
-        "en": "Deaths by cause, latest available year."
+        "de": "Gestorbene in Deutschland nach Todesursache, Anzahl, neuestes verfügbares Jahr.",
+        "en": "Deaths in Germany by cause, number of people, latest available year."
       },
       "unit": "",
       "chart": "bar-latest",
@@ -374,12 +374,12 @@
     {
       "id": "poverty-risk",
       "title": {
-        "de": "Armutsgefährdungsquote",
-        "en": "At-risk-of-poverty rate"
+        "de": "Seit über zehn Jahren ist rund jede sechste Person armutsgefährdet",
+        "en": "Roughly one in six people in Germany has been at risk of poverty for over a decade"
       },
       "subtitle": {
-        "de": "Anteil der Menschen mit weniger als 60 % des mittleren Einkommens (nach Sozialleistungen), in Prozent.",
-        "en": "Share of people living on less than 60% of median income (after social transfers), in percent."
+        "de": "Armutsgefährdungsquote: Anteil der Menschen mit weniger als 60 % des mittleren Einkommens (Median, nach Sozialleistungen), in Prozent, Deutschland. Ein relatives Einkommensmaß, keine Messung von Armut selbst.",
+        "en": "At-risk-of-poverty rate: share of people living on less than 60% of median income (after social transfers), in percent, Germany. A relative income measure, not a measure of poverty itself."
       },
       "unit": "%",
       "chart": "line",
@@ -415,12 +415,12 @@
     {
       "id": "house-prices",
       "title": {
-        "de": "Immobilienpreise",
-        "en": "House prices"
+        "de": "Wohnimmobilien sind seit 2010 viel teurer geworden – trotz des Rückgangs nach 2022",
+        "en": "House prices have risen steeply since 2010, despite a dip after 2022"
       },
       "subtitle": {
-        "de": "Häuserpreisindex, 2015 = 100 (nicht inflationsbereinigt).",
-        "en": "House price index, 2015 = 100 (not adjusted for inflation)."
+        "de": "Häuserpreisindex für alle Wohnimmobilien, 2015 = 100, nicht inflationsbereinigt, Deutschland, seit 2005.",
+        "en": "House price index for all dwellings, 2015 = 100, not adjusted for inflation, Germany, since 2005."
       },
       "unit": "Index",
       "chart": "line",
