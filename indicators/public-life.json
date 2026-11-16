@@ -15,8 +15,8 @@
     {
       "id": "bundestag-second-votes",
       "title": {
-        "de": "Bundestagswahlen: Zweitstimmen nach Partei",
-        "en": "Bundestag elections: second votes by party"
+        "de": "Union und SPD erhalten zusammen deutlich weniger Zweitstimmen als in den 1990er-Jahren",
+        "en": "CDU/CSU and SPD win a much smaller combined share of the vote than in the 1990s"
       },
       "subtitle": {
         "de": "Anteil an den gültigen Zweitstimmen in Prozent, bei jeder Bundestagswahl seit der Wiedervereinigung. Die Zweitstimme entscheidet über die Sitzverteilung.",
@@ -111,12 +111,12 @@
     {
       "id": "bundestag-turnout",
       "title": {
-        "de": "Wahlbeteiligung bei Bundestagswahlen",
-        "en": "Turnout at Bundestag elections"
+        "de": "Die Wahlbeteiligung erreichte 2009 ihren Tiefpunkt und ist seitdem wieder gestiegen",
+        "en": "Turnout hit its low in 2009 and has risen again since"
       },
       "subtitle": {
-        "de": "Anteil der Wahlberechtigten, die gewählt haben, in Prozent.",
-        "en": "Share of eligible voters who voted, in percent."
+        "de": "Anteil der Wahlberechtigten, die gewählt haben, in Prozent, bei jeder Bundestagswahl seit der Wiedervereinigung.",
+        "en": "Share of eligible voters who voted, in percent, at every Bundestag election since reunification."
       },
       "unit": "%",
       "chart": "line",
@@ -144,12 +144,12 @@
     {
       "id": "bundestag-turnout-laender",
       "title": {
-        "de": "Wahlbeteiligung nach Bundesland",
-        "en": "Turnout by state"
+        "de": "In den ostdeutschen Ländern gehen meist weniger Menschen wählen als im Westen",
+        "en": "Turnout tends to be lower in the eastern Länder than in the west"
       },
       "subtitle": {
-        "de": "Wahlbeteiligung bei der letzten Bundestagswahl in Prozent.",
-        "en": "Turnout at the latest Bundestag election, in percent."
+        "de": "Wahlbeteiligung bei der letzten Bundestagswahl nach Ländern, in Prozent der Wahlberechtigten. Die gestrichelte Linie zeigt den Wert für ganz Deutschland.",
+        "en": "Turnout at the latest Bundestag election by Land, as a percentage of eligible voters. The dashed line shows the figure for Germany as a whole."
       },
       "unit": "%",
       "chart": "bar-latest",
@@ -178,12 +178,12 @@
     {
       "id": "homicide-rate",
       "title": {
-        "de": "Vorsätzliche Tötungsdelikte",
-        "en": "Intentional homicides"
+        "de": "Die Polizei erfasst weniger als eine vorsätzliche Tötung je 100.000 Einwohner im Jahr",
+        "en": "Police record fewer than one intentional homicide per 100,000 residents a year"
       },
       "subtitle": {
-        "de": "Von der Polizei erfasste vorsätzliche Tötungen pro 100.000 Einwohner.",
-        "en": "Police-recorded intentional homicides per 100,000 people."
+        "de": "Von der Polizei erfasste vorsätzliche Tötungen pro Jahr je 100.000 Einwohner, Deutschland.",
+        "en": "Intentional homicides recorded by the police per year, per 100,000 residents, Germany."
       },
       "unit": "",
       "chart": "line",
@@ -216,12 +216,12 @@
     {
       "id": "recorded-crime",
       "title": {
-        "de": "Erfasste Straftaten nach Art",
-        "en": "Recorded offences by type"
+        "de": "Nach dem Tiefstand 2021 erfasst die Polizei wieder mehr Diebstähle, Einbrüche und Raubtaten",
+        "en": "Since a low in 2021, police have recorded more thefts, burglaries and robberies again"
       },
       "subtitle": {
-        "de": "Von der Polizei erfasste Fälle pro 100.000 Einwohner.",
-        "en": "Police-recorded offences per 100,000 people."
+        "de": "Von der Polizei erfasste Fälle pro Jahr je 100.000 Einwohner, Deutschland. Gezählt werden nur Taten, die der Polizei bekannt werden, nicht alle begangenen Straftaten.",
+        "en": "Offences recorded by the police per year, per 100,000 residents, Germany. These are only the crimes that become known to the police, not all crime committed."
       },
       "unit": "",
       "chart": "line",
@@ -264,8 +264,8 @@
     {
       "id": "tertiary-attainment",
       "title": {
-        "de": "Hochschul- und Meisterabschlüsse bei jungen Erwachsenen",
-        "en": "Tertiary education among young adults"
+        "de": "Der Anteil junger Erwachsener mit Hochschul- oder Meisterabschluss hat sich seit Anfang der 1990er-Jahre etwa verdoppelt",
+        "en": "The share of young adults with a tertiary qualification has roughly doubled since the early 1990s"
       },
       "subtitle": {
         "de": "Anteil der 25- bis 34-Jährigen mit tertiärem Abschluss (ISCED 5–8, inkl. Meister/Techniker), in Prozent.",
@@ -304,12 +304,12 @@
     {
       "id": "early-school-leavers",
       "title": {
-        "de": "Frühe Schulabgänger",
-        "en": "Early leavers from education"
+        "de": "Der Anteil früher Schulabgänger ist wieder etwa so hoch wie Ende der 1990er-Jahre",
+        "en": "The share of early leavers from education is back near its late-1990s level"
       },
       "subtitle": {
-        "de": "Anteil der 18- bis 24-Jährigen ohne Abschluss der Sekundarstufe II, die nicht in Ausbildung sind, in Prozent.",
-        "en": "Share of 18 to 24-year-olds with at most lower-secondary education and not in further education or training, in percent."
+        "de": "Anteil der 18- bis 24-Jährigen ohne Abschluss der Sekundarstufe II, die nicht in Ausbildung sind, in Prozent. Eurostat kennzeichnet Brüche in der Reihe 2020, 2021 und 2024.",
+        "en": "Share of 18 to 24-year-olds with at most lower-secondary education and not in further education or training, in percent. Eurostat flags breaks in the series in 2020, 2021 and 2024."
       },
       "unit": "%",
       "chart": "line",

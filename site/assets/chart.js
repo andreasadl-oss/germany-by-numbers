@@ -206,9 +206,17 @@
     const notes = noteMarks(spec.notes || [], tk);
     const marginTop = TOP + (spec.notes?.length ? NOTE_ROW : 0);
     const ymax = d3.max(data, (d) => d.value);
-    const zero = isArea || spec.chart === "bar-time" || ymin < 0 || ymin < ymax * 0.25;
-    // Stacked shares can't exceed 100 %.
-    const yDomainMax = isArea && spec.unit === "%" ? 100 : undefined;
+    // Start at zero unless the indicator opts out with baseline "data" (zoomed to
+    // the data range). Area charts always start at zero.
+    const zero = isArea || spec.baseline !== "data";
+    const yTicks = Math.max(4, Math.floor(height / 50));
+    // Stacked shares that add up to about 100 % keep a 0–100 axis; others end at
+    // the first tick above the largest yearly total.
+    let yDomain;
+    if (isArea && spec.unit === "%") {
+      const largestStack = d3.max(d3.rollup(data, (v) => d3.sum(v, (d) => d.value), (d) => d.year).values());
+      yDomain = largestStack >= 95 ? [0, 100] : d3.scaleLinear().domain([0, largestStack]).nice(yTicks).domain();
+    }
     // Nudge end labels apart so they never overlap (min 14px between them).
     if (direct && last.length > 1) {
       const plotH = height - marginTop - 30;
@@ -244,7 +252,7 @@
       marginTop,
       style: { background: "transparent", color: tk.muted, fontSize: "12px", fontFamily: "inherit" },
       x: { label: null, tickFormat: (d) => String(d), ticks: Math.max(3, Math.floor(width / 90)), domain: d3.extent(data, (d) => d.year) },
-      y: { label: null, tickFormat: axisFormat(spec.unit), ticks: Math.max(4, Math.floor(height / 50)), nice: !yDomainMax, zero, ...(yDomainMax ? { domain: [0, yDomainMax] } : {}) },
+      y: { label: null, tickFormat: axisFormat(spec.unit), ticks: yTicks, nice: !yDomain, zero, ...(yDomain ? { domain: yDomain } : {}) },
       color: { domain: labels, range },
       marks,
     }), 52);

@@ -15,12 +15,12 @@
     {
       "id": "electricity-mix",
       "title": {
-        "de": "Woher kommt Deutschlands Strom?",
-        "en": "Where does Germany's electricity come from?"
+        "de": "Mehr Wind- und Solarstrom, weniger Kohle, keine Kernkraft mehr",
+        "en": "More wind and solar power, less coal and no more nuclear"
       },
       "subtitle": {
-        "de": "Stromerzeugung nach Energieträger, in Terawattstunden (TWh) pro Jahr.",
-        "en": "Electricity generation by source, in terawatt-hours (TWh) per year."
+        "de": "Stromerzeugung nach Energieträger, in Terawattstunden (TWh) pro Jahr, seit 1990.",
+        "en": "Electricity generation by source, in terawatt-hours (TWh) per year, since 1990."
       },
       "unit": "TWh",
       "chart": "area",
@@ -91,12 +91,12 @@
     {
       "id": "renewables-share-electricity",
       "title": {
-        "de": "Fast 60 % des Stroms sind inzwischen erneuerbar",
-        "en": "Almost 60% of Germany's electricity is now renewable"
+        "de": "Inzwischen ist mehr als die Hälfte des Stroms erneuerbar",
+        "en": "More than half of Germany's electricity is now renewable"
       },
       "subtitle": {
-        "de": "Anteil an der Stromerzeugung in Prozent.",
-        "en": "Share of electricity generation, in percent."
+        "de": "Anteil an der Stromerzeugung nach Art der Quelle, in Prozent, seit 1990. Gemeint ist nur Strom, nicht der gesamte Energieverbrauch.",
+        "en": "Share of electricity generation by type of source, in percent, since 1990. This covers electricity only, not all energy use."
       },
       "unit": "%",
       "chart": "line",
@@ -140,8 +140,8 @@
         "en": "Fossil fuels still dominate Germany's energy use"
       },
       "subtitle": {
-        "de": "Anteil am Primärenergieverbrauch nach Quelle, in Prozent. Strom ist nur ein Teil davon – Wärme und Verkehr gehören dazu.",
-        "en": "Share of primary energy consumption by source, in percent. Electricity is only one part – heating and transport are included too."
+        "de": "Anteil am Primärenergieverbrauch nach Quelle, in Prozent, seit 1965. Strom ist nur ein Teil davon – Wärme und Verkehr gehören dazu.",
+        "en": "Share of primary energy consumption by source, in percent, since 1965. Electricity is only one part – heating and transport are included too."
       },
       "unit": "%",
       "chart": "area",
@@ -195,8 +195,8 @@
         "en": "Germany's CO₂ emissions have almost halved since 1990"
       },
       "subtitle": {
-        "de": "Jährliche CO₂-Emissionen aus fossilen Brennstoffen und Industrie, in Millionen Tonnen.",
-        "en": "Annual CO₂ emissions from fossil fuels and industry, in million tonnes."
+        "de": "Jährliche CO₂-Emissionen auf deutschem Gebiet aus fossilen Brennstoffen und Industrie, in Millionen Tonnen, seit 1950. Nur CO₂, ohne andere Treibhausgase und ohne Landnutzung.",
+        "en": "Annual CO₂ emissions on German territory from fossil fuels and industry, in million tonnes, since 1950. CO₂ only, excluding other greenhouse gases and land use."
       },
       "unit": "Mt CO₂",
       "chart": "line",
@@ -223,12 +223,12 @@
     {
       "id": "co2-by-fuel",
       "title": {
-        "de": "Die Emissionen aus Kohle sind seit 1990 um fast drei Viertel gesunken",
-        "en": "Emissions from coal have fallen by almost three-quarters since 1990"
+        "de": "Die CO₂-Emissionen aus Kohle sind seit 1990 um mehr als zwei Drittel gesunken",
+        "en": "CO₂ emissions from coal have fallen by more than two-thirds since 1990"
       },
       "subtitle": {
-        "de": "CO₂-Emissionen nach Brennstoff, in Millionen Tonnen.",
-        "en": "CO₂ emissions by fuel, in million tonnes."
+        "de": "Jährliche CO₂-Emissionen auf deutschem Gebiet nach Brennstoff sowie aus der Zementherstellung, in Millionen Tonnen, seit 1950.",
+        "en": "Annual CO₂ emissions on German territory by fuel, plus cement production, in million tonnes, since 1950."
       },
       "unit": "Mt CO₂",
       "chart": "line",
@@ -273,12 +273,12 @@
     {
       "id": "co2-per-capita",
       "title": {
-        "de": "Pro-Kopf-Emissionen: territorial vs. konsumbasiert",
-        "en": "Emissions per person: territorial vs. consumption-based"
+        "de": "Die CO₂-Emissionen pro Kopf sinken – rechnet man Importe ein, liegen sie höher",
+        "en": "CO₂ emissions per person are falling, and are higher once imports are counted"
       },
       "subtitle": {
-        "de": "CO₂ pro Person und Jahr, in Tonnen. Konsumbasiert heißt: inklusive der Emissionen importierter Güter, ohne die exportierter.",
-        "en": "CO₂ per person per year, in tonnes. Consumption-based includes emissions embedded in imports and excludes those in exports."
+        "de": "CO₂ pro Person und Jahr, in Tonnen, seit 1990: territorial (auf deutschem Gebiet ausgestoßen) und konsumbasiert. Konsumbasiert heißt: inklusive der Emissionen importierter Güter, ohne die exportierter.",
+        "en": "CO₂ per person per year, in tonnes, since 1990: territorial (emitted on German territory) and consumption-based. Consumption-based includes emissions embedded in imports and excludes those in exports."
       },
       "unit": "t CO₂",
       "chart": "line",
@@ -309,12 +309,12 @@
     {
       "id": "ghg-by-sector",
       "title": {
-        "de": "Treibhausgasemissionen nach Sektor",
-        "en": "Greenhouse gas emissions by sector"
+        "de": "Die Treibhausgasemissionen sind seit 1991 um mehr als 40 % gesunken – am meisten in der Energiewirtschaft",
+        "en": "Greenhouse gas emissions have fallen by more than 40% since 1991, most of all in the energy industries"
       },
       "subtitle": {
-        "de": "Treibhausgasemissionen in Millionen Tonnen CO₂-Äquivalent.",
-        "en": "Greenhouse gas emissions in million tonnes of CO₂-equivalent."
+        "de": "Alle Treibhausgase (CO₂, Methan, Lachgas und F-Gase) in den wichtigsten Sektoren, in Millionen Tonnen CO₂-Äquivalent pro Jahr, seit 1991. Ohne Landnutzung und Forstwirtschaft.",
+        "en": "All greenhouse gases (CO₂, methane, nitrous oxide and F-gases) in the main sectors, in million tonnes of CO₂-equivalent per year, since 1991. Excluding land use and forestry."
       },
       "unit": "Mt CO₂e",
       "chart": "area",
