@@ -1,7 +1,7 @@
 {
   "births-deaths": {
     "rows": 70,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1991,
       2025
@@ -9,7 +9,7 @@
   },
   "bundestag-second-votes": {
     "rows": 65,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1990,
       2025
@@ -17,7 +17,7 @@
   },
   "bundestag-turnout": {
     "rows": 10,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1990,
       2025
@@ -25,7 +25,7 @@
   },
   "bundestag-turnout-laender": {
     "rows": 170,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1990,
       2025
@@ -33,7 +33,7 @@
   },
   "causes-of-death": {
     "rows": 286,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1998,
       2025
@@ -41,7 +41,7 @@
   },
   "co2-by-fuel": {
     "rows": 304,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1950,
       2025
@@ -49,7 +49,7 @@
   },
   "co2-emissions": {
     "rows": 76,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1950,
       2025
@@ -57,7 +57,7 @@
   },
   "co2-per-capita": {
     "rows": 71,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1990,
       2025
@@ -65,7 +65,7 @@
   },
   "early-school-leavers": {
     "rows": 29,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1996,
       2025
@@ -73,7 +73,7 @@
   },
   "electricity-mix": {
     "rows": 288,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1990,
       2025
@@ -81,7 +81,7 @@
   },
   "gdp-per-capita": {
     "rows": 35,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1991,
       2025
@@ -89,7 +89,7 @@
   },
   "gdp-per-capita-laender": {
     "rows": 425,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       2000,
       2024
@@ -97,7 +97,7 @@
   },
   "ghg-by-sector": {
     "rows": 238,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1991,
       2024
@@ -105,7 +105,7 @@
   },
   "government-debt": {
     "rows": 31,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1995,
       2025
@@ -113,7 +113,7 @@
   },
   "government-revenue-expenditure": {
     "rows": 62,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1995,
       2025
@@ -121,7 +121,7 @@
   },
   "government-spending-by-function": {
     "rows": 300,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1995,
       2024
@@ -129,7 +129,7 @@
   },
   "homicide-rate": {
     "rows": 17,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       2008,
       2024
@@ -137,7 +137,7 @@
   },
   "house-prices": {
     "rows": 21,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       2005,
       2025
@@ -145,7 +145,7 @@
   },
   "inflation": {
     "rows": 30,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1996,
       2025
@@ -153,7 +153,7 @@
   },
   "life-expectancy": {
     "rows": 68,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1991,
       2024
@@ -161,7 +161,7 @@
   },
   "life-expectancy-laender": {
     "rows": 402,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1991,
       2024
@@ -169,7 +169,7 @@
   },
   "net-migration": {
     "rows": 35,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1991,
       2025
@@ -177,7 +177,7 @@
   },
   "population": {
     "rows": 36,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1991,
       2026
@@ -185,7 +185,7 @@
   },
   "population-laender": {
     "rows": 578,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1991,
       2025
@@ -193,7 +193,7 @@
   },
   "poverty-risk": {
     "rows": 28,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1995,
       2025
@@ -201,7 +201,7 @@
   },
   "primary-energy-mix": {
     "rows": 300,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1965,
       2024
@@ -209,7 +209,7 @@
   },
   "recorded-crime": {
     "rows": 51,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       2008,
       2024
@@ -217,7 +217,7 @@
   },
   "renewables-share-electricity": {
     "rows": 108,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1990,
       2025
@@ -225,7 +225,7 @@
   },
   "tax-revenue-by-tax": {
     "rows": 216,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1999,
       2025
@@ -233,7 +233,7 @@
   },
   "tax-revenue-by-type": {
     "rows": 124,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1995,
       2025
@@ -241,7 +241,7 @@
   },
   "tertiary-attainment": {
     "rows": 33,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1992,
       2025
@@ -249,7 +249,7 @@
   },
   "unemployment": {
     "rows": 17,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       2009,
       2025
@@ -257,7 +257,7 @@
   },
   "unemployment-laender": {
     "rows": 457,
-    "updated": "2026-11-12",
+    "updated": "2026-11-16",
     "years": [
       1999,
       2025
