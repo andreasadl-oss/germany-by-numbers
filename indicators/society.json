@@ -24,6 +24,7 @@
       },
       "unit": "",
       "chart": "line",
+      "baseline": "data",
       "series": {
         "JAN": {
           "de": "Bevölkerung",
@@ -188,6 +189,7 @@
       },
       "unit": "",
       "chart": "line",
+      "baseline": "data",
       "series": {
         "F": {
           "de": "Frauen",

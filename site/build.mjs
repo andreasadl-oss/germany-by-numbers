@@ -154,6 +154,7 @@ function chartSpec(ind, lang) {
     subtitle: ind.subtitle[lang],
     unit: ind.unit,
     chart: ind.chart,
+    baseline: ind.baseline ?? "zero",
     geo: ind.geo ?? "national",
     series,
     colors: ind.colors,

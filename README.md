@@ -36,6 +36,14 @@ own metadata. The build stops if a note lacks a language, has another kind, or
 falls outside the indicator's data years. Notes work on charts with a year
 axis (`line`, `area`, `bar-time`), not on `bar-latest`.
 
+`line` and `bar-time` charts start their y-axis at zero, so a reader can judge
+size at a glance. To zoom an indicator to its data range instead, add
+`"baseline": "data"` (the default is `"zero"`). Use it only where the level is
+near-constant and the change is the story, such as population. Area charts
+always start at zero and ignore the field. Stacked shares in % run to 100 only
+when the series add up to about 100 % (a yearly total of at least 95 %);
+otherwise the axis ends at the first tick above the largest total.
+
 ## Run locally
 
 ```bash
