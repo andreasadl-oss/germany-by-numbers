@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { after, before, describe, test } from "node:test";
-import { launch, LANGS, ROOT, servedSite, WIDTHS, withPage } from "./harness.mjs";
+import { buildSite, fixture, launch, LANGS, ROOT, servedSite, WIDTHS, withPage } from "./harness.mjs";
 
 // Every indicator definition on the real site that has data.
 const definitions = fs.readdirSync(path.join(ROOT, "indicators"))
@@ -46,6 +46,12 @@ const pages = (fn) => {
     for (const lang of LANGS) fn({ name, width, lang });
   }
 };
+
+describe("the build checks every baseline", () => {
+  test("a baseline other than zero or data stops the build, naming the indicator", async () => {
+    await assert.rejects(buildSite(fixture("baseline-unknown")), /baseline-unknown.*zoomed/s);
+  });
+});
 
 describe("line and bar charts start at zero unless the indicator opts out", () => {
   const timeCharts = definitions.filter((ind) => ["line", "bar-time"].includes(ind.chart));

@@ -93,6 +93,17 @@ if (noteProblems.length) {
   process.exit(1);
 }
 
+// ---------------------------------------------------------------- baseline
+// Where a line or bar-time chart's y-axis starts: at zero (the default) or zoomed to the data.
+const BASELINES = ["zero", "data"];
+const baselineProblems = topics.flatMap((t) => t.indicators)
+  .filter((ind) => ind.baseline !== undefined && !BASELINES.includes(ind.baseline))
+  .map((ind) => `Indicator "${ind.id}": baseline "${ind.baseline}" is not one of ${BASELINES.join(", ")}`);
+if (baselineProblems.length) {
+  console.error(`Build stopped: ${baselineProblems.length} unknown baseline(s)\n${baselineProblems.map((e) => `  - ${e}`).join("\n")}`);
+  process.exit(1);
+}
+
 const esc = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
