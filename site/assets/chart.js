@@ -310,8 +310,9 @@
     rows.sort((a, b) => b.value - a.value);
     const narrow = width < 560;
     // Wide enough for the longest word of any label, up to 55 % of the chart.
-    // (A Land counts with its short form, which is what a narrow chart falls back to.)
-    const longestWord = d3.max(rows, (d) => d3.max(shortestName(d.name, d.geo).split(/\s+/), (w) => textWidth(w)));
+    // A Land counts with its whole short form, which a narrow chart shows on one line.
+    const units = (d) => (LAENDER[d.geo] ? [landShort(d.geo)] : d.name.split(/\s+/));
+    const longestWord = d3.max(rows, (d) => d3.max(units(d), (w) => textWidth(w)));
     const marginLeft = Math.min(Math.round(width * 0.55), Math.max(narrow ? Math.round(width * 0.42) : 230, longestWord + 12));
     // Each row's label fits the label column (the margin less the tick padding and
     // a little air): full name, a Land's short form, or wrapped onto more lines.
