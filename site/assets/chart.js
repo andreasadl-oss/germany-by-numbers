@@ -54,19 +54,30 @@
     return Math.ceil(measureEl.getComputedTextLength());
   }
 
+  // A series label may mark where a long word breaks with a soft hyphen (U+00AD),
+  // between the parts of a compound: "Behandlungs\u00adkomplikationen". Readers
+  // only ever see the plain name.
+  const SHY = "\u00ad";
+  const plain = (s) => s.replaceAll(SHY, "");
+
   // Break a word wider than `maxW` into pieces that fit, each but the last ending
-  // in a hyphen. A word that fits comes back whole. The last piece keeps at least
-  // five characters where it can, so no lone "en)" ends up on a line of its own.
+  // in a hyphen. A word that fits comes back whole. It breaks at the last marked
+  // break that fits; failing that, the last piece keeps at least five characters
+  // where it can, so no lone "en)" ends up on a line of its own.
   function hyphenate(word, maxW, size) {
     const pieces = [];
     let rest = word;
-    while (textWidth(rest, size) > maxW && rest.length > 2) {
+    while (textWidth(plain(rest), size) > maxW && rest.length > 2) {
+      const marked = [...rest.matchAll(SHY)].map((m) => m.index).reverse()
+        .find((i) => textWidth(plain(rest.slice(0, i)) + "-", size) <= maxW);
+      if (marked) { pieces.push(plain(rest.slice(0, marked)) + "-"); rest = rest.slice(marked + 1); continue; }
+      rest = plain(rest);
       let n = rest.length > 7 ? rest.length - 5 : rest.length - 1;
       while (n > 1 && textWidth(rest.slice(0, n) + "-", size) > maxW) n--;
       pieces.push(rest.slice(0, n) + "-");
       rest = rest.slice(n);
     }
-    return [...pieces, rest];
+    return [...pieces, plain(rest)];
   }
 
   // Break text into lines no wider than `maxW`, at spaces and after hyphens; a
@@ -84,10 +95,11 @@
   }
 
   // The label of a bar or dot chart row that fits its label column: the full name
-  // if it fits, else a Land's short form (or another name), wrapped if need be.
-  function fitLabel(name, geo, maxW) {
+  // if it fits, else a Land's short form (or the name with its marked breaks),
+  // wrapped if need be.
+  function fitLabel(name, geo, maxW, marked) {
     if (textWidth(name) <= maxW) return name;
-    return wrapLines(shortestName(name, geo), maxW).join("\n");
+    return wrapLines(marked ?? shortestName(name, geo), maxW).join("\n");
   }
 
   // Build a plot whose y-axis tick labels fit its left margin: draw it with
@@ -145,11 +157,14 @@
   // Turn tidy rows into what a chart needs, labelled in the page language.
   function prepare(spec, rows) {
     const keys = Object.keys(spec.series);
-    const color = Object.fromEntries(keys.map((k, i) => [spec.series[k], i]));
+    const label = (k) => plain(spec.series[k]);
+    const color = Object.fromEntries(keys.map((k, i) => [label(k), i]));
     const data = rows
       .filter((r) => keys.includes(String(r.series)))
-      .map((r) => ({ ...r, series: String(r.series), label: spec.series[String(r.series)] }));
-    return { keys, labels: keys.map((k) => spec.series[k]), color, data };
+      .map((r) => ({ ...r, series: String(r.series), label: label(String(r.series)) }));
+    // Each label as the definition writes it, with its marked breaks.
+    const marked = Object.fromEntries(keys.map((k) => [label(k), spec.series[k]]));
+    return { keys, labels: keys.map(label), marked, color, data };
   }
 
   // One colour per series, in series order. An indicator may name a fixed colour
@@ -300,7 +315,7 @@
     const marginLeft = Math.min(Math.round(width * 0.55), Math.max(narrow ? Math.round(width * 0.42) : 230, longestWord + 12));
     // Each row's label fits the label column (the margin less the tick padding and
     // a little air): full name, a Land's short form, or wrapped onto more lines.
-    const label = new Map(rows.map((d) => [d.name, fitLabel(d.name, d.geo, marginLeft - 12)]));
+    const label = new Map(rows.map((d) => [d.name, fitLabel(d.name, d.geo, marginLeft - 12, prep.marked[d.name])]));
     // Rows grow with the most lines any label needs (12 px a line plus air), so
     // wrapped labels never run into their neighbours.
     const lines = d3.max(rows, (d) => label.get(d.name).split("\n").length);

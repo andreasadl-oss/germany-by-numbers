@@ -45,6 +45,12 @@ always start at zero and ignore the field. Stacked shares in % run to 100 only
 when the series add up to about 100 % (a yearly total of at least 95 %);
 otherwise the axis ends at the first tick above the largest total.
 
+On a phone, a bar chart wraps long category names. A word too long for its
+line breaks where its series label marks a soft hyphen (`\u00ad`), between the
+parts of a compound: `"Behandlungs\u00adkomplikationen"`. Readers never see the
+mark. A bar chart's test fails if a word breaks anywhere else, so add a mark
+when a new long word needs one.
+
 ## Run locally
 
 ```bash

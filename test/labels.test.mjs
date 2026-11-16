@@ -147,6 +147,53 @@ describe("chart labels on the real site", () => {
     }
   }
 
+  // Where a long word may break: the soft hyphens (U+00AD) an indicator's series
+  // labels carry, as positions in the plain name a reader sees.
+  const SHY = "\u00ad";
+  const breakPoints = new Map(fs.readdirSync(path.join(ROOT, "indicators"))
+    .flatMap((f) => JSON.parse(fs.readFileSync(path.join(ROOT, "indicators", f), "utf8")).indicators)
+    .flatMap((ind) => Object.values(ind.series ?? {}).flatMap((l) => LANGS.map((lang) => l[lang])))
+    .map((name) => {
+      const at = [];
+      let plain = "";
+      for (const c of name) c === SHY ? at.push(plain.length) : (plain += c);
+      return [plain, at];
+    }));
+
+  /** Where the drawn lines break a word of `name` with a hyphen the name lacks,
+   *  as positions in `name`; null if the lines don't spell the name. */
+  function insertedBreaks(lines, name) {
+    const at = [];
+    let p = 0;
+    for (const l of lines) {
+      if (name.startsWith(l, p)) p += l.length;
+      else if (l.endsWith("-") && name.startsWith(l.slice(0, -1), p)) { p += l.length - 1; at.push(p); continue; }
+      else return null;
+      if (name[p] === " ") p++;
+    }
+    return p === name.length ? at : null;
+  }
+
+  for (const lang of LANGS) {
+    test(`a word too long for its line breaks only where its name marks a break, between the parts of a compound (${lang})`, async () => {
+      const problems = [];
+      const queue = barCharts.flatMap((id) => BAR_WIDTHS.map((width) => ({ id, width })));
+      await Promise.all(Array.from({ length: 4 }, async () => {
+        for (let job; (job = queue.shift()); ) {
+          await withPage(browser, `${site.url}${lang}/chart/${job.id}/`, job.width, async (page) => {
+            for (const l of await barLabels(page)) {
+              const name = l.reads.find((r) => breakPoints.has(r)) ?? l.read;
+              const at = insertedBreaks(l.lines, name);
+              const allowed = breakPoints.get(name) ?? [];
+              if (at?.some((i) => !allowed.includes(i))) problems.push(`${job.id} at ${job.width}px: ${JSON.stringify(l.lines)}`);
+            }
+          });
+        }
+      }));
+      assert.deepEqual(problems, [], "no word is broken anywhere but at a marked break");
+    });
+  }
+
   // The Germany figure on a Länder chart, as the chart labels it.
   const GERMANY = { de: "Deutschland gesamt", en: "Germany overall" };
   const chartTexts = (page) => page.locator("figure[data-chart] .plot svg").first().locator("text").allTextContents();
