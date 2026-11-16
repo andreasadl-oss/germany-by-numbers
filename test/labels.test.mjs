@@ -175,20 +175,20 @@ describe("chart labels on the real site", () => {
   }
 
   for (const lang of LANGS) {
-    test(`a word of a category name too long for its line breaks only where the name marks a break, between the parts of a compound (${lang})`, async () => {
+    test(`a word of a series label too long for its line breaks only where the label marks a break, between the parts of a compound (${lang})`, async () => {
       const problems = [];
       let checked = 0;
       await inParallel(barPages, (job) =>
         withPage(browser, `${site.url}${lang}/chart/${job.id}/`, job.width, async (page) => {
           for (const l of await barLabels(page)) {
-            // Category names are series labels; Land names shorten rather than break.
+            // Series labels are checked; Land names shorten rather than break.
             const name = l.reads.find((r) => breakPoints.has(r));
             if (!name) continue;
             checked++;
             if (insertedBreaks(l.lines, name)?.some((i) => !breakPoints.get(name).includes(i))) problems.push(`${job.id} at ${job.width}px: ${JSON.stringify(l.lines)}`);
           }
         }));
-      assert.ok(checked > 0, "the bar charts show category names");
+      assert.ok(checked > 0, "the bar charts show series labels");
       assert.deepEqual(problems, [], "no word is broken anywhere but at a marked break");
     });
   }
