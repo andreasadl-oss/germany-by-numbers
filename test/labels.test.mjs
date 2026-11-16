@@ -30,8 +30,8 @@ async function textOutsideCharts(page) {
   );
 }
 
-/** The y-axis labels of a bar or dot chart (the Land names), with their boxes.
- *  `read` is the label as a reader reads it: its lines joined by a space, or
+/** The y-axis labels of a bar or dot chart (the Land names), with their boxes
+ *  and drawn `lines`; the array's `svg` is the chart's own box. `read` is the label as a reader reads it: its lines joined by a space, or
  *  directly after a line that ends in a hyphen. `reads` is every way a reader may
  *  read it: a hyphen at a line end is part of the name ("Herz-Kreislauf-" /
  *  "Erkrankungen") or only marks a word broken across lines ("Behandlungs-" /
@@ -39,17 +39,14 @@ async function textOutsideCharts(page) {
 async function barLabels(page) {
   return page.locator("figure[data-chart] .plot svg").first().evaluate((svg) => {
     const box = (el) => { const b = el.getBoundingClientRect(); return { left: b.left, right: b.right, top: b.top, bottom: b.bottom }; };
-    const read = (t) => {
+    const labels = Array.from(svg.querySelectorAll("[aria-label='y-axis tick label'] text")).map((t) => {
       const lines = t.querySelectorAll("tspan").length ? Array.from(t.querySelectorAll("tspan"), (s) => s.textContent) : [t.textContent];
-      return lines.reduce((acc, l) => (!acc ? l : acc.endsWith("-") ? acc + l : `${acc} ${l}`), "");
-    };
-    const reads = (t) => {
-      const lines = t.querySelectorAll("tspan").length ? Array.from(t.querySelectorAll("tspan"), (s) => s.textContent) : [t.textContent];
-      return lines.reduce((accs, l) => accs.flatMap((acc) =>
+      const reads = lines.reduce((accs, l) => accs.flatMap((acc) =>
         !acc ? [l] : acc.endsWith("-") ? [acc + l, acc.slice(0, -1) + l] : [`${acc} ${l}`]), [""]);
-    };
-    return Array.from(svg.querySelectorAll("[aria-label='y-axis tick label'] text")).map((t) => ({ text: t.textContent, read: read(t), reads: reads(t), box: box(t) }));
-  });
+      return { text: t.textContent, lines, read: reads[0], reads, box: box(t) };
+    });
+    return { labels, svg: box(svg) };
+  }).then(({ labels, svg }) => Object.assign(labels, { svg }));
 }
 
 const overlaps = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
@@ -124,11 +121,7 @@ describe("chart labels on the real site", () => {
           await withPage(browser, `${site.url}${lang}/chart/${job.id}/`, job.width, async (page) => {
             const where = `${job.id} at ${job.width}px`;
             const labels = await barLabels(page);
-            const svg = await page.locator("figure[data-chart] .plot svg").first().evaluate((s) => {
-              const b = s.getBoundingClientRect();
-              return { left: b.left, right: b.right, top: b.top, bottom: b.bottom };
-            });
-            for (const l of labels) if (!inside(l.box, svg)) problems.push(`${where}: "${l.read}" sticks out of the chart`);
+            for (const l of labels) if (!inside(l.box, labels.svg)) problems.push(`${where}: "${l.read}" sticks out of the chart`);
             labels.forEach((a, i) => labels.slice(i + 1).forEach((b) => {
               if (overlaps(a.box, b.box)) problems.push(`${where}: "${a.read}" overlaps "${b.read}"`);
             }));

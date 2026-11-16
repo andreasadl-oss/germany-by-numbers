@@ -87,11 +87,14 @@ const noteForPage = (n, lang) => ({
   text: n.text[lang],
 });
 
-const noteProblems = topics.flatMap((t) => t.indicators.flatMap(noteErrors));
-if (noteProblems.length) {
-  console.error(`Build stopped: ${noteProblems.length} broken note(s)\n${noteProblems.map((e) => `  - ${e}`).join("\n")}`);
+// Stop the build, listing every problem, if there are any.
+function stopOn(problems, what) {
+  if (!problems.length) return;
+  console.error(`Build stopped: ${problems.length} ${what}\n${problems.map((e) => `  - ${e}`).join("\n")}`);
   process.exit(1);
 }
+
+stopOn(topics.flatMap((t) => t.indicators.flatMap(noteErrors)), "broken note(s)");
 
 // ---------------------------------------------------------------- baseline
 // Where a line or bar-time chart's y-axis starts: at zero (the default) or zoomed to the data.
@@ -99,10 +102,7 @@ const BASELINES = ["zero", "data"];
 const baselineProblems = topics.flatMap((t) => t.indicators)
   .filter((ind) => ind.baseline !== undefined && !BASELINES.includes(ind.baseline))
   .map((ind) => `Indicator "${ind.id}": baseline "${ind.baseline}" is not one of ${BASELINES.join(", ")}`);
-if (baselineProblems.length) {
-  console.error(`Build stopped: ${baselineProblems.length} unknown baseline(s)\n${baselineProblems.map((e) => `  - ${e}`).join("\n")}`);
-  process.exit(1);
-}
+stopOn(baselineProblems, "unknown baseline(s)");
 
 const esc = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
